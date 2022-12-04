@@ -15,6 +15,11 @@ public class Player {
     public boolean bankrupt;  // игрок банкрот?
     public boolean canRollDice; // можно бросать кубик? взводится перед броском игрока
     public ArrayList<Debt> debts = new ArrayList<>();
+    //public ArrayList<FieldDB> tests = new ArrayList<>();
+    //public Auction tests = null;
+
+    public Player() {
+    }
 
     public Player(int cash, String name) {
         this.position = 0;
@@ -25,6 +30,8 @@ public class Player {
         this.bankrupt = false;
         this.canRollDice = false;
         this.name = name;
+        //tests.add(new FieldDB(0,0));
+        //tests.add(new FieldDB(1,1));
     }
 
     public Debt getLastDebt(){

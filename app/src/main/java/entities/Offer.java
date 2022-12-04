@@ -2,7 +2,7 @@ package entities;
 
 import enums.OfferStates;
 import enums.OfferTypes;
-import enums.Participants;
+import services.MapService;
 
 // sold (продажа):
 // создатель предложения хочет продать свою senderProperty
@@ -18,17 +18,17 @@ import enums.Participants;
 // sum при этом: =0 - простой обмен, <0 - с доплатой отправителя, >0 - с доплатой получателя
 
 public class Offer {
-    public Player sender;
-    public Player recipient;
-    public Property senderProperty; // номер собственности
+    public int senderID;
+    public int recipientID;
+    public int senderPropertyID; // номер собственности
     public int sum;
     public OfferTypes type;
     public OfferStates state; //1 - new_offer; //2 - accept_offer; //3 - reject_offer;
-    public Property recipientProperty;
+    public int recipientPropertyID;
 
-    public Offer(Player sender, Player recipient, Property senderProperty, int sum, OfferTypes type, OfferStates state, Property recipientProperty) {
-        this.sender = sender;
-        this.senderProperty = senderProperty;
+    public Offer(int senderID, int recipientID, Property senderProperty, int sum, OfferTypes type, OfferStates state, Property recipientProperty) {
+        this.senderID = senderID;
+        this.senderPropertyID = MapService.getInstance().map.indexOf(senderProperty);
         if ((type == OfferTypes.buy || type == OfferTypes.sold) && sum < 0) {
             this.sum = -sum;
         } else
@@ -36,60 +36,37 @@ public class Offer {
 
         this.type = type;
         this.state = state;
-        this.recipientProperty = recipientProperty;
-        this.recipient = recipient;
+        this.recipientPropertyID = MapService.getInstance().map.indexOf(recipientProperty);
+        this.recipientID = recipientID;
     }
 
-    public int getFullSum(Participants player) {
+    public Offer(int senderID, int recipientID, int senderProperty, int sum, OfferTypes type, OfferStates state, int recipientProperty) {
+        this.senderID = senderID;
+        this.senderPropertyID = senderProperty;
+        if ((type == OfferTypes.buy || type == OfferTypes.sold) && sum < 0) {
+            this.sum = -sum;
+        } else
+            this.sum = sum;
 
+        this.type = type;
+        this.state = state;
+        this.recipientPropertyID = recipientProperty;
+        this.recipientID = recipientID;
+    }
 
-        switch (type) {
-            case buy:
-                switch (player) {
-                    case sender:
-                        return
-                                sum + (recipientProperty.deposit ?
-                                        (sender.repayment ?
-                                                recipientProperty.redemptionPrice :
-                                                recipientProperty.tenPercent)
-                                        : 0);
-                    case recipient:
-                        return 0;
-                }
+    public Offer() {
+    }
 
-            case sold:
-                switch (player) {
-                    case sender:
-                        return 0;
-                    case recipient:
-                        return
-                                sum + (senderProperty.deposit ?
-                                        (recipient.repayment ?
-                                                senderProperty.redemptionPrice :
-                                                senderProperty.tenPercent)
-                                        : 0);
+    public Property senderProperty() {
+        if(senderPropertyID==-1)
+            return null;
+        return MapService.getInstance().getPropertyByPosition(senderPropertyID);
+    }
 
-                }
-                ;
-            case change:
-                switch (player) {
-                    case sender:
-                        return
-                                (sum < 0 ? -1 * sum : 0) + (recipientProperty.deposit ?
-                                        (sender.repayment ?
-                                                recipientProperty.redemptionPrice :
-                                                recipientProperty.tenPercent)
-                                        : 0);
-                    case recipient:
-                        return
-                                (sum > 0 ? sum : 0) + (senderProperty.deposit ?
-                                        (recipient.repayment ?
-                                                senderProperty.redemptionPrice :
-                                                senderProperty.tenPercent)
-                                        : 0);
-                }
-        }
-        return -1;
+    public Property recipientProperty() {
+        if(recipientPropertyID==-1)
+            return null;
+        return MapService.getInstance().getPropertyByPosition(recipientPropertyID);
     }
 }
 

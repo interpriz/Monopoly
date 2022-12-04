@@ -1,21 +1,17 @@
 package entities;
 
-import java.security.acl.Owner;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.UUID;
 
 import enums.GameStates;
-import services.GameService;
 import services.MapService;
 
-import static entities.StaticStrings.*;
 import static enums.GameStates.*;
 
 
 public class Game {
 
-    public UUID id;
+    //public Long id;
     public String organizer; //имя организатора
 
     public int maxPLayers; //максимальное количество игроков
@@ -35,8 +31,16 @@ public class Game {
     public ArrayList<FieldDB> fieldsOwners = new ArrayList<>();
     public ArrayList<Player> players = new ArrayList<>();
 
+    public Game(){
+        this.maxPLayers = 4;
+        this.bank = new Player(21100, "BANK");
+        for(int i=0;i<40;i++){
+            fieldsOwners.add(new FieldDB(-1,0));
+        }
+    }
+
     public Game(int maxPLayers, String organizer) {
-        id = UUID.randomUUID();
+        //id = UUID.randomUUID();
         this.organizer = organizer;
         this.maxPLayers = maxPLayers;
         this.bank = new Player(21100, "BANK");

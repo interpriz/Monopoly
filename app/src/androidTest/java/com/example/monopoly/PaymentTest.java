@@ -2,12 +2,15 @@ package com.example.monopoly;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
 import entities.Game;
 import entities.Player;
-import static entities.StaticStrings.*;
+import static entities.StaticMessages.*;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import services.GameService;
 import services.MapService;
@@ -17,6 +20,7 @@ import services.MapService;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+@RunWith(AndroidJUnit4.class)
 public class PaymentTest {
 
     private Player sender;
@@ -74,8 +78,8 @@ public class PaymentTest {
         assertEquals(1500,sender.cash);
         assertEquals(1500,recipient.cash);
         assertEquals(1600,sender.getLastDebt().sum);
-        assertEquals(sender,sender.getLastDebt().debtor);
-        assertEquals(recipient,sender.getLastDebt().recipient);
+        assertEquals(sender,gameService.getPlayer(sender.getLastDebt().debtorID));
+        assertEquals(recipient,gameService.getPlayer(sender.getLastDebt().recipientID));
     }
 
 

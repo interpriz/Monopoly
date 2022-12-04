@@ -8,4 +8,7 @@ public class FieldDB {
         this.owner = owner;
         this.houses = houses;
     }
+
+    public FieldDB() {
+    }
 }

@@ -31,10 +31,6 @@ public class Property extends Field{
         return 0;
     }*/
 
-    public Street getStreet(){
-        if(type==PropTypes.street){
-            return (Street) this;
-        }else return null;
-    }
+
 }
 

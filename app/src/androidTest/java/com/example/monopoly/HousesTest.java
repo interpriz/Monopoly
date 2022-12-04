@@ -2,18 +2,21 @@ package com.example.monopoly;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static entities.StaticStrings.*;
+import static entities.StaticMessages.*;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import entities.Game;
 import entities.Player;
-import entities.Property;
 import entities.Street;
 import services.GameService;
 import services.MapService;
 
+@RunWith(AndroidJUnit4.class)
 public class HousesTest {
 
     private Game game;
