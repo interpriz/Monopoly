@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
             String value = dataSnapshot.getValue(String.class);
-            textView.setText(value);
+            //textView.setText(value);
             Log.d(TAG, "Value is: " + value);
         }
 
@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 gameService = new GameService(game);
                 gr = new GameRepository(game);
                 pr = new PlayerRepository(game);
+
+                bindGameParameters();
 
                 /*
                 gr.setDice1(1);
@@ -400,13 +402,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = (TextView) findViewById(R.id.text);
+        //textView = (TextView) findViewById(R.id.text);
 
 
 
         gameRef.get().addOnCompleteListener(gameFirstListen);
 
-        bindGameParameters();
 
         testMessageRef.addValueEventListener(testMessageListener);
 

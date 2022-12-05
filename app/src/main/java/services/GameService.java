@@ -53,7 +53,7 @@ public class GameService {
 
     //войти в игру
     public Player enterGame(String name) {
-        boolean unicName = game.players.stream().noneMatch(x -> x.name == name);
+        boolean unicName = game.players.stream().noneMatch(x -> x.name.equals(name));
         if (unicName && name!="BANK") {
             Player newPlayer = new Player(1500, name);
             if (game.players.size() < game.maxPLayers) {
