@@ -1,66 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:columnCount="11"
-    android:orientation="horizontal" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <!--<ImageView android:rotation="90" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1.25" android:layout_gravity="center_horizontal" app:srcCompat="@drawable/rectangle_field" />
+-->
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:orientation="vertical"
+        android:weightSum="15.25"
+        android:layout_gravity="center">
 
 
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="2"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="3"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="4"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="5"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="6"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="7"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="8"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="9"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="10" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:orientation="horizontal"
+            android:weightSum="15.25"
+            android:layout_weight="2"
+            android:layout_gravity="center_horizontal">
 
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button
-        android:layout_rowSpan="9"
-        android:layout_columnSpan="9"
-        android:text="2"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
+            <ImageView style="@style/ImageSquareStyle"  app:srcCompat="@drawable/square_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/square_field" />
 
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
+        </LinearLayout>
 
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:layout_weight="11.25"
+            android:layout_gravity="center_horizontal">
 
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="11.25"
+                android:layout_weight="2"
+                android:layout_gravity="center_horizontal">
 
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
 
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
+            </LinearLayout>
 
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-
-    <Button android:text="1"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="2"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="3"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="4"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="5"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="6"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="7"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="8"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="9"  android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="10" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
-    <Button android:text="11" android:layout_width="36dp" android:layout_height="36dp" android:textSize="7dp" android:layout_gravity="center"/>
+            <View android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></View>
 
 
-</GridLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="11.25"
+                android:layout_weight="2"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:orientation="horizontal"
+            android:weightSum="15.25"
+            android:layout_weight="2"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView style="@style/ImageSquareStyle"  app:srcCompat="@drawable/square_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
+            <ImageView style="@style/ImageSquareStyle"  app:srcCompat="@drawable/square_field" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
