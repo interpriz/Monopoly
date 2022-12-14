@@ -45,4 +45,12 @@
         <item name ="android:layout_gravity">center_horizontal</item>
     </style>
 
+
+    <style name="LinRecVerticalStyle">
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">39.6dp</item>
+        <item name="android:layout_weight">1.25</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>
