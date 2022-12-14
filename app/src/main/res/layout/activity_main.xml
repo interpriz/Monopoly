@@ -14,28 +14,24 @@
         android:layout_height="300dp"
         android:orientation="vertical"
         android:weightSum="15.25"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:background="@drawable/game_field">
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="55dp"
-            android:orientation="horizontal"
-            android:weightSum="15.25"
-            android:layout_weight="2"
-            android:layout_gravity="center_horizontal">
+        <LinearLayout style="@style/LinLayHorizontalStyle">
 
-            <ImageView style="@style/ImageSquareStyle"  app:srcCompat="@drawable/square_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/square_field" />
+            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
+
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
 
         </LinearLayout>
 
@@ -43,78 +39,65 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="5"
+            android:weightSum="15.25"
             android:layout_weight="11.25"
             android:layout_gravity="center_horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="11.25"
-                android:layout_weight="2"
-                android:layout_gravity="center_horizontal">
+            <LinearLayout style="@style/LinLayVerticalStyle">
 
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
 
             </LinearLayout>
 
-            <View android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></View>
+            <LinearLayout android:layout_width="225dp"
+                android:layout_height="225dp"
+                android:layout_weight="11.25">
+
+            </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="11.25"
-                android:layout_weight="2"
-                android:layout_gravity="center_horizontal">
+            <LinearLayout style="@style/LinLayVerticalStyle">
 
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-                <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field1" />
-
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
+2
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="55dp"
-            android:orientation="horizontal"
-            android:weightSum="15.25"
-            android:layout_weight="2"
-            android:layout_gravity="center_horizontal">
+        <LinearLayout style="@style/LinLayHorizontalStyle">
 
-            <ImageView style="@style/ImageSquareStyle"  app:srcCompat="@drawable/square_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageRecStyle" app:srcCompat="@drawable/rectangle_field" />
-            <ImageView style="@style/ImageSquareStyle"  app:srcCompat="@drawable/square_field" />
+            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
 
         </LinearLayout>
 
     </LinearLayout>
+
 
 </LinearLayout>
