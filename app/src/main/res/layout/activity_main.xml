@@ -20,10 +20,46 @@
 
         <LinearLayout style="@style/LinLayHorizontalStyle">
 
-            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
+
 
             <LinearLayout
-                style="@style/LinRecVerticalStyle"
+                style="@style/LinSquareStyle"
+                >
+
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:columnCount="2"
+                    android:rowCount="2">
+
+                    <ImageView
+                        android:layout_width="12.25dp"
+                        android:layout_height="12.25dp"
+                        app:srcCompat="@drawable/player_1" />
+
+                    <ImageView
+                        android:layout_width="12.25dp"
+                        android:layout_height="12.25dp"
+                        app:srcCompat="@drawable/player_2" />
+
+                    <ImageView
+                        android:layout_width="12.25dp"
+                        android:layout_height="12.25dp"
+                        app:srcCompat="@drawable/player_3" />
+
+                    <ImageView
+                        android:layout_width="12.25dp"
+                        android:layout_height="12.25dp"
+                        app:srcCompat="@drawable/player_4" />
+                </GridLayout>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LinRecVerticaStyle"
                 android:background="@drawable/frame_1"
                 >
                 <GridLayout
@@ -106,7 +142,73 @@
 
             <LinearLayout style="@style/LinLayVerticalStyle">
 
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+
+                <LinearLayout
+                    style="@style/LinRecHorizontalStyle"
+                    android:background="@drawable/frame_1"
+                    >
+                    <GridLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:columnCount="3"
+                        android:rowCount="4">
+                        <ImageView
+                            android:layout_width="12.25dp"
+                            android:layout_height="12.25dp"
+                            android:layout_rowSpan="2"
+                            app:srcCompat="@drawable/player_1" />
+                        <ImageView
+                            android:layout_width="12.25dp"
+                            android:layout_height="12.25dp"
+                            android:layout_rowSpan="2"
+                            app:srcCompat="@drawable/player_2" />
+                        <ImageView
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            app:srcCompat="@drawable/house1"
+                            />
+                        <ImageView
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            app:srcCompat="@drawable/house1"
+                            />
+
+                        <ImageView
+                            android:layout_width="12.25dp"
+                            android:layout_height="12.25dp"
+                            android:layout_rowSpan="2"
+                            app:srcCompat="@drawable/player_3" />
+                        <ImageView
+                            android:layout_width="12.25dp"
+                            android:layout_height="12.25dp"
+                            android:layout_rowSpan="2"
+                            app:srcCompat="@drawable/player_4"
+                            />
+                        <ImageView
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            app:srcCompat="@drawable/house1"
+                            />
+                        <ImageView
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            app:srcCompat="@drawable/house1"
+                            />
+
+
+
+
+
+                            />
+                    </GridLayout>
+
+
+
+                </LinearLayout>
                 <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
                 <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
                 <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
@@ -135,8 +237,71 @@
                 <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
                 <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
                 <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-2
+
+                <LinearLayout
+                    style="@style/LinRecHorizontalStyle"
+                    android:background="@drawable/frame_1"
+                    >
+                    <GridLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:columnCount="3"
+                        android:rowCount="4">
+
+                        <ImageView
+                            android:layout_marginRight="8dp"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            app:srcCompat="@drawable/house1"
+                            />
+                        <ImageView
+                            android:layout_width="12.25dp"
+                            android:layout_height="12.25dp"
+                            android:layout_rowSpan="2"
+                            app:srcCompat="@drawable/player_1" />
+                        <ImageView
+                            android:layout_width="12.25dp"
+                            android:layout_height="12.25dp"
+                            android:layout_rowSpan="2"
+                            app:srcCompat="@drawable/player_2" />
+
+                        <ImageView
+                            android:layout_marginRight="8dp"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            app:srcCompat="@drawable/house1"
+                            />
+                        <ImageView
+                            android:layout_marginRight="8dp"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            app:srcCompat="@drawable/house1"
+                            />
+
+                        <ImageView
+                            android:layout_width="12.25dp"
+                            android:layout_height="12.25dp"
+                            android:layout_rowSpan="2"
+                            app:srcCompat="@drawable/player_3" />
+                        <ImageView
+                            android:layout_width="12.25dp"
+                            android:layout_height="12.25dp"
+                            android:layout_rowSpan="2"
+                            app:srcCompat="@drawable/player_4"
+                            />
+
+                        <ImageView
+                            android:layout_marginRight="8dp"
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            app:srcCompat="@drawable/house1"
+                            />
+                        />
+                    </GridLayout>
+
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -153,7 +318,70 @@
             <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
             <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
             <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+
+            <LinearLayout
+                style="@style/LinRecVerticaStyle"
+                android:background="@drawable/frame_1"
+                >
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4"
+                    android:rowCount="3">
+                    <ImageView
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        app:srcCompat="@drawable/house1"
+                        />
+                    <ImageView
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        app:srcCompat="@drawable/house1"
+                        />
+                    <ImageView
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        app:srcCompat="@drawable/house1"
+                        />
+                    <ImageView
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        app:srcCompat="@drawable/house1"
+                        />
+
+                    <ImageView
+                        android:layout_width="12.25dp"
+                        android:layout_height="12.25dp"
+                        android:layout_columnSpan="2"
+                        app:srcCompat="@drawable/player_1" />
+                    <ImageView
+                        android:layout_width="12.25dp"
+                        android:layout_height="12.25dp"
+                        android:layout_columnSpan="2"
+                        app:srcCompat="@drawable/player_2" />
+                    <ImageView
+                        android:layout_width="12.25dp"
+                        android:layout_height="12.25dp"
+                        android:layout_columnSpan="2"
+                        app:srcCompat="@drawable/player_3" />
+                    <ImageView
+                        android:layout_width="12.25dp"
+                        android:layout_height="12.25dp"
+                        android:layout_columnSpan="2"
+                        app:srcCompat="@drawable/player_4"
+                        />
+
+
+                </GridLayout>
+
+
+
+            </LinearLayout>
+
             <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
 
         </LinearLayout>
