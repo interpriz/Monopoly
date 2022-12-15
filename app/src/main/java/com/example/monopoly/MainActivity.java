@@ -374,6 +374,13 @@ public class MainActivity extends AppCompatActivity {
             // comment and if so displayed the changed comment.
             Player updatedPlayer = dataSnapshot.getValue(Player.class);
             int PlayerId = Integer.parseInt(dataSnapshot.getKey());
+
+            int oldPosition = game.players.get(PlayerId).position;
+            int newPosition = updatedPlayer.position;
+            if(oldPosition != newPosition){
+                movePlayerFigure(oldPosition,newPosition,PlayerId);
+            }
+
             game.players.set(PlayerId, updatedPlayer);
 
             // ...
@@ -468,6 +475,62 @@ public class MainActivity extends AppCompatActivity {
             case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39:
                 FieldRecRight fragmentR = (FieldRecRight) getFieldById(fieldId);
                 fragmentR.setFramePlayer(idPlayer);
+                break;
+        }
+    }
+
+    private void movePlayerFigure(int fieldFrom, int fieldTo, int idPlayer){
+        switch (fieldFrom) {
+            case 0: case 10: case 20: case 30:
+                FieldSquare fragmentS = (FieldSquare) getFieldById(fieldFrom);
+                fragmentS.setInvisiblePLayer(idPlayer);
+                break;
+
+            case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+                FieldRecBottom fragmentB = (FieldRecBottom) getFieldById(fieldFrom);
+                fragmentB.setInvisiblePLayer(idPlayer);
+                break;
+
+            case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19:
+                FieldRecLeft fragmentL = (FieldRecLeft) getFieldById(fieldFrom);
+                fragmentL.setInvisiblePLayer(idPlayer);
+                break;
+
+            case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
+                FieldRecTop fragmentT = (FieldRecTop) getFieldById(fieldFrom);
+                fragmentT.setInvisiblePLayer(idPlayer);
+                break;
+
+            case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39:
+                FieldRecRight fragmentR = (FieldRecRight) getFieldById(fieldFrom);
+                fragmentR.setInvisiblePLayer(idPlayer);
+                break;
+        }
+
+        switch (fieldTo) {
+            case 0: case 10: case 20: case 30:
+                FieldSquare fragmentS = (FieldSquare) getFieldById(fieldTo);
+                fragmentS.setVisiblePLayer(idPlayer);
+                break;
+
+            case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+                FieldRecBottom fragmentB = (FieldRecBottom) getFieldById(fieldTo);
+                fragmentB.setVisiblePLayer(idPlayer);
+                break;
+
+            case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19:
+                FieldRecLeft fragmentL = (FieldRecLeft) getFieldById(fieldTo);
+                fragmentL.setVisiblePLayer(idPlayer);
+                break;
+
+            case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
+                FieldRecTop fragmentT = (FieldRecTop) getFieldById(fieldTo);
+                fragmentT.setVisiblePLayer(idPlayer);
+                break;
+
+            case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39:
+                FieldRecRight fragmentR = (FieldRecRight) getFieldById(fieldTo);
+                fragmentR.setVisiblePLayer(idPlayer);
                 break;
         }
     }

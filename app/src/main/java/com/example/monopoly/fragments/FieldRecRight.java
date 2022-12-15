@@ -78,16 +78,16 @@ public class FieldRecRight extends Fragment {
     public void setFramePlayer(int idPlayer) {
         LinearLayout frag = (LinearLayout) getView();
         switch(idPlayer){
-            case 1:
+            case 0:
                 frag.setBackgroundResource(R.drawable.frame_1);
                 break;
-            case 2:
+            case 1:
                 frag.setBackgroundResource(R.drawable.frame_2);
                 break;
-            case 3:
+            case 2:
                 frag.setBackgroundResource(R.drawable.frame_3);
                 break;
-            case 4:
+            case 3:
                 frag.setBackgroundResource(R.drawable.frame_4);
                 break;
             default:
