@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/FragSquareMarginStyle"
+        android:columnCount="2"
+        android:rowCount="2">
+
+        <ImageView
+            android:id="@+id/player1"
+            style="@style/ImgPlayerStyle"
+            app:srcCompat="@drawable/player_1"/>
+        <ImageView
+            android:id="@+id/player2"
+            style="@style/ImgPlayerStyle"
+            app:srcCompat="@drawable/player_2"
+            />
+        <ImageView
+            android:id="@+id/player3"
+            style="@style/ImgPlayerStyle"
+            app:srcCompat="@drawable/player_3"
+            />
+        <ImageView
+            android:id="@+id/player4"
+            style="@style/ImgPlayerStyle"
+            app:srcCompat="@drawable/player_4"
+            />
+    </GridLayout>
+
+
+
+</LinearLayout>

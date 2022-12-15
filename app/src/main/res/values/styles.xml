@@ -1,31 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ImageRecVerticalStyle">
-        <item name="android:layout_width">25dp</item>
-        <item name="android:layout_height">39.6dp</item>
-        <item name="android:layout_weight">1.25</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name ="android:scaleX">0.5</item>
-        <item name ="android:scaleY">0.3</item>
-    </style>
 
-    <style name="ImageRecHorizontalStyle">
-        <item name="android:layout_width">39.6dp</item>
-        <item name="android:layout_height">25dp</item>
-        <item name="android:layout_weight">1.25</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name ="android:scaleX">0.3</item>
-        <item name ="android:scaleY">0.5</item>
-    </style>
-
-    <style name="ImageSquareStyle">
-        <item name="android:layout_width">39.6dp</item>
-        <item name="android:layout_height">39.6dp</item>
-        <item name="android:layout_weight">2</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name ="android:scaleX">0.35</item>
-        <item name ="android:scaleY">0.35</item>
-    </style>
 
     <style name="LinLayHorizontalStyle">
         <item name="android:layout_width">wrap_content</item>
@@ -45,26 +20,67 @@
         <item name ="android:layout_gravity">center_horizontal</item>
     </style>
 
-
-    <style name="LinRecVerticaStyle">
+    <style name="FragRecVerticalStyle">
         <item name="android:layout_width">25dp</item>
         <item name="android:layout_height">39.6dp</item>
         <item name="android:layout_weight">1.25</item>
-        <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="LinRecHorizontalStyle">
+    <style name="FragRecHorizontalStyle">
         <item name="android:layout_width">39.6dp</item>
         <item name="android:layout_height">25dp</item>
         <item name="android:layout_weight">1.25</item>
-        <item name="android:orientation">horizontal</item>
     </style>
 
-    <style name="LinSquareStyle">
+    <style name="FragSquareStyle">
         <item name="android:layout_width">39.6dp</item>
         <item name="android:layout_height">39.6dp</item>
         <item name="android:layout_weight">2</item>
-        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="FragSquareMarginStyle">
+        <item name="android:layout_margin">8dp</item>
+    </style>
+
+    <style name="ImgPlayerStyle">
+        <item name="android:layout_width">12.5dp</item>
+        <item name="android:layout_height">12.5dp</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <style name="ImgHouseMarginBottomStyle">
+        <item name="android:layout_width">6dp</item>
+        <item name="android:layout_height">6dp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="ImgHouseMarginTopStyle">
+        <item name="android:layout_width">6dp</item>
+        <item name="android:layout_height">6dp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="ImgHouseMarginLeftStyle">
+        <item name="android:layout_width">6dp</item>
+        <item name="android:layout_height">6dp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:layout_marginLeft">8dp</item>
+    </style>
+
+    <style name="ImgHouseMarginRightStyle">
+        <item name="android:layout_width">6dp</item>
+        <item name="android:layout_height">6dp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+
+    <style name="FragPlayer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:name">com.example.monopoly.fragments.Player</item>
     </style>
 
 </resources>

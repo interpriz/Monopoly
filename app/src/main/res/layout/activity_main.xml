@@ -6,129 +6,59 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_gravity="center"
 
-    <!--<ImageView android:rotation="90" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1.25" android:layout_gravity="center_horizontal" app:srcCompat="@drawable/rectangle_field" />
--->
+    android:weightSum="3">
+
+    <fragment
+        android:id="@+id/player_1"
+        style="@style/FragPlayer"
+        tools:layout="@layout/fragment_player"
+        android:layout_weight="1"/>
+    <fragment
+        android:id="@+id/player_2"
+        style="@style/FragPlayer"
+        tools:layout="@layout/fragment_player"
+        android:layout_weight="1"/>
+    <fragment
+        android:id="@+id/player_3"
+        style="@style/FragPlayer"
+        tools:layout="@layout/fragment_player"
+        android:layout_weight="1"/>
+
+</LinearLayout>
+
+
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:orientation="vertical"
         android:weightSum="15.25"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
         android:background="@drawable/game_field">
 
 
         <LinearLayout style="@style/LinLayHorizontalStyle">
 
+            <fragment android:id="@+id/field20" android:name="com.example.monopoly.fragments.FieldSquare" style="@style/FragSquareStyle" tools:layout="@layout/fragment_field_square"></fragment>
 
+            <fragment android:id="@+id/field21" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
+            <fragment android:id="@+id/field22" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
+            <fragment android:id="@+id/field23" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
+            <fragment android:id="@+id/field24" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
+            <fragment android:id="@+id/field25" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
+            <fragment android:id="@+id/field26" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
+            <fragment android:id="@+id/field27" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
+            <fragment android:id="@+id/field28" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
+            <fragment android:id="@+id/field29" android:name="com.example.monopoly.fragments.FieldRecTop" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_top"></fragment>
 
-            <LinearLayout
-                style="@style/LinSquareStyle"
-                >
+            <fragment android:id="@+id/field30" android:name="com.example.monopoly.fragments.FieldSquare" style="@style/FragSquareStyle" tools:layout="@layout/fragment_field_square"></fragment>
 
-                <GridLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:columnCount="2"
-                    android:rowCount="2">
-
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        app:srcCompat="@drawable/player_1" />
-
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        app:srcCompat="@drawable/player_2" />
-
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        app:srcCompat="@drawable/player_3" />
-
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        app:srcCompat="@drawable/player_4" />
-                </GridLayout>
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/LinRecVerticaStyle"
-                android:background="@drawable/frame_1"
-                >
-                <GridLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:columnCount="4"
-                    android:rowCount="3">
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        android:layout_columnSpan="2"
-                        app:srcCompat="@drawable/player_1" />
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        android:layout_columnSpan="2"
-                        app:srcCompat="@drawable/player_2" />
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        android:layout_columnSpan="2"
-                        app:srcCompat="@drawable/player_3" />
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        android:layout_columnSpan="2"
-                        app:srcCompat="@drawable/player_4"
-                        />
-
-                    <ImageView
-                        android:layout_marginTop="8dp"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        app:srcCompat="@drawable/house1"
-                        />
-                    <ImageView
-                        android:layout_marginTop="8dp"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        app:srcCompat="@drawable/house1"
-                        />
-                    <ImageView
-                        android:layout_marginTop="8dp"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        app:srcCompat="@drawable/house1"
-                        />
-                    <ImageView
-                        android:layout_marginTop="8dp"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        app:srcCompat="@drawable/house1"
-                        />
-                </GridLayout>
-
-
-
-            </LinearLayout>
-
-
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
 
         </LinearLayout>
 
@@ -143,80 +73,15 @@
             <LinearLayout style="@style/LinLayVerticalStyle">
 
 
-                <LinearLayout
-                    style="@style/LinRecHorizontalStyle"
-                    android:background="@drawable/frame_1"
-                    >
-                    <GridLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:columnCount="3"
-                        android:rowCount="4">
-                        <ImageView
-                            android:layout_width="12.25dp"
-                            android:layout_height="12.25dp"
-                            android:layout_rowSpan="2"
-                            app:srcCompat="@drawable/player_1" />
-                        <ImageView
-                            android:layout_width="12.25dp"
-                            android:layout_height="12.25dp"
-                            android:layout_rowSpan="2"
-                            app:srcCompat="@drawable/player_2" />
-                        <ImageView
-                            android:layout_marginLeft="8dp"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
-                            app:srcCompat="@drawable/house1"
-                            />
-                        <ImageView
-                            android:layout_marginLeft="8dp"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
-                            app:srcCompat="@drawable/house1"
-                            />
-
-                        <ImageView
-                            android:layout_width="12.25dp"
-                            android:layout_height="12.25dp"
-                            android:layout_rowSpan="2"
-                            app:srcCompat="@drawable/player_3" />
-                        <ImageView
-                            android:layout_width="12.25dp"
-                            android:layout_height="12.25dp"
-                            android:layout_rowSpan="2"
-                            app:srcCompat="@drawable/player_4"
-                            />
-                        <ImageView
-                            android:layout_marginLeft="8dp"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
-                            app:srcCompat="@drawable/house1"
-                            />
-                        <ImageView
-                            android:layout_marginLeft="8dp"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
-                            app:srcCompat="@drawable/house1"
-                            />
-
-
-
-
-
-                            />
-                    </GridLayout>
-
-
-
-                </LinearLayout>
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle"  app:srcCompat="@drawable/player_1"/>
+                <fragment android:id="@+id/field19" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
+                <fragment android:id="@+id/field18" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
+                <fragment android:id="@+id/field17" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
+                <fragment android:id="@+id/field16" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
+                <fragment android:id="@+id/field15" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
+                <fragment android:id="@+id/field14" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
+                <fragment android:id="@+id/field13" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
+                <fragment android:id="@+id/field12" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
+                <fragment android:id="@+id/field11" android:name="com.example.monopoly.fragments.FieldRecLeft" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_left"></fragment>
 
             </LinearLayout>
 
@@ -229,163 +94,50 @@
 
             <LinearLayout style="@style/LinLayVerticalStyle">
 
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-                <ImageView style="@style/ImageRecHorizontalStyle" app:srcCompat="@drawable/player_1"/>
-
-                <LinearLayout
-                    style="@style/LinRecHorizontalStyle"
-                    android:background="@drawable/frame_1"
-                    >
-                    <GridLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:columnCount="3"
-                        android:rowCount="4">
-
-                        <ImageView
-                            android:layout_marginRight="8dp"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
-                            app:srcCompat="@drawable/house1"
-                            />
-                        <ImageView
-                            android:layout_width="12.25dp"
-                            android:layout_height="12.25dp"
-                            android:layout_rowSpan="2"
-                            app:srcCompat="@drawable/player_1" />
-                        <ImageView
-                            android:layout_width="12.25dp"
-                            android:layout_height="12.25dp"
-                            android:layout_rowSpan="2"
-                            app:srcCompat="@drawable/player_2" />
-
-                        <ImageView
-                            android:layout_marginRight="8dp"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
-                            app:srcCompat="@drawable/house1"
-                            />
-                        <ImageView
-                            android:layout_marginRight="8dp"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
-                            app:srcCompat="@drawable/house1"
-                            />
-
-                        <ImageView
-                            android:layout_width="12.25dp"
-                            android:layout_height="12.25dp"
-                            android:layout_rowSpan="2"
-                            app:srcCompat="@drawable/player_3" />
-                        <ImageView
-                            android:layout_width="12.25dp"
-                            android:layout_height="12.25dp"
-                            android:layout_rowSpan="2"
-                            app:srcCompat="@drawable/player_4"
-                            />
-
-                        <ImageView
-                            android:layout_marginRight="8dp"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
-                            app:srcCompat="@drawable/house1"
-                            />
-                        />
-                    </GridLayout>
-
-
-
-                </LinearLayout>
-
+                <fragment android:id="@+id/field31" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                <fragment android:id="@+id/field32" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                <fragment android:id="@+id/field33" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                <fragment android:id="@+id/field34" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                <fragment android:id="@+id/field35" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                <fragment android:id="@+id/field36" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                <fragment android:id="@+id/field37" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                <fragment android:id="@+id/field38" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                <fragment android:id="@+id/field39" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
+                
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout style="@style/LinLayHorizontalStyle">
 
-            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
-            <ImageView style="@style/ImageRecVerticalStyle"    app:srcCompat="@drawable/player_1" />
+            <fragment android:id="@+id/field10" android:name="com.example.monopoly.fragments.FieldSquare" style="@style/FragSquareStyle" tools:layout="@layout/fragment_field_square"></fragment>
 
-            <LinearLayout
-                style="@style/LinRecVerticaStyle"
-                android:background="@drawable/frame_1"
-                >
-                <GridLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:columnCount="4"
-                    android:rowCount="3">
-                    <ImageView
-                        android:layout_marginBottom="8dp"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        app:srcCompat="@drawable/house1"
-                        />
-                    <ImageView
-                        android:layout_marginBottom="8dp"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        app:srcCompat="@drawable/house1"
-                        />
-                    <ImageView
-                        android:layout_marginBottom="8dp"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        app:srcCompat="@drawable/house1"
-                        />
-                    <ImageView
-                        android:layout_marginBottom="8dp"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        app:srcCompat="@drawable/house1"
-                        />
+            <fragment android:id="@+id/field9" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
+            <fragment android:id="@+id/field8" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
+            <fragment android:id="@+id/field7" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
+            <fragment android:id="@+id/field6" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
+            <fragment android:id="@+id/field5" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
+            <fragment android:id="@+id/field4" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
+            <fragment android:id="@+id/field3" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
+            <fragment android:id="@+id/field2" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
+            <fragment android:id="@+id/field1" android:name="com.example.monopoly.fragments.FieldRecBottom" style="@style/FragRecVerticalStyle" tools:layout="@layout/fragment_field_rec_bottom"></fragment>
 
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        android:layout_columnSpan="2"
-                        app:srcCompat="@drawable/player_1" />
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        android:layout_columnSpan="2"
-                        app:srcCompat="@drawable/player_2" />
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        android:layout_columnSpan="2"
-                        app:srcCompat="@drawable/player_3" />
-                    <ImageView
-                        android:layout_width="12.25dp"
-                        android:layout_height="12.25dp"
-                        android:layout_columnSpan="2"
-                        app:srcCompat="@drawable/player_4"
-                        />
+            <fragment android:id="@+id/field0" android:name="com.example.monopoly.fragments.FieldSquare" style="@style/FragSquareStyle" tools:layout="@layout/fragment_field_square"></fragment>
 
-
-                </GridLayout>
-
-
-
-            </LinearLayout>
-
-            <ImageView style="@style/ImageSquareStyle" app:srcCompat="@drawable/player_1" />
 
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <fragment
+            android:id="@+id/yourPlayer"
+            style="@style/FragPlayer"
+            tools:layout="@layout/fragment_player"
+            android:layout_weight="1"/>
     </LinearLayout>
 
 

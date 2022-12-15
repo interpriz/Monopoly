@@ -4,11 +4,17 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.monopoly.fragments.FieldRecBottom;
+import com.example.monopoly.fragments.FieldRecLeft;
+import com.example.monopoly.fragments.FieldRecRight;
+import com.example.monopoly.fragments.FieldRecTop;
+import com.example.monopoly.fragments.FieldSquare;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -17,6 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import entities.Auction;
 import entities.FieldDB;
@@ -33,29 +43,31 @@ public class MainActivity extends AppCompatActivity {
 
     String text;
     private TextView textView;
-    
+
     //объекты логики игры 
     private Game game;
+    private Player yourPlayer;
     private GameService gameService;
     private GameRepository gr;
     private PlayerRepository pr;
     private MapService mapService = MapService.getInstance();
-    
+
     //объекты взаимодействия с БД
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
-    DatabaseReference testMessageRef        = database.getReference("testMessage");
-    DatabaseReference gameRef               = database.getReference("testGame");
-    DatabaseReference gameDice1Ref          = gameRef.child("dice1");
-    DatabaseReference gameDice2Ref          = gameRef.child("dice2");
-    DatabaseReference gameAuctionRef        = gameRef.child("auction");
-    DatabaseReference gameStateRef          = gameRef.child("state");
-    DatabaseReference gameCurPlayerRef      = gameRef.child("currentPlayerId");
-    DatabaseReference gameBankRef           = gameRef.child("bank");
-    DatabaseReference gamePausedPlayerRef   = gameRef.child("pausedPlayer");
-    DatabaseReference gameWinnerRef         = gameRef.child("winnerId");
-    DatabaseReference gameFieldsOwnersRef   = gameRef.child("fieldsOwners");
-    DatabaseReference gamePlayersRef        = gameRef.child("players");
-    
+    DatabaseReference testMessageRef = database.getReference("testMessage");
+    DatabaseReference gameRef = database.getReference("testGame");
+    DatabaseReference gameDice1Ref = gameRef.child("dice1");
+    DatabaseReference gameDice2Ref = gameRef.child("dice2");
+    DatabaseReference gameAuctionRef = gameRef.child("auction");
+    DatabaseReference gameStateRef = gameRef.child("state");
+    DatabaseReference gameCurPlayerRef = gameRef.child("currentPlayerId");
+    DatabaseReference gameBankRef = gameRef.child("bank");
+    DatabaseReference gamePausedPlayerRef = gameRef.child("pausedPlayer");
+    DatabaseReference gameWinnerRef = gameRef.child("winnerId");
+    DatabaseReference gameFieldsOwnersRef = gameRef.child("fieldsOwners");
+    DatabaseReference gamePlayersRef = gameRef.child("players");
+    //DatabaseReference gamePlayer0Ref = gameRef.child("players").child("0");
+
     //слушатели БД
     ValueEventListener testMessageListener = new ValueEventListener() {
         @Override
@@ -108,20 +120,19 @@ public class MainActivity extends AppCompatActivity {
         public void onComplete(@NonNull Task<DataSnapshot> task) {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
-            }
-            else {
+            } else {
                 Log.d("firebase", String.valueOf(task.getResult().getValue()));
                 DataSnapshot ds = task.getResult();
                 game = ds.getValue(Game.class);
-                int a =0;
-                if(game==null){
-                    game = new Game(4,"God");
+                int a = 0;
+                if (game == null) {
+                    game = new Game(4, "God");
                     gameRef.setValue(game);
-                    gameService.enterGame("God");
+                    gameService = new GameService(game);
+                    yourPlayer = gameService.enterGame("God");
                     gameService.enterGame("Sasha");
                     gameService.enterGame("Sveta");
                     gameService.enterGame("Lola");
-                    gr.setNewOwner(2, 0);
                 }
 
                 gameService = new GameService(game);
@@ -165,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    ValueEventListener gameDice1Listener        = new ValueEventListener() {
+    ValueEventListener gameDice1Listener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
@@ -180,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "Failed to read value.", error.toException());
         }
     };
-    ValueEventListener gameDice2Listener        = new ValueEventListener() {
+    ValueEventListener gameDice2Listener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
@@ -195,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "Failed to read value.", error.toException());
         }
     };
-    ValueEventListener gameAuctionListener      = new ValueEventListener() {
+    ValueEventListener gameAuctionListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
@@ -210,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "Failed to read value.", error.toException());
         }
     };
-    ValueEventListener gameStateListener        = new ValueEventListener() {
+    ValueEventListener gameStateListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
@@ -225,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "Failed to read value.", error.toException());
         }
     };
-    ValueEventListener gameCurPlayerListener    = new ValueEventListener() {
+    ValueEventListener gameCurPlayerListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
@@ -240,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "Failed to read value.", error.toException());
         }
     };
-    ValueEventListener gameBankListener         = new ValueEventListener() {
+    ValueEventListener gameBankListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
@@ -270,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "Failed to read value.", error.toException());
         }
     };
-    ValueEventListener gameWinnerListener       = new ValueEventListener() {
+    ValueEventListener gameWinnerListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
@@ -307,6 +318,8 @@ public class MainActivity extends AppCompatActivity {
             FieldDB updatedField = dataSnapshot.getValue(FieldDB.class);
             int fieldId = Integer.parseInt(dataSnapshot.getKey());
             game.fieldsOwners.set(fieldId, updatedField);
+            setHousesOnField(fieldId,updatedField.houses);
+            setPlayerFrame(fieldId, updatedField.owner);
 
             // ...
         }
@@ -396,6 +409,71 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    //объекты интерфейса
+    public List<Integer> fields = new ArrayList<Integer>(
+            Arrays.asList(
+                    R.id.field0, R.id.field1, R.id.field2, R.id.field3, R.id.field4, R.id.field5, R.id.field6, R.id.field7, R.id.field8, R.id.field9,
+                    R.id.field10,R.id.field11,R.id.field12,R.id.field13,R.id.field14,R.id.field15,R.id.field16,R.id.field17,R.id.field18,R.id.field19,
+                    R.id.field20,R.id.field21,R.id.field22,R.id.field23,R.id.field24,R.id.field25,R.id.field26,R.id.field27,R.id.field28,R.id.field29,
+                    R.id.field30,R.id.field31,R.id.field32,R.id.field33,R.id.field34,R.id.field35,R.id.field36,R.id.field37,R.id.field38,R.id.field39
+            )
+    );
+
+    //функции интерфейса
+    private Fragment getFieldById(int id) {
+        return getSupportFragmentManager().findFragmentById(fields.get(id));
+    }
+
+    private void setHousesOnField(int fieldId, int houses) {
+        switch (fieldId) {
+            case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+                FieldRecBottom fragmentB = (FieldRecBottom) getFieldById(fieldId);
+                fragmentB.setVisibleHouses(houses);
+                break;
+
+            case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19:
+                FieldRecLeft fragmentL = (FieldRecLeft) getFieldById(fieldId);
+                fragmentL.setVisibleHouses(houses);
+                break;
+
+            case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
+                FieldRecTop fragmentT = (FieldRecTop) getFieldById(fieldId);
+                fragmentT.setVisibleHouses(houses);
+                break;
+
+            case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39:
+                FieldRecRight fragmentR = (FieldRecRight) getFieldById(fieldId);
+                fragmentR.setVisibleHouses(houses);
+                break;
+        }
+    }
+
+    private void setPlayerFrame(int fieldId, int idPlayer){
+        switch (fieldId) {
+            case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+                FieldRecBottom fragmentB = (FieldRecBottom) getFieldById(fieldId);
+                fragmentB.setFramePlayer(idPlayer);
+                break;
+
+            case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19:
+                FieldRecLeft fragmentL = (FieldRecLeft) getFieldById(fieldId);
+                fragmentL.setFramePlayer(idPlayer);
+                break;
+
+            case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
+                FieldRecTop fragmentT = (FieldRecTop) getFieldById(fieldId);
+                fragmentT.setFramePlayer(idPlayer);
+                break;
+
+            case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39:
+                FieldRecRight fragmentR = (FieldRecRight) getFieldById(fieldId);
+                fragmentR.setFramePlayer(idPlayer);
+                break;
+        }
+    }
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -404,6 +482,11 @@ public class MainActivity extends AppCompatActivity {
 
         //textView = (TextView) findViewById(R.id.text);
 
+        FieldSquare fragment0 = (FieldSquare) getFieldById(0);
+        fragment0.setVisiblePLayer(1);
+        fragment0.setVisiblePLayer(2);
+        fragment0.setVisiblePLayer(3);
+        fragment0.setVisiblePLayer(4);
 
 
         gameRef.get().addOnCompleteListener(gameFirstListen);
@@ -412,19 +495,19 @@ public class MainActivity extends AppCompatActivity {
         testMessageRef.addValueEventListener(testMessageListener);
 
     }
-    
-    private void bindGameParameters(){
+
+    private void bindGameParameters() {
         //gameRef            .addListenerForSingleValueEvent(gameFirstListen);
-        gameDice1Ref       .addValueEventListener(gameDice1Listener);
-        gameDice2Ref       .addValueEventListener(gameDice2Listener);
-        gameAuctionRef     .addValueEventListener(gameAuctionListener);
-        gameStateRef       .addValueEventListener(gameStateListener);
-        gameCurPlayerRef   .addValueEventListener(gameCurPlayerListener);
-        gameBankRef        .addValueEventListener(gameBankListener);
+        gameDice1Ref.addValueEventListener(gameDice1Listener);
+        gameDice2Ref.addValueEventListener(gameDice2Listener);
+        gameAuctionRef.addValueEventListener(gameAuctionListener);
+        gameStateRef.addValueEventListener(gameStateListener);
+        gameCurPlayerRef.addValueEventListener(gameCurPlayerListener);
+        gameBankRef.addValueEventListener(gameBankListener);
         gamePausedPlayerRef.addValueEventListener(gamePausedPlayerListener);
-        gameWinnerRef      .addValueEventListener(gameWinnerListener);
+        gameWinnerRef.addValueEventListener(gameWinnerListener);
         gameFieldsOwnersRef.addChildEventListener(gameFieldsOwnersListener);
-        gamePlayersRef     .addChildEventListener(gamePlayersListener);
+        gamePlayersRef.addChildEventListener(gamePlayersListener);
     }
     
     /* List<String> users = new ArrayList<>();
@@ -485,8 +568,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         myRef1.addChildEventListener(childEventListener);*/
-
-
 
 
 }
