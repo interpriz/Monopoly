@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.monopoly.R;
 
@@ -35,17 +36,17 @@ public class FieldSquare extends Fragment {
     public void setVisiblePLayer(int idPlayer) {
         ImageView img = null;
         switch(idPlayer){
-            case 1:
+            case 0:
             default:
                 img =  (ImageView) getView().findViewById(R.id.player1);
                 break;
-            case 2:
+            case 1:
                 img =  (ImageView) getView().findViewById(R.id.player2);
                 break;
-            case 3:
+            case 2:
                 img =  (ImageView) getView().findViewById(R.id.player3);
                 break;
-            case 4:
+            case 3:
                 img =  (ImageView) getView().findViewById(R.id.player4);
                 break;
         }
@@ -56,23 +57,24 @@ public class FieldSquare extends Fragment {
     public void setInvisiblePLayer(int idPlayer) {
         ImageView img = null;
         switch(idPlayer){
-            case 1:
+            case 0:
             default:
                 img =  (ImageView) getView().findViewById(R.id.player1);
                 break;
-            case 2:
+            case 1:
                 img =  (ImageView) getView().findViewById(R.id.player2);
                 break;
-            case 3:
+            case 2:
                 img =  (ImageView) getView().findViewById(R.id.player3);
                 break;
-            case 4:
+            case 3:
                 img =  (ImageView) getView().findViewById(R.id.player4);
                 break;
         }
         img.setVisibility(View.INVISIBLE);
         // do something in fragment
     }
+
 
     /**
      * Use this factory method to create a new instance of

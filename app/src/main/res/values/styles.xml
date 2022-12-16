@@ -4,7 +4,7 @@
 
     <style name="LinLayHorizontalStyle">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">39.6dp</item>
+        <item name="android:layout_height">45.54dp</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:weightSum">15.25</item>
         <item name ="android:layout_weight">2</item>
@@ -12,7 +12,7 @@
     </style>
 
     <style name="LinLayVerticalStyle">
-        <item name="android:layout_width">39.6dp</item>
+        <item name="android:layout_width">45.54dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:weightSum">11.25</item>
@@ -21,25 +21,25 @@
     </style>
 
     <style name="FragRecVerticalStyle">
-        <item name="android:layout_width">25dp</item>
-        <item name="android:layout_height">39.6dp</item>
+        <item name="android:layout_width">28.75dp</item>
+        <item name="android:layout_height">45.54dp</item>
         <item name="android:layout_weight">1.25</item>
     </style>
 
     <style name="FragRecHorizontalStyle">
-        <item name="android:layout_width">39.6dp</item>
-        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_width">45.54dp</item>
+        <item name="android:layout_height">28.75dp</item>
         <item name="android:layout_weight">1.25</item>
     </style>
 
     <style name="FragSquareStyle">
-        <item name="android:layout_width">39.6dp</item>
-        <item name="android:layout_height">39.6dp</item>
+        <item name="android:layout_width">45.54dp</item>
+        <item name="android:layout_height">45.54dp</item>
         <item name="android:layout_weight">2</item>
     </style>
 
     <style name="FragSquareMarginStyle">
-        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_margin">10dp</item>
     </style>
 
     <style name="ImgPlayerStyle">
@@ -49,31 +49,31 @@
     </style>
 
     <style name="ImgHouseMarginBottomStyle">
-        <item name="android:layout_width">6dp</item>
-        <item name="android:layout_height">6dp</item>
+        <item name="android:layout_width">7.114dp</item>
+        <item name="android:layout_height">7.114dp</item>
         <item name="android:visibility">invisible</item>
-        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
     </style>
 
     <style name="ImgHouseMarginTopStyle">
-        <item name="android:layout_width">6dp</item>
-        <item name="android:layout_height">6dp</item>
+        <item name="android:layout_width">7.114dp</item>
+        <item name="android:layout_height">7.114dp</item>
         <item name="android:visibility">invisible</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginTop">12dp</item>
     </style>
 
     <style name="ImgHouseMarginLeftStyle">
-        <item name="android:layout_width">6dp</item>
-        <item name="android:layout_height">6dp</item>
+        <item name="android:layout_width">7.114dp</item>
+        <item name="android:layout_height">7.114dp</item>
         <item name="android:visibility">invisible</item>
-        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
     </style>
 
     <style name="ImgHouseMarginRightStyle">
-        <item name="android:layout_width">6dp</item>
-        <item name="android:layout_height">6dp</item>
+        <item name="android:layout_width">7.114dp</item>
+        <item name="android:layout_height">7.114dp</item>
         <item name="android:visibility">invisible</item>
-        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginRight">12dp</item>
     </style>
 
     <style name="FragPlayer">

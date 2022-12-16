@@ -38,17 +38,17 @@ public class FieldRecTop extends Fragment {
     public void setVisiblePLayer(int idPlayer) {
         ImageView img = null;
         switch(idPlayer){
-            case 1:
+            case 0:
             default:
                 img =  (ImageView) getView().findViewById(R.id.player1);
                 break;
-            case 2:
+            case 1:
                 img =  (ImageView) getView().findViewById(R.id.player2);
                 break;
-            case 3:
+            case 2:
                 img =  (ImageView) getView().findViewById(R.id.player3);
                 break;
-            case 4:
+            case 3:
                 img =  (ImageView) getView().findViewById(R.id.player4);
                 break;
         }
@@ -59,17 +59,17 @@ public class FieldRecTop extends Fragment {
     public void setInvisiblePLayer(int idPlayer) {
         ImageView img = null;
         switch(idPlayer){
-            case 1:
+            case 0:
             default:
                 img =  (ImageView) getView().findViewById(R.id.player1);
                 break;
-            case 2:
+            case 1:
                 img =  (ImageView) getView().findViewById(R.id.player2);
                 break;
-            case 3:
+            case 2:
                 img =  (ImageView) getView().findViewById(R.id.player3);
                 break;
-            case 4:
+            case 3:
                 img =  (ImageView) getView().findViewById(R.id.player4);
                 break;
         }
@@ -106,7 +106,6 @@ public class FieldRecTop extends Fragment {
         ImageView house4 = (ImageView) getView().findViewById(R.id.house4);
         switch(number){
             case 1:
-            default:
                 house1.setVisibility(View.VISIBLE);
                 house2.setVisibility(View.INVISIBLE);
                 house3.setVisibility(View.INVISIBLE);
@@ -131,6 +130,7 @@ public class FieldRecTop extends Fragment {
                 house4.setVisibility(View.VISIBLE);
                 break;
             case 0:
+            default:
                 house1.setVisibility(View.INVISIBLE);
                 house2.setVisibility(View.INVISIBLE);
                 house3.setVisibility(View.INVISIBLE);
