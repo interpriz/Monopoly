@@ -109,6 +109,13 @@ public class GameRepository {
         myRef1.child("fieldsOwners").child(String.valueOf(idProperty)).child("owner").setValue(newOwnerId);
     }
 
+    public void setNewDeposit(int idProperty, boolean newDeposit) {
+        game.fieldsOwners.get(idProperty).deposit = newDeposit;
+        myRef1.child("fieldsOwners").child(String.valueOf(idProperty)).child("deposit").setValue(newDeposit);
+    }
+
+
+
     public void addHouse(Street street) {
         int idProperty = MapService.getInstance()
                 .map.indexOf(street);

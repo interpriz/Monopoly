@@ -24,6 +24,7 @@ import com.example.monopoly.fragments.FieldRecRight;
 import com.example.monopoly.fragments.FieldRecTop;
 import com.example.monopoly.fragments.FieldSquare;
 import com.example.monopoly.fragments.PlayerFrag;
+import com.example.monopoly.fragments.soldBuyProperty;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -58,10 +59,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
 
     //объекты логики игры 
-    private Game game;
-    private Player yourPlayer;
-    private Player currentPlayer; //TODO для теста
-    private GameService gameService;
+    public Game game;
+    public Player yourPlayer;
+    public Player currentPlayer; //TODO для теста
+    public GameService gameService;
     private GameRepository gr;
     private PlayerRepository pr;
     private MapService mapService = MapService.getInstance();
@@ -776,6 +777,21 @@ public class MainActivity extends AppCompatActivity {
         showMessage(result);
     }
 
+    boolean open = false;
+    soldBuyProperty frag1 = new soldBuyProperty();
+    public void depositBuyClick(View view) {
+        if(!open){
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container_view, frag1)
+                    .commit();
+            open=true;
+        }else{
+            getSupportFragmentManager().beginTransaction().remove(frag1).commit();
+            open=false;
+        }
+
+    }
+
     public void showMessage(String mes){
         if(!mes.equals(SUCCESS)){
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -783,6 +799,8 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         }
     }
+
+
 
 
     

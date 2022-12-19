@@ -4,7 +4,7 @@ import enums.FieldTypes;
 import enums.PropTypes;
 
 public class RailwayStation extends Property {
-    String name;
+    public String name;
 
     public RailwayStation(
             FieldTypes type,

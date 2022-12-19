@@ -146,6 +146,11 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <FrameLayout
+                    android:id="@+id/fragment_container_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
 
 
             </LinearLayout>
@@ -209,8 +214,19 @@
                 android:onClick="goOutFromJailClick"
                 android:text="Выйти из тюрьмы 50$"
                 android:textSize="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_gravity="center"
+                 />
+
+            <Button
+                android:id="@+id/depositBuyBackBtn"
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:backgroundTint="#FF5722"
+                android:onClick="depositBuyClick"
+                android:text="Заложить/выкупить собственность"
+                android:textSize="10dp"
+                android:layout_gravity="center"
+                 />
 
         </GridLayout>
     </LinearLayout>

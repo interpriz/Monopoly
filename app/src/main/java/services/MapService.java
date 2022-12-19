@@ -109,6 +109,27 @@ public class MapService {
         else return null;
     }
 
+    public  String getPropertyNameByPosition(int pos) {
+        Field field = getFieldByPosition(pos);
+        if (field.getType() == FieldTypes.property){
+            Property property = (Property) field;
+            switch (property.type){
+                case street:
+                    Street street = (Street) property;
+                    return street.name;
+                case station:
+                    RailwayStation station = (RailwayStation) property;
+                    return station.name;
+                case municipal:
+                    MunicipalEnterprise municipal = (MunicipalEnterprise) property;
+                    return municipal.name;
+                default:
+                    return "";
+            }
+        }
+        else return "";
+    }
+
     public Field getFieldByPosition(int pos) {
         return map.get(pos);
     }

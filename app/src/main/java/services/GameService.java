@@ -50,7 +50,6 @@ public class GameService {
         this.playerRepo = new PlayerRepository(game);
         this.test = false;
     }
-
     //войти в игру
     public Player enterGame(String name) {
         boolean unicName = game.players.stream().noneMatch(x -> x.name.equals(name));
@@ -877,7 +876,7 @@ public class GameService {
 
     public void setDeposit(Property property, boolean newDeposit){
         int idProp =  mapServ.map.indexOf(property);
-        game.fieldsOwners.get(idProp).deposit = newDeposit;
+        gameRepo.setNewDeposit(idProp, newDeposit);
     }
 
     public int getHouses(Street street) {

@@ -4,7 +4,7 @@ import enums.FieldTypes;
 import enums.PropTypes;
 
 public class MunicipalEnterprise extends Property {
-    String name;
+    public String name;
 
     public MunicipalEnterprise(
             FieldTypes type,
