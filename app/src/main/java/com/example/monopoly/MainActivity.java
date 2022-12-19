@@ -771,6 +771,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void goOutFromJailClick(View view) {
+        String result = gameService.goOutFromJail(currentPlayer);
+        showMessage(result);
+    }
+
     public void showMessage(String mes){
         if(!mes.equals(SUCCESS)){
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -778,6 +783,8 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         }
     }
+
+
     
     /* List<String> users = new ArrayList<>();
         DatabaseReference myRef1 = database.getReference("players");

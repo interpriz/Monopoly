@@ -799,6 +799,19 @@ public class GameService {
         }
     }
 
+    public String goOutFromJail(Player player){
+        if(player.jailMove==0)
+            return "You are not in jail now!";
+
+        if(player.cash<50)
+            return NOT_ENOUGH_MONEY;
+
+        payment(player, game.bank, 50);
+        playerRepo.setJailMove(player,0);
+
+        return SUCCESS;
+    }
+
 
 
 

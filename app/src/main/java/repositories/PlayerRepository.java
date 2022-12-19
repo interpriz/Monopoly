@@ -82,11 +82,8 @@ public class PlayerRepository {
     }
 
     public void reduceJailMove(Player player) {
-        player.jailMove--;
-        myRef1.child("players")
-                .child(Integer.toString(game.players.indexOf(player)))
-                .child("jailMove")
-                .setValue(player.jailMove);
+        int newJailMove = player.jailMove-1;
+        setJailMove(player, newJailMove);
     }
 
 
@@ -99,11 +96,8 @@ public class PlayerRepository {
     }
 
     public void increaseDoubles(Player player) {
-        player.doubles++;
-        myRef1.child("players")
-                .child(Integer.toString(game.players.indexOf(player)))
-                .child("doubles")
-                .setValue(player.doubles);
+        int newDoubles = player.doubles+1;
+        setDoubles(player, newDoubles);
     }
 
     public void setBankrupt(Player player, boolean bankrupt) {
