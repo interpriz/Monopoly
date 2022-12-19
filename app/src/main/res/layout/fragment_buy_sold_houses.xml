@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Выберите собственность игрока"
+        android:text="Выберите улицу игрока"
         android:textAlignment="center">
 
     </TextView>
@@ -25,17 +25,17 @@
         android:textAlignment="center" />
 
     <Button
-        android:id="@+id/depositBtn"
+        android:id="@+id/buyBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Заложить"/>
+        android:text="Купить дом"/>
 
     <Button
-        android:id="@+id/buyBackBtn"
+        android:id="@+id/soldBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Выкупить" />
+        android:text="Продать дом" />
 
 </LinearLayout>
