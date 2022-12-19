@@ -91,10 +91,8 @@ public class GameService {
         Player player = getCurrentPlayer();
         if (player.canRollDice) {
             if(!test){
-                //gameRepo.setDice1(new Random().nextInt(6) + 1);
-                //gameRepo.setDice2(new Random().nextInt(6) + 1);
-                gameRepo.setDice1(6);
-                gameRepo.setDice2(1);
+                gameRepo.setDice1(new Random().nextInt(6) + 1);
+                gameRepo.setDice2(new Random().nextInt(6) + 1);
             }else{
                 gameRepo.setDice1(d1);
                 gameRepo.setDice2(d2);
@@ -253,7 +251,7 @@ public class GameService {
                     //станция
                     //улица
                     //если владелец - банк
-                    Property property = mapServ.getPropertyByPosition(player.position);
+                    Property property = mapServ.getPropertyByPosition(newPosition);
                     if (getOwner(property) == game.bank) {
                         //TODO продумать функционал аукциона
                         makeOffer(player, property, OfferTypes.sold, property.price, null, game.bank);
@@ -815,13 +813,17 @@ public class GameService {
 
     private void giveDicesToNextPlayer() {
         playerRepo.setCanRollDice(getCurrentPlayer(), false);
+        int i = game.currentPlayerId;
         do {
-            if (game.currentPlayerId == game.players.size() - 1) {
-                gameRepo.setCurrentPlayerID(0);
+            if (i == game.players.size() - 1) {
+                i=0;
+                //gameRepo.setCurrentPlayerID(0);
             } else
-                gameRepo.setCurrentPlayerID(++game.currentPlayerId);
-        } while (getCurrentPlayer().bankrupt);
-        playerRepo.setCanRollDice(getCurrentPlayer(), true);
+                i++;
+                //gameRepo.setCurrentPlayerID(i++);
+        } while (getPlayer(i).bankrupt);
+        gameRepo.setCurrentPlayerID(i);
+        playerRepo.setCanRollDice(getPlayer(i), true);
     }
 
     public String pauseGame(Player player) {

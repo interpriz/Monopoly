@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,7 +41,9 @@ import java.util.stream.Collectors;
 import entities.Auction;
 import entities.FieldDB;
 import entities.Game;
+import entities.Offer;
 import entities.Player;
+import entities.Property;
 import enums.GameStates;
 import repositories.GameRepository;
 import repositories.PlayerRepository;
@@ -48,7 +51,7 @@ import services.GameService;
 import services.MapService;
 import static entities.StaticMessages.*;
 
-// token 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
+// token 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
 public class MainActivity extends AppCompatActivity {
 
     String text;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     //объекты логики игры 
     private Game game;
     private Player yourPlayer;
+    private Player currentPlayer; //TODO для теста
     private GameService gameService;
     private GameRepository gr;
     private PlayerRepository pr;
@@ -130,11 +134,14 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 gameService = new GameService(game);
+                //TODO для теста
+                currentPlayer = gameService.getCurrentPlayer();
+                gameService.setTest(true);
                 gr = new GameRepository(game);
                 pr = new PlayerRepository(game);
 
                 bindGameParameters();
-                outPutPlayersIFragmentsInfo();
+                //outPutPlayersIFragmentsInfo();
                 
 
 
@@ -267,6 +274,21 @@ public class MainActivity extends AppCompatActivity {
             curPlayerFragment.setFrame(newCurPlayerId);
 
             game.currentPlayerId = newCurPlayerId;
+
+
+            if(newCurPlayerId==game.players.indexOf(yourPlayer) && game.state.equals(GameStates.onPlay)){
+                Button btn = (Button) findViewById(R.id.moveBtn);
+                if (yourPlayer.canRollDice)
+                    btn.setText("Сделать ход");
+                else
+                    btn.setText("Завершить ход");
+            }
+
+            //TODO для теста
+            currentPlayer= gameService.getCurrentPlayer();
+
+
+
         }
 
         @Override
@@ -327,7 +349,10 @@ public class MainActivity extends AppCompatActivity {
             //Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
             // A new comment has been added, add it to the displayed list
-            //FieldDB field = dataSnapshot.getValue(FieldDB.class);
+            FieldDB field = dataSnapshot.getValue(FieldDB.class);
+            int fieldId = Integer.parseInt(dataSnapshot.getKey());
+            setHousesOnField(fieldId,field.houses);
+            setPlayerFrame(fieldId, field.owner, field.deposit);
             //game.fieldsOwners.add(field);
 
             // ...
@@ -388,15 +413,13 @@ public class MainActivity extends AppCompatActivity {
             // A new comment has been added, add it to the displayed list
             if(isNewPlayer){
                 game.players.add(newPlayer);
-                int idNewPlayer = game.players.indexOf(newPlayer);
-                PlayerFrag playerI =  getPlayerFragByPlayersId(idNewPlayer);
+            }else{
+                int idPlayer = Integer.parseInt(dataSnapshot.getKey());
+                PlayerFrag playerI =  getPlayerFragByPlayersId(idPlayer);
                 playerI.setCash(newPlayer.cash);
                 playerI.setPlayerName(newPlayer.name);
-                playerI.setImage(
-                        playersImages.get(
-                                game.players.indexOf(newPlayer)
-                        )
-                );
+                playerI.setImage(playersImages.get(idPlayer));
+                movePlayerFigure(0, newPlayer.position, idPlayer);
             }
             if(flag && game.players.size()==game.maxPLayers){
                 if(yourPlayer.name.equals(game.organizer)){
@@ -425,14 +448,18 @@ public class MainActivity extends AppCompatActivity {
                 movePlayerFigure(oldPosition,newPosition,playerId);
             }
 
-            if(oldPlayer.cash!=updatedPlayer.cash){
-                PlayerFrag playerFrag = getPlayerFragByPlayersId(playerId);
-                playerFrag.setCash(updatedPlayer.cash);
-            }
+            PlayerFrag playerFrag = getPlayerFragByPlayersId(playerId);
+            playerFrag.setCash(updatedPlayer.cash);
+
             game.players.set(playerId, updatedPlayer);
 
             if(updatedPlayer.name.equals(yourPlayer.name)){
                 yourPlayer= game.players.get(playerId);
+            }
+
+            //TODO для теста
+            if(updatedPlayer.name.equals(currentPlayer.name)){
+                currentPlayer= game.players.get(playerId);
             }
 
 
@@ -625,7 +652,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //вывод информации о игроках на экран
-    private void outPutPlayersIFragmentsInfo(){
+    /*private void outPutPlayersIFragmentsInfo(){
         for(Player player: game.players){
             int idPlayer = game.players.indexOf(player);
             PlayerFrag playerFrag =  getPlayerFragByPlayersId(idPlayer);
@@ -633,7 +660,7 @@ public class MainActivity extends AppCompatActivity {
             playerFrag.setPlayerName(player.name);
             playerFrag.setImage(playersImages.get(idPlayer));
         }
-    }
+    }*/
     
     
 
@@ -647,13 +674,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //textView = (TextView) findViewById(R.id.text);
-
-        FieldSquare fragment0 = (FieldSquare) getFieldById(0);
-        fragment0.setVisiblePLayer(1);
-        fragment0.setVisiblePLayer(2);
-        fragment0.setVisiblePLayer(3);
-        fragment0.setVisiblePLayer(4);
-
 
         gameRef.get().addOnCompleteListener(gameFirstListen);
 
@@ -693,35 +713,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void moveClick(View view){
-        String result = gameService.makeMove(yourPlayer);
-        switch (result){
-            case SUCCESS:
+        //TODO для теста
+        gameService.setD1D2(game.dice1, game.dice2);
+        //Player curPlayer = yourPlayer; //gameService.getCurrentPlayer();
+
+        Button btn = (Button) view;
+        String mode = btn.getText().toString();
+
+
+        switch (mode){
+            case"Сделать ход":
+                String result = gameService.makeMove(currentPlayer);
+                switch (result){
+                    case SUCCESS:
+                        btn.setText("Завершить ход");
+                        break;
+                    case BUY_OR_AUCTION:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle("Важное сообщение!")
+                                .setMessage("Хотите купить собственность или начать аукцион?")
+                                .setCancelable(false)
+                                .setPositiveButton("Купить",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                Offer bankOffer = currentPlayer.offers.get(currentPlayer.offers.size()-1);
+                                                String acceptRes = gameService.acceptOffer(bankOffer, currentPlayer);
+                                                dialog.cancel();
+                                                showMessage(acceptRes);
+                                            }
+                                        })
+                                .setNegativeButton("Аукцион",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                //gameService.startAuction(currentPlayer.offers.get(0).senderProperty());
+                                                dialog.cancel();
+                                            }
+                                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        break;
+                    default:
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                result, Toast.LENGTH_SHORT);
+                        toast.show();
+                        break;
+                }
+                btn.setText("Завершить ход");
+
                 break;
-            case BUY_OR_AUCTION:
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Важное сообщение!")
-                        .setMessage("Хотите купить собственность или начать аукцион?")
-                        .setCancelable(false)
-                        .setPositiveButton("Купить",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                })
-                        .setNegativeButton("Аукцион",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                AlertDialog alert = builder.create();
-                alert.show();
+            case "Завершить ход":
+                String endMotionRes = gameService.endMotion();
+                if(endMotionRes.equals(SUCCESS))
+                    btn.setText("Сделать ход");
+                showMessage(endMotionRes);
                 break;
-            default:
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        result, Toast.LENGTH_SHORT);
-                toast.show();
-                break;
+        }
+
+    }
+
+    public void showMessage(String mes){
+        if(!mes.equals(SUCCESS)){
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    mes, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
     

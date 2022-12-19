@@ -49,7 +49,7 @@ public class PlayerRepository {
     }
 
     public void setCash(Player player, int cash) {
-        //player.cash = cash;
+        player.cash = cash;
         if(player!=game.bank){
             myRef1.child("players")
                     .child(Integer.toString(game.players.indexOf(player)))
@@ -123,12 +123,14 @@ public class PlayerRepository {
     }
 
     public void addOffer(Player player, Offer offer) {
-        myRef1.child("players")
-                .child(Integer.toString(game.players.indexOf(player)))
-                .child("offers")
-                .child(Integer.toString(player.offers.size()))
-                .setValue(offer);
-        player.offers.add(offer);
+        if(player!=game.bank){
+            myRef1.child("players")
+                    .child(Integer.toString(game.players.indexOf(player)))
+                    .child("offers")
+                    .child(Integer.toString(player.offers.size()))
+                    .setValue(offer);
+            player.offers.add(offer);
+        }
     }
 
     public void removeOffer(Player player, Offer offer) {

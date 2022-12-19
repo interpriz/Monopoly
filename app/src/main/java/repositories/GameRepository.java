@@ -95,7 +95,7 @@ public class GameRepository {
     }
 
     public void setCurrentPlayerID(int i) {
-        game.currentPlayerId = i;
+        //game.currentPlayerId = i;
         myRef1.child("currentPlayerId").setValue(i);
     }
 
