@@ -24,6 +24,7 @@ import com.example.monopoly.fragments.FieldRecRight;
 import com.example.monopoly.fragments.FieldRecTop;
 import com.example.monopoly.fragments.FieldSquare;
 import com.example.monopoly.fragments.PlayerFrag;
+import com.example.monopoly.fragments.buySoldHouses;
 import com.example.monopoly.fragments.soldBuyProperty;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -777,18 +778,20 @@ public class MainActivity extends AppCompatActivity {
         showMessage(result);
     }
 
-    boolean open = false;
-    soldBuyProperty frag1 = new soldBuyProperty();
     public void depositBuyClick(View view) {
-        if(!open){
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container_view, frag1)
-                    .commit();
-            open=true;
-        }else{
-            getSupportFragmentManager().beginTransaction().remove(frag1).commit();
-            open=false;
-        }
+        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container_view, soldBuyProperty.class, null)
+                .commit();
+
+
+    }
+
+    public void buySoldHouseClick(View view) {
+        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container_view, buySoldHouses.class, null)
+                .commit();
 
     }
 
