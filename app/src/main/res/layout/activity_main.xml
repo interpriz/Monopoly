@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@drawable/table3"
     tools:context=".MainActivity">
 <LinearLayout
-    android:layout_width="match_parent"
+    android:layout_width="186dp"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:weightSum="3">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_gravity="left"
 
         android:weightSum="3">
@@ -39,14 +39,7 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/play_pause"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:background="@drawable/play"
-        android:onClick="pausePLayClick"
-        />
+
 
 </LinearLayout>
 
@@ -195,19 +188,35 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <fragment
-            android:id="@+id/yourPlayer"
-            style="@style/FragPlayer"
-            tools:layout="@layout/fragment_player"
-            android:layout_weight="1"/>
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <fragment
+                android:id="@+id/yourPlayer"
+                style="@style/FragPlayer"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_player" />
+
+            <ImageButton
+                android:id="@+id/play_pause"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/play"
+                android:onClick="pausePLayClick" />
+        </LinearLayout>
+
         <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            >
+            android:columnCount="1">
 
             <Button
                 android:id="@+id/goOutFromJail"
@@ -225,22 +234,21 @@
                 android:id="@+id/depositBuyBackBtn"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
                 android:backgroundTint="#FF5722"
                 android:onClick="depositBuyClick"
                 android:text="Заложить/выкупить собственность"
-                android:textSize="10dp"
-                android:layout_gravity="center"
-                />
+                android:textSize="10dp" />
+
             <Button
                 android:id="@+id/buySoldHouseBtn"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
                 android:backgroundTint="#FF5722"
                 android:onClick="buySoldHouseClick"
                 android:text="Купить/продать дома"
-                android:textSize="10dp"
-                android:layout_gravity="center"
-                />
+                android:textSize="10dp" />
 
         </GridLayout>
     </LinearLayout>
