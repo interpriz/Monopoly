@@ -16,8 +16,8 @@ public class Game {
 
     public int maxPLayers; //максимальное количество игроков
 
-    public int dice1 = 0; //число на первом кубике
-    public int dice2 = 0; //число на втором кубике
+    public int dice1 = 1; //число на первом кубике
+    public int dice2 = 1; //число на втором кубике
 
     public Auction auction = null;
     public GameStates state = onStart;

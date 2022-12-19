@@ -77,20 +77,36 @@ public class FieldRecTop extends Fragment {
         // do something in fragment
     }
 
-    public void setFramePlayer(int idPlayer) {
+    public void setFramePlayer(int idPlayer, boolean deposit) {
         LinearLayout frag = (LinearLayout) getView();
         switch(idPlayer){
             case 0:
-                frag.setBackgroundResource(R.drawable.frame_1);
+                if (deposit) {
+                    frag.setBackgroundResource(R.drawable.frame_deposit_1);
+                } else {
+                    frag.setBackgroundResource(R.drawable.frame_1);
+                }
                 break;
             case 1:
-                frag.setBackgroundResource(R.drawable.frame_2);
+                if (deposit) {
+                    frag.setBackgroundResource(R.drawable.frame_deposit_2);
+                } else {
+                    frag.setBackgroundResource(R.drawable.frame_2);
+                }
                 break;
             case 2:
-                frag.setBackgroundResource(R.drawable.frame_3);
+                if (deposit) {
+                    frag.setBackgroundResource(R.drawable.frame_deposit_3);
+                } else {
+                    frag.setBackgroundResource(R.drawable.frame_3);
+                }
                 break;
             case 3:
-                frag.setBackgroundResource(R.drawable.frame_4);
+                if (deposit) {
+                    frag.setBackgroundResource(R.drawable.frame_deposit_4);
+                } else {
+                    frag.setBackgroundResource(R.drawable.frame_4);
+                }
                 break;
             default:
                 frag.setBackgroundResource(0);
@@ -104,6 +120,10 @@ public class FieldRecTop extends Fragment {
         ImageView house2 = (ImageView) getView().findViewById(R.id.house2);
         ImageView house3 = (ImageView) getView().findViewById(R.id.house3);
         ImageView house4 = (ImageView) getView().findViewById(R.id.house4);
+        house1.setImageResource(R.drawable.house1);
+        house2.setImageResource(R.drawable.house1);
+        house3.setImageResource(R.drawable.house1);
+        house4.setImageResource(R.drawable.house1);
         switch(number){
             case 1:
                 house1.setVisibility(View.VISIBLE);
@@ -128,6 +148,17 @@ public class FieldRecTop extends Fragment {
                 house2.setVisibility(View.VISIBLE);
                 house3.setVisibility(View.VISIBLE);
                 house4.setVisibility(View.VISIBLE);
+                break;
+            case 5:
+                house1.setVisibility(View.VISIBLE);
+                house2.setVisibility(View.VISIBLE);
+                house3.setVisibility(View.VISIBLE);
+                house4.setVisibility(View.VISIBLE);
+                house1.setImageResource(R.drawable.hotel);
+                house2.setImageResource(R.drawable.hotel);
+                house3.setImageResource(R.drawable.hotel);
+                house4.setImageResource(R.drawable.hotel);
+
                 break;
             case 0:
             default:

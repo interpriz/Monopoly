@@ -7,28 +7,45 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_gravity="center"
-
     android:weightSum="3">
 
-    <fragment
-        android:id="@+id/player_1"
-        style="@style/FragPlayer"
-        tools:layout="@layout/fragment_player"
-        android:layout_weight="1"/>
-    <fragment
-        android:id="@+id/player_2"
-        style="@style/FragPlayer"
-        tools:layout="@layout/fragment_player"
-        android:layout_weight="1"/>
-    <fragment
-        android:id="@+id/player_3"
-        style="@style/FragPlayer"
-        tools:layout="@layout/fragment_player"
-        android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="left"
+
+        android:weightSum="3">
+
+        <fragment
+            android:id="@+id/player_1"
+            style="@style/FragPlayer"
+            tools:layout="@layout/fragment_player"
+            android:layout_weight="1"/>
+        <fragment
+            android:id="@+id/player_2"
+            style="@style/FragPlayer"
+            tools:layout="@layout/fragment_player"
+            android:layout_weight="1"/>
+        <fragment
+            android:id="@+id/player_3"
+            style="@style/FragPlayer"
+            tools:layout="@layout/fragment_player"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/play_pause"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="@drawable/play"
+        android:onClick="pausePLayClick"
+        />
 
 </LinearLayout>
 
@@ -87,7 +104,48 @@
 
             <LinearLayout android:layout_width="258.75dp"
                 android:layout_height="258.75dp"
-                android:layout_weight="11.25">
+                android:layout_weight="11.25"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <ImageView
+                        android:id="@+id/dice1"
+                        android:layout_marginLeft="100dp"
+                        style="@style/ImgDiceStyle"
+                        android:src="@drawable/dice_6"></ImageView>
+
+                    <ImageView
+
+                        android:id="@+id/dice2"
+                        style="@style/ImgDiceStyle"
+                        android:src="@drawable/dice_6"></ImageView>
+
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="#FF5722"
+                        android:text="Сделать ход"
+                        android:textSize="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:onClick="moveClick"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             </LinearLayout>
 

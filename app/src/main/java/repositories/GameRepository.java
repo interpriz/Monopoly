@@ -3,6 +3,7 @@ package repositories;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import entities.Auction;
@@ -58,10 +59,11 @@ public class GameRepository {
     }
 
     public void setAuctionNewParticipant(int idPlayer) {
-        game.auction.participants.add(idPlayer);
+
         myRef1.child("auction")
                 .child("participants")
-                .child(Integer.toString(game.auction.participants.size()-1)).setValue(idPlayer);
+                .child(Integer.toString(game.auction.participants.size())).setValue(idPlayer);
+        game.auction.participants.add(idPlayer);
     }
 
     public void setAuctionRemovePlayer(int idPlayer) {
@@ -74,13 +76,22 @@ public class GameRepository {
     }
 
     public void addNewPlayer(Player newPlayer) {
+        myRef1.child("players").child(Integer.toString(game.players.size())).setValue(newPlayer);
         game.players.add(newPlayer);
-        myRef1.child("players").child(Integer.toString(game.players.size()-1)).setValue(newPlayer);
     }
 
     public void mixPLayers() {
+        /*ArrayList<Player> buffer = new ArrayList<>();
+        for(Player player: game.players){
+            buffer.add(player);
+        }*/
         Collections.shuffle(game.players);
         myRef1.child("players").setValue(game.players);
+        /*for(int i=0; i< game.players.size(); i++){
+            myRef1.child("players").child(i+"").setValue(game.players.get(i));
+        }*/
+        //game.players=buffer;
+
     }
 
     public void setCurrentPlayerID(int i) {

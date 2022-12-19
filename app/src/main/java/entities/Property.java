@@ -7,7 +7,7 @@ public class Property extends Field{
     //public Player owner;     // номер владельца (игрока в списке)
     public PropTypes type;    // f_types: //1 - street;  //2 - station; //3 - municipal;
     public int price;     // стоимость собственности
-    public boolean deposit;   // находится ли собственность в залоге?
+    //public boolean deposit;   // находится ли собственность в залоге?
     public int depositPrice;     //залоговая стоимость
     public int redemptionPrice;  //стоимость выкупа
     public int tenPercent;      //10% от залоговой стоимости
@@ -17,7 +17,7 @@ public class Property extends Field{
         //this.owner = owner;
         this.type = type1;
         this.price = price;
-        this.deposit = false;
+        //this.deposit = false;
         this.depositPrice = depositPrice;
         this.redemptionPrice = redemptionPrice;
         this.tenPercent = depositPrice*10/100;

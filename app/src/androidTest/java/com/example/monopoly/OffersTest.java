@@ -610,7 +610,7 @@ public class OffersTest {
         assertEquals(0, result);
 
         //если собственность в залоге
-        recipientProperty.deposit=true;
+        gameService.setDeposit(recipientProperty,true);
 
         sender.repayment=true;
         result = gameService.getFullOfferSum(offer,Participants.sender);
@@ -621,7 +621,7 @@ public class OffersTest {
         assertEquals(100+recipientProperty.tenPercent, result);
 
         //если собственность не в залоге
-        recipientProperty.deposit=false;
+        gameService.setDeposit(recipientProperty,false);
 
         sender.repayment=true;
         result = gameService.getFullOfferSum(offer,Participants.sender);
@@ -648,7 +648,7 @@ public class OffersTest {
         assertEquals(0, result);
 
         //если собственность в залоге
-        senderProperty.deposit=true;
+        gameService.setDeposit(senderProperty,true);
 
         recipient.repayment=true;
         result = gameService.getFullOfferSum(offer,Participants.recipient);
@@ -659,7 +659,7 @@ public class OffersTest {
         assertEquals(100+senderProperty.tenPercent, result);
 
         //если собственность не в залоге
-        senderProperty.deposit=false;
+        gameService.setDeposit(senderProperty,false);
 
         recipient.repayment=true;
         result = gameService.getFullOfferSum(offer,Participants.recipient);
@@ -684,7 +684,7 @@ public class OffersTest {
         );
         //---------------- для отправителя----------------------
         //если собственность в залоге
-        recipientProperty.deposit=true;
+        gameService.setDeposit(recipientProperty,true);
 
         sender.repayment=true;
         int result = gameService.getFullOfferSum(offer,Participants.sender);
@@ -695,7 +695,7 @@ public class OffersTest {
         assertEquals(100+recipientProperty.tenPercent, result);
 
         //если собственность не в залоге
-        recipientProperty.deposit=false;
+        gameService.setDeposit(recipientProperty,false);
 
         sender.repayment=true;
         result = gameService.getFullOfferSum(offer,Participants.sender);
@@ -707,7 +707,7 @@ public class OffersTest {
 
         //---------------- для получателя--------------------
         //если собственность в залоге
-        senderProperty.deposit=true;
+        gameService.setDeposit(senderProperty,true);
 
         recipient.repayment=true;
         result = gameService.getFullOfferSum(offer,Participants.recipient);
@@ -718,7 +718,7 @@ public class OffersTest {
         assertEquals(senderProperty.tenPercent, result);
 
         //если собственность не в залоге
-        senderProperty.deposit=false;
+        gameService.setDeposit(senderProperty,false);
 
         recipient.repayment=true;
         result = gameService.getFullOfferSum(offer,Participants.recipient);

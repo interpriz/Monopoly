@@ -81,7 +81,7 @@ public class GameTest {
 
         //сходил на житную
         gameService.setD1D2(0,1);
-        String result = gameService.makeMove();
+        String result = gameService.makeMove(player_1);
         assertEquals(BUY_OR_AUCTION,result);
 
         //проверка текущего игрока
@@ -94,7 +94,7 @@ public class GameTest {
                 game.players.indexOf(currentPlayer));
 
         // не может ходить повторно, т.к. не дубль
-        result = gameService.makeMove();
+        result = gameService.makeMove(player_1);
         assertEquals(ALREADY_ROLL,result);
 
         //передает кубики следующему
@@ -107,7 +107,7 @@ public class GameTest {
     public void Roll1(){
         //сходил на житную
         gameService.setD1D2(0,1);
-        gameService.makeMove();
+        gameService.makeMove(player_1);
         //купил житную
         gameService.acceptOffer(gameService
                         .getCurrentPlayer()
@@ -120,7 +120,7 @@ public class GameTest {
     public void Roll2(){
         //сходил на варшавку
         gameService.setD1D2(3,3);
-        gameService.makeMove();
+        gameService.makeMove(player_2);
 
         // купил варшавку
         gameService.acceptOffer( gameService.getCurrentPlayer().getLastOffer(),
@@ -133,7 +133,7 @@ public class GameTest {
     public void Roll3(){
         //сходил на огарева
         gameService.setD1D2(1,1);
-        gameService.makeMove();
+        gameService.makeMove(player_2);
 
         // купил огарева
         gameService.acceptOffer( gameService.getCurrentPlayer().getLastOffer(),
@@ -146,7 +146,7 @@ public class GameTest {
     public void Roll4(){
         //сходил на первую парковую
         gameService.setD1D2(0,1);
-        gameService.makeMove();
+        gameService.makeMove(player_2);
 
         // купил первую парковую
         gameService.acceptOffer( gameService.getCurrentPlayer().getLastOffer(),
@@ -173,7 +173,7 @@ public class GameTest {
         //-----тест 2ого хода-----------------
         //сходил на варшавку
         gameService.setD1D2(3,3);
-        String result = gameService.makeMove();
+        String result = gameService.makeMove(player_2);
         assertEquals(BUY_OR_AUCTION,result);
 
         //проверка текущего игрока
@@ -194,7 +194,7 @@ public class GameTest {
         //----------тест 3его хода(дубль)------------
         //сходил на огарева
         gameService.setD1D2(1,1);
-        result = gameService.makeMove();
+        result = gameService.makeMove(player_2);
         assertEquals(BUY_OR_AUCTION,result);
 
         //проверка текущего игрока
@@ -214,7 +214,7 @@ public class GameTest {
         //----------тест 4ого хода(дубль)------------
         //сходил на первую парковую
         gameService.setD1D2(0,1);
-        result = gameService.makeMove();
+        result = gameService.makeMove(player_2);
         assertEquals(BUY_OR_AUCTION,result);
 
         //проверка текущего игрока
@@ -250,7 +250,7 @@ public class GameTest {
 
         //сходил на общественную казну (дубль)
         gameService.setD1D2(1,1);
-        String result = gameService.makeMove();
+        String result = gameService.makeMove(player_3);
         assertEquals(SUCCESS,result);
         assertTrue(game.players.get(2).cash!=1500);
 
@@ -265,7 +265,7 @@ public class GameTest {
 
         //сходил на подоходный налог (дубль)
         gameService.setD1D2(1,1);
-        result = gameService.makeMove();
+        result = gameService.makeMove(player_3);
         assertEquals(SUCCESS,result);
         assertEquals(playerNewCash-200, game.players.get(2).cash);
         playerNewCash = game.players.get(2).cash;
@@ -279,7 +279,7 @@ public class GameTest {
         assertEquals(game.players.get(2),gameService.getCurrentPlayer());
         //сходил на варшавку (3ий дубль - тюрьма)
         gameService.setD1D2(1,1);
-        result = gameService.makeMove();
+        result = gameService.makeMove(player_3);
         assertEquals(SUCCESS,result);
         assertEquals(10, gameService.getCurrentPlayer().position);
 

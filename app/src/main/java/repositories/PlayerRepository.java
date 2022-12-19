@@ -22,12 +22,13 @@ public class PlayerRepository {
     }
 
     public void addDebt(Player player, Debt newDebt){
-        player.debts.add(newDebt);
+
         myRef1.child("players")
                 .child(Integer.toString(game.players.indexOf(player)))
                 .child("debts")
-                .child(Integer.toString(player.debts.size()-1))
+                .child(Integer.toString(player.debts.size()))
                 .setValue(newDebt);
+        player.debts.add(newDebt);
     }
 
     public void removeDebt(Player player, Debt debt){
@@ -40,7 +41,7 @@ public class PlayerRepository {
     }
 
     public void setPosition(Player player, int position) {
-        player.position = position;
+        //player.position = position;
         myRef1.child("players")
                 .child(Integer.toString(game.players.indexOf(player)))
                 .child("position")
@@ -48,27 +49,28 @@ public class PlayerRepository {
     }
 
     public void setCash(Player player, int cash) {
-        player.cash = cash;
-        myRef1.child("players")
-                .child(Integer.toString(game.players.indexOf(player)))
-                .child("cash")
-                .setValue(cash);
+        //player.cash = cash;
+        if(player!=game.bank){
+            myRef1.child("players")
+                    .child(Integer.toString(game.players.indexOf(player)))
+                    .child("cash")
+                    .setValue(cash);
+        }else{
+            myRef1.child("bank")
+                    .child("cash")
+                    .setValue(cash);
+        }
+
     }
 
     public void addCach(Player player, int sum) {
-        player.cash+=sum;
-        myRef1.child("players")
-                .child(Integer.toString(game.players.indexOf(player)))
-                .child("cash")
-                .setValue(player.cash);
+        int newsum = player.cash+sum;
+        setCash(player, newsum);
     }
 
     public void reduceCash(Player player, int sum) {
-        player.cash-=sum;
-        myRef1.child("players")
-                .child(Integer.toString(game.players.indexOf(player)))
-                .child("cash")
-                .setValue(player.cash);
+        int newsum = player.cash-sum;
+        setCash(player, newsum);
     }
 
     public void setJailMove(Player player, int jailMove) {
@@ -121,12 +123,12 @@ public class PlayerRepository {
     }
 
     public void addOffer(Player player, Offer offer) {
-        player.offers.add(offer);
         myRef1.child("players")
                 .child(Integer.toString(game.players.indexOf(player)))
                 .child("offers")
-                .child(Integer.toString(player.offers.size()-1))
+                .child(Integer.toString(player.offers.size()))
                 .setValue(offer);
+        player.offers.add(offer);
     }
 
     public void removeOffer(Player player, Offer offer) {

@@ -67,14 +67,14 @@ public class GameService {
     //начать игру
     public String startGame(Player player) {
 
-        if (player.name != game.organizer)
+        if (!player.name.equals(game.organizer))
             return NOT_ORGANIZER;
 
         if (game.state == GameStates.onStart) {
             gameRepo.setState(GameStates.onPlay);
             //случайное перемешивание игроков
             //TODO подумать о синхронизации данного действия
-            gameRepo.mixPLayers();
+            //gameRepo.mixPLayers();
             playerRepo.setCanRollDice(game.players.get(0), true);
         } else
             return GAME_IS_STARTED;
@@ -91,8 +91,10 @@ public class GameService {
         Player player = getCurrentPlayer();
         if (player.canRollDice) {
             if(!test){
-                gameRepo.setDice1(new Random().nextInt(6) + 1);
-                gameRepo.setDice2(new Random().nextInt(6) + 1);
+                //gameRepo.setDice1(new Random().nextInt(6) + 1);
+                //gameRepo.setDice2(new Random().nextInt(6) + 1);
+                gameRepo.setDice1(6);
+                gameRepo.setDice2(1);
             }else{
                 gameRepo.setDice1(d1);
                 gameRepo.setDice2(d2);
@@ -106,20 +108,20 @@ public class GameService {
     }
 
     //осуществление хода
-    public String makeMove(/*Player playerI*/) {
+    public String makeMove(Player player) {
         if (game.state != GameStates.onPlay)
             return GAME_NOT_ON_PLAY;
 
+        if (getCurrentPlayer() != player) {
+            return NOT_CURRENT_PLAYER;
+        }
         //проверка на повторный бросок кубиков
         String result = diceRoll();
         if(result != SUCCESS)
             return result;
 
-        /*if (!game.isCurrentPLayer(player)) {
-            String message = "You are not a current player!";
-            return;
-        }*/
-        Player player = getCurrentPlayer();
+
+        //Player player = getCurrentPlayer();
 
         int bankrupts = 0;//количество банкротов в игре
         Player winner = null;//возможный победитель
@@ -311,7 +313,7 @@ public class GameService {
                 int cnt = (int) mapServ.getStreets().stream()
                         .filter(x -> x.colour == street.colour && getOwner(x) == getOwner(property))
                         .count();
-                if (!street.deposit) {//если улица не заложена
+                if (!getDeposit(street)) {//если улица не заложена
 
                     if (cnt == 3 || (cnt == 2 && (street.colour == 1 || street.colour == 8))) {
                         switch (getHouses(street)) {
@@ -462,7 +464,7 @@ public class GameService {
 
     // выкуп заложенной собственности prop игроком player
     private String buyDepositProperty(Property property, Player player) {
-        if (property.deposit) {
+        if (getDeposit(property)) {
             //оплатить 10% от ее залоговой стоимости = стоимость выкупа - залоговая стоимость или
             if (!player.repayment) {
                 /*if (player.cash < property.tenPercent) {
@@ -475,7 +477,7 @@ public class GameService {
                 }*/
                 String result = payment(player, game.bank, property.redemptionPrice);
                 if (result.equals(SUCCESS)) {
-                    property.deposit = false;
+                    setDeposit(property, false);
                 }
                 return result;
             }
@@ -490,7 +492,7 @@ public class GameService {
             return NOT_AN_OWNER;
         }
 
-        if (property.deposit)
+        if (getDeposit(property))
             return ALREADY_DEPOSIT;
 
         //проверка отсутствия домов в группе отправляющего предложение
@@ -501,7 +503,7 @@ public class GameService {
 
         String result = payment(game.bank, player, property.depositPrice);
         if (result.equals(SUCCESS))
-            property.deposit = true;
+            setDeposit(property,true);
         return result;
     }
 
@@ -511,7 +513,7 @@ public class GameService {
             return NOT_AN_OWNER;
         }
 
-        if (!property.deposit)
+        if (!getDeposit(property))
             return NOT_DEPOSIT;
 
         if (player.cash < property.redemptionPrice) {
@@ -520,7 +522,7 @@ public class GameService {
 
         String result = payment(player, game.bank, property.redemptionPrice);
         if (result.equals(SUCCESS))
-            property.deposit = false;
+            setDeposit(property,false);
         return result;
     }
 
@@ -656,7 +658,7 @@ public class GameService {
                 } else {
                     payment(player, getPlayer(offer.senderID), offer.sum);
                     //если собственность не заложена
-                    if (offer.senderProperty().deposit) {
+                    if (getDeposit(offer.senderProperty())) {
                         buyDepositProperty(offer.senderProperty(), player);
                     }
                     setOwner(offer.senderProperty(), player);
@@ -676,7 +678,7 @@ public class GameService {
                 } else {
                     payment(getPlayer(offer.senderID), player, offer.sum);
                     //если собственность не заложена
-                    if (offer.recipientProperty().deposit) {
+                    if (getDeposit(offer.recipientProperty())) {
                         buyDepositProperty(offer.recipientProperty(), getPlayer(offer.senderID));
                     }
                     setOwner(offer.recipientProperty(), getPlayer(offer.senderID));
@@ -698,7 +700,7 @@ public class GameService {
                 if (player.cash < getFullOfferSum(offer, Participants.recipient)) {
                     return NOT_ENOUGH_MONEY;
                 } else {
-                    if (offer.senderProperty().deposit) {
+                    if (getDeposit(offer.senderProperty())) {
                         buyDepositProperty(offer.senderProperty(), player);
                     }
                 }
@@ -707,7 +709,7 @@ public class GameService {
                 if (getPlayer(offer.senderID).cash < getFullOfferSum(offer,Participants.sender)) {
                     return SENDER_NOT_ENOUGH_MONEY;
                 } else {
-                    if (offer.recipientProperty().deposit) {
+                    if (getDeposit(offer.recipientProperty())) {
                         buyDepositProperty(offer.recipientProperty(), getPlayer(offer.senderID));
                     }
                 }
@@ -853,6 +855,16 @@ public class GameService {
         gameRepo.setNewOwner(idProperty, newOwnerId);
     }
 
+    public boolean getDeposit(Property property){
+        int idProp =  mapServ.map.indexOf(property);
+        return game.fieldsOwners.get(idProp).deposit;
+    }
+
+    public void setDeposit(Property property, boolean newDeposit){
+        int idProp =  mapServ.map.indexOf(property);
+        game.fieldsOwners.get(idProp).deposit = newDeposit;
+    }
+
     public int getHouses(Street street) {
         return game.fieldsOwners.get(
                 MapService.getInstance()
@@ -890,6 +902,8 @@ public class GameService {
         return game.players.indexOf(player);
     }
 
+    
+
     public int getFullOfferSum(Offer offer, Participants player) {
         Player sender = getPlayer(offer.senderID);
         Player recipient = getPlayer(offer.recipientID);
@@ -898,7 +912,7 @@ public class GameService {
                 switch (player) {
                     case sender:
                         return
-                                offer.sum + (offer.recipientProperty().deposit ?
+                                offer.sum + (getDeposit(offer.recipientProperty()) ?
                                         (sender.repayment ?
                                                 offer.recipientProperty().redemptionPrice :
                                                 offer.recipientProperty().tenPercent)
@@ -913,7 +927,7 @@ public class GameService {
                         return 0;
                     case recipient:
                         return
-                                offer.sum + (offer.senderProperty().deposit ?
+                                offer.sum + (getDeposit(offer.senderProperty()) ?
                                         (recipient.repayment ?
                                                 offer.senderProperty().redemptionPrice :
                                                 offer.senderProperty().tenPercent)
@@ -925,14 +939,14 @@ public class GameService {
                 switch (player) {
                     case sender:
                         return
-                                (offer.sum < 0 ? -1 * offer.sum : 0) + (offer.recipientProperty().deposit ?
+                                (offer.sum < 0 ? -1 * offer.sum : 0) + (getDeposit(offer.recipientProperty()) ?
                                         (sender.repayment ?
                                                 offer.recipientProperty().redemptionPrice :
                                                 offer.recipientProperty().tenPercent)
                                         : 0);
                     case recipient:
                         return
-                                (offer.sum > 0 ? offer.sum : 0) + (offer.senderProperty().deposit ?
+                                (offer.sum > 0 ? offer.sum : 0) + (getDeposit(offer.senderProperty()) ?
                                         (recipient.repayment ?
                                                 offer.senderProperty().redemptionPrice :
                                                 offer.senderProperty().tenPercent)
@@ -941,6 +955,8 @@ public class GameService {
         }
         return -1;
     }
+
+
 
 
 }

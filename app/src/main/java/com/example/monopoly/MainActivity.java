@@ -6,15 +6,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.monopoly.fragments.FieldRecBottom;
 import com.example.monopoly.fragments.FieldRecLeft;
 import com.example.monopoly.fragments.FieldRecRight;
 import com.example.monopoly.fragments.FieldRecTop;
 import com.example.monopoly.fragments.FieldSquare;
+import com.example.monopoly.fragments.PlayerFrag;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -27,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import entities.Auction;
 import entities.FieldDB;
@@ -37,6 +46,7 @@ import repositories.GameRepository;
 import repositories.PlayerRepository;
 import services.GameService;
 import services.MapService;
+import static entities.StaticMessages.*;
 
 // token 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
 public class MainActivity extends AppCompatActivity {
@@ -67,24 +77,6 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference gameFieldsOwnersRef = gameRef.child("fieldsOwners");
     DatabaseReference gamePlayersRef = gameRef.child("players");
     //DatabaseReference gamePlayer0Ref = gameRef.child("players").child("0");
-
-    //слушатели БД
-    ValueEventListener testMessageListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            // This method is called once with the initial value and again
-            // whenever data at this location is updated.
-            String value = dataSnapshot.getValue(String.class);
-            //textView.setText(value);
-            Log.d(TAG, "Value is: " + value);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError error) {
-            // Failed to read value
-            Log.w(TAG, "Failed to read value.", error.toException());
-        }
-    };
 
     /*ValueEventListener gameFirstListen = new ValueEventListener() {
         @Override
@@ -133,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
                     gameService.enterGame("Sasha");
                     gameService.enterGame("Sveta");
                     gameService.enterGame("Lola");
+                }else{
+                    yourPlayer = game.players.get(0);
                 }
 
                 gameService = new GameService(game);
@@ -140,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
                 pr = new PlayerRepository(game);
 
                 bindGameParameters();
+                outPutPlayersIFragmentsInfo();
+                
+
 
                 /*
                 gr.setDice1(1);
@@ -183,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
             // whenever data at this location is updated.
             game.dice1 = dataSnapshot.getValue(Integer.class);
             Log.d(TAG, "Value is: " + game.dice1);
+            ImageView dice1Img = findViewById(R.id.dice1);
+            dice1Img.setImageResource(dicesImages.get(game.dice1-1));
         }
 
         @Override
@@ -198,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
             // whenever data at this location is updated.
             game.dice2 = dataSnapshot.getValue(Integer.class);
             Log.d(TAG, "Value is: " + game.dice2);
+            ImageView dice2Img = findViewById(R.id.dice2);
+            dice2Img.setImageResource(dicesImages.get(game.dice2-1));
         }
 
         @Override
@@ -228,6 +229,19 @@ public class MainActivity extends AppCompatActivity {
             // whenever data at this location is updated.
             game.state = dataSnapshot.getValue(GameStates.class);
             Log.d(TAG, "Value is: " + game.state);
+            ImageButton buttonPlayPause = findViewById(R.id.play_pause);
+            switch (game.state){
+                case onStart:case onEnd:
+                    buttonPlayPause.setBackgroundResource(0);
+                    break;
+                case onPause:
+                    buttonPlayPause.setBackgroundResource(R.drawable.play);
+                    break;
+                case onPlay:
+                    buttonPlayPause.setBackgroundResource(R.drawable.pause);
+                    break;
+
+            }
         }
 
         @Override
@@ -241,8 +255,18 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            game.currentPlayerId = dataSnapshot.getValue(Integer.class);
-            Log.d(TAG, "Value is: " + game.currentPlayerId);
+
+            int newCurPlayerId = dataSnapshot.getValue(Integer.class);
+            int oldCurPlayerId = game.currentPlayerId;
+            Log.d(TAG, "Value is: " + newCurPlayerId);
+
+            PlayerFrag oldPlayerFragment = getPlayerFragByPlayersId(oldCurPlayerId);
+            oldPlayerFragment.setFrame(-1);
+
+            PlayerFrag curPlayerFragment = getPlayerFragByPlayersId(newCurPlayerId);
+            curPlayerFragment.setFrame(newCurPlayerId);
+
+            game.currentPlayerId = newCurPlayerId;
         }
 
         @Override
@@ -319,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
             int fieldId = Integer.parseInt(dataSnapshot.getKey());
             game.fieldsOwners.set(fieldId, updatedField);
             setHousesOnField(fieldId,updatedField.houses);
-            setPlayerFrame(fieldId, updatedField.owner);
+            setPlayerFrame(fieldId, updatedField.owner, updatedField.deposit);
 
             // ...
         }
@@ -354,14 +378,32 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    boolean flag = true;
     ChildEventListener gamePlayersListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-            //Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-
+            Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+            Player newPlayer = dataSnapshot.getValue(Player.class);
+            boolean isNewPlayer = game.players.stream().noneMatch(x -> x.name.equals(newPlayer.name));
             // A new comment has been added, add it to the displayed list
-            //FieldDB field = dataSnapshot.getValue(FieldDB.class);
-            //game.fieldsOwners.add(field);
+            if(isNewPlayer){
+                game.players.add(newPlayer);
+                int idNewPlayer = game.players.indexOf(newPlayer);
+                PlayerFrag playerI =  getPlayerFragByPlayersId(idNewPlayer);
+                playerI.setCash(newPlayer.cash);
+                playerI.setPlayerName(newPlayer.name);
+                playerI.setImage(
+                        playersImages.get(
+                                game.players.indexOf(newPlayer)
+                        )
+                );
+            }
+            if(flag && game.players.size()==game.maxPLayers){
+                if(yourPlayer.name.equals(game.organizer)){
+                    String result = gameService.startGame(yourPlayer);
+                }
+                flag = false;
+            }
 
             // ...
         }
@@ -373,15 +415,26 @@ public class MainActivity extends AppCompatActivity {
             // A comment has changed, use the key to determine if we are displaying this
             // comment and if so displayed the changed comment.
             Player updatedPlayer = dataSnapshot.getValue(Player.class);
-            int PlayerId = Integer.parseInt(dataSnapshot.getKey());
+            int playerId = Integer.parseInt(dataSnapshot.getKey());
+            Player oldPlayer = game.players.get(playerId);
 
-            int oldPosition = game.players.get(PlayerId).position;
+
+            int oldPosition = oldPlayer.position;
             int newPosition = updatedPlayer.position;
             if(oldPosition != newPosition){
-                movePlayerFigure(oldPosition,newPosition,PlayerId);
+                movePlayerFigure(oldPosition,newPosition,playerId);
             }
 
-            game.players.set(PlayerId, updatedPlayer);
+            if(oldPlayer.cash!=updatedPlayer.cash){
+                PlayerFrag playerFrag = getPlayerFragByPlayersId(playerId);
+                playerFrag.setCash(updatedPlayer.cash);
+            }
+            game.players.set(playerId, updatedPlayer);
+
+            if(updatedPlayer.name.equals(yourPlayer.name)){
+                yourPlayer= game.players.get(playerId);
+            }
+
 
             // ...
         }
@@ -403,8 +456,8 @@ public class MainActivity extends AppCompatActivity {
 
             // A comment has changed position, use the key to determine if we are
             // displaying this comment and if so move it.
-            //FieldDB movedField = dataSnapshot.getValue(FieldDB.class);
-            //String fieldId = dataSnapshot.getKey();
+            Player movedField = dataSnapshot.getValue(Player.class);
+            String fieldId = dataSnapshot.getKey();
             // ...
         }
 
@@ -425,6 +478,27 @@ public class MainActivity extends AppCompatActivity {
                     R.id.field30,R.id.field31,R.id.field32,R.id.field33,R.id.field34,R.id.field35,R.id.field36,R.id.field37,R.id.field38,R.id.field39
             )
     );
+
+    public List<Integer> playersImages = new ArrayList<Integer>(
+            Arrays.asList(
+                    R.drawable.player_1, R.drawable.player_2, R.drawable.player_3, R.drawable.player_4
+            )
+    );
+
+    public List<Integer> dicesImages = new ArrayList<Integer>(
+            Arrays.asList(
+                    R.drawable.dice_1, R.drawable.dice_2, R.drawable.dice_3,
+                    R.drawable.dice_4, R.drawable.dice_5, R.drawable.dice_6
+            )
+    );
+
+    public List<Integer> playersFragsRID = new ArrayList<Integer>(
+            Arrays.asList(
+                    R.id.player_1, R.id.player_2, R.id.player_3
+            )
+    );
+
+
 
     //функции интерфейса
     private Fragment getFieldById(int id) {
@@ -455,26 +529,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setPlayerFrame(int fieldId, int idPlayer){
+    private void setPlayerFrame(int fieldId, int idPlayer, boolean deposit){
         switch (fieldId) {
             case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
                 FieldRecBottom fragmentB = (FieldRecBottom) getFieldById(fieldId);
-                fragmentB.setFramePlayer(idPlayer);
+                fragmentB.setFramePlayer(idPlayer, deposit);
                 break;
 
             case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19:
                 FieldRecLeft fragmentL = (FieldRecLeft) getFieldById(fieldId);
-                fragmentL.setFramePlayer(idPlayer);
+                fragmentL.setFramePlayer(idPlayer, deposit);
                 break;
 
             case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
                 FieldRecTop fragmentT = (FieldRecTop) getFieldById(fieldId);
-                fragmentT.setFramePlayer(idPlayer);
+                fragmentT.setFramePlayer(idPlayer, deposit);
                 break;
 
             case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39:
                 FieldRecRight fragmentR = (FieldRecRight) getFieldById(fieldId);
-                fragmentR.setFramePlayer(idPlayer);
+                fragmentR.setFramePlayer(idPlayer, deposit);
                 break;
         }
     }
@@ -535,6 +609,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private PlayerFrag getPlayerFragByPlayersId(int idPlayer){
+        int playerRID;
+        int yourPlayerId = game.players.indexOf(yourPlayer);
+        if(idPlayer==yourPlayerId){
+            playerRID = R.id.yourPlayer;
+        }
+        else{
+            if(idPlayer<yourPlayerId)
+                playerRID = playersFragsRID.get(idPlayer);
+            else
+                playerRID = playersFragsRID.get(idPlayer-1);
+        }
+        return (PlayerFrag) getSupportFragmentManager().findFragmentById(playerRID);
+    }
+
+    //вывод информации о игроках на экран
+    private void outPutPlayersIFragmentsInfo(){
+        for(Player player: game.players){
+            int idPlayer = game.players.indexOf(player);
+            PlayerFrag playerFrag =  getPlayerFragByPlayersId(idPlayer);
+            playerFrag.setCash(player.cash);
+            playerFrag.setPlayerName(player.name);
+            playerFrag.setImage(playersImages.get(idPlayer));
+        }
+    }
+    
+    
+
+
 
 
 
@@ -554,9 +657,6 @@ public class MainActivity extends AppCompatActivity {
 
         gameRef.get().addOnCompleteListener(gameFirstListen);
 
-
-        testMessageRef.addValueEventListener(testMessageListener);
-
     }
 
     private void bindGameParameters() {
@@ -571,6 +671,58 @@ public class MainActivity extends AppCompatActivity {
         gameWinnerRef.addValueEventListener(gameWinnerListener);
         gameFieldsOwnersRef.addChildEventListener(gameFieldsOwnersListener);
         gamePlayersRef.addChildEventListener(gamePlayersListener);
+    }
+
+    public void pausePLayClick(View view){
+
+        String result = SUCCESS;
+        switch (game.state){
+            case onPlay:
+                result = gameService.pauseGame(yourPlayer);
+                break;
+            case onPause:
+                result = gameService.continueGame(yourPlayer);
+                break;
+
+        }
+        if(result!=SUCCESS){
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    result, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    public void moveClick(View view){
+        String result = gameService.makeMove(yourPlayer);
+        switch (result){
+            case SUCCESS:
+                break;
+            case BUY_OR_AUCTION:
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Важное сообщение!")
+                        .setMessage("Хотите купить собственность или начать аукцион?")
+                        .setCancelable(false)
+                        .setPositiveButton("Купить",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setNegativeButton("Аукцион",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                AlertDialog alert = builder.create();
+                alert.show();
+                break;
+            default:
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        result, Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+        }
     }
     
     /* List<String> users = new ArrayList<>();

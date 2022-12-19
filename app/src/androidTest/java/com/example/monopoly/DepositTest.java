@@ -50,7 +50,16 @@ public class DepositTest {
 
     @After
     public void after() throws Exception {
-        property.deposit=false;
+        gameService.setDeposit(property,false);
+    }
+
+    @Test
+    public void test() {
+
+
+        boolean result = gameService.getDeposit(property);
+
+        assertEquals(false, result);
     }
 
     //-----------createDeposit---------------------
@@ -60,17 +69,17 @@ public class DepositTest {
         String result = gameService.createDeposit(property, game.players.get(1));
 
         assertEquals(NOT_AN_OWNER, result);
-        assertFalse(property.deposit);
+        assertFalse(gameService.getDeposit(property));
     }
 
     @Test
     public void destroyDeposit_alreadyDeposit() {
 
-        property.deposit=true;
+        gameService.setDeposit(property,true);
         String result = gameService.createDeposit(property, player);
 
         assertEquals(ALREADY_DEPOSIT, result);
-        assertTrue(property.deposit);
+        assertTrue(gameService.getDeposit(property));
     }
 
     @Test
@@ -81,7 +90,7 @@ public class DepositTest {
         String result = gameService.createDeposit(property, player);
 
         assertEquals(CANT_DEPOSIT_STREET_WITH_HOUSES, result);
-        assertFalse(property.deposit);
+        assertFalse(gameService.getDeposit(property));
     }
 
     @Test
@@ -90,7 +99,7 @@ public class DepositTest {
         String result = gameService.createDeposit(property, player);
 
         assertEquals(SUCCESS, result);
-        assertTrue(property.deposit);
+        assertTrue(gameService.getDeposit(property));
     }
 
     //------------destroyDeposit------------------
@@ -98,11 +107,11 @@ public class DepositTest {
     @Test
     public void destroyDeposit_notAnOwner() {
 
-        property.deposit=true;
+        gameService.setDeposit(property,true);
         String result = gameService.destroyDeposit(property, game.players.get(1));
 
         assertEquals(NOT_AN_OWNER, result);
-        assertTrue(property.deposit);
+        assertTrue(gameService.getDeposit(property));
     }
 
     @Test
@@ -111,29 +120,29 @@ public class DepositTest {
         String result = gameService.destroyDeposit(property, player);
 
         assertEquals(NOT_DEPOSIT, result);
-        assertFalse(property.deposit);
+        assertFalse(gameService.getDeposit(property));
     }
 
     @Test
     public void destroyDeposit_noMoney() {
 
-        property.deposit=true;
+        gameService.setDeposit(property,true);
         player.cash = property.depositPrice-1;
         String result = gameService.destroyDeposit(property, player);
 
         assertEquals(NOT_ENOUGH_MONEY, result);
-        assertTrue(property.deposit);
+        assertTrue(gameService.getDeposit(property));
     }
 
     @Test
     public void destroyDeposit_Success() {
 
-        property.deposit=true;
+        gameService.setDeposit(property,true);
         String result = gameService.destroyDeposit(property, player);
 
         assertEquals(SUCCESS, result);
         assertEquals(1500- property.redemptionPrice, player.cash);
-        assertFalse(property.deposit);
+        assertFalse(gameService.getDeposit(property));
     }
 
 }

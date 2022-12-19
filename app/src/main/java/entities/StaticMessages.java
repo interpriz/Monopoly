@@ -30,6 +30,7 @@ public final class StaticMessages {
     public static final String GAME_IS_STARTED = "Game is already started!";
     public static final String ALREADY_ROLL = "You have already roll dices!";
     public static final String NO_AUCTION = "There is no auction in game now!";
+    public static final String NOT_CURRENT_PLAYER ="You are not a current player!";
 
     private StaticMessages() {
     }

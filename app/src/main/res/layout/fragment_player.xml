@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".fragments.Player"
+    tools:context=".fragments.PlayerFrag"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
