@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="NickName"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:fontFamily="@font/segoepr"
+        android:textColor="@color/light_orange"/>
 
     <ImageView
         android:id="@+id/playerImg"
@@ -28,6 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="000$"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:fontFamily="@font/segoepr"
+        android:textColor="@color/light_orange"/>
 
 </LinearLayout>
