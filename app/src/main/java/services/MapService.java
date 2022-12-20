@@ -113,6 +113,12 @@ public class MapService {
         Field field = getFieldByPosition(pos);
         if (field.getType() == FieldTypes.property){
             Property property = (Property) field;
+            return getPropertyName(property);
+        }
+        else return "";
+    }
+
+    public  String getPropertyName(Property property) {
             switch (property.type){
                 case street:
                     Street street = (Street) property;
@@ -126,9 +132,9 @@ public class MapService {
                 default:
                     return "";
             }
-        }
-        else return "";
     }
+
+
 
     public Field getFieldByPosition(int pos) {
         return map.get(pos);

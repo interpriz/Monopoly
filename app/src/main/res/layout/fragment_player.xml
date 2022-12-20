@@ -3,10 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context=".fragments.PlayerFrag"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
     <TextView
         android:id="@+id/playerName"
         android:layout_width="wrap_content"
@@ -33,5 +37,20 @@
         android:textAlignment="center"
         android:fontFamily="@font/segoepr"
         android:textColor="@color/light_orange"/>
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <ImageButton
+        android:id="@+id/offerBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:background="@drawable/offer_button" />
+
+</LinearLayout>
+
 
 </LinearLayout>

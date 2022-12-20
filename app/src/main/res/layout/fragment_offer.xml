@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="258.75dp"
+    android:layout_height="match_parent"
+    android:background="#CEE6D0"
+    android:orientation="vertical"
+    tools:context=".fragments.soldBuyProperty">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Выберите тип сделки"
+        android:textAlignment="center"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButtonBuy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Покупка" />
+
+        <RadioButton
+            android:id="@+id/radioButtonSold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Продажа" />
+
+        <RadioButton
+            android:id="@+id/radioButtonChange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Обмен" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:lines="3"
+                android:text="Выберите свою собственность"
+                android:textAlignment="center">
+
+            </TextView>
+
+            <Spinner
+                android:id="@+id/senderList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Выберите собственность игрока"
+                android:textAlignment="center">
+
+            </TextView>
+
+            <Spinner
+                android:id="@+id/recipientList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Сумма сделки \nПри обмене: '+' - доплата получателя; '-' - доплата отправителя"
+        android:textAlignment="center">
+
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <EditText
+            android:id="@+id/sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:inputType="number"
+            android:layout_weight="1"
+            android:textSize="10dp"/>
+
+        <Button
+            android:id="@+id/makeOfferBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Создать"
+            android:textSize="10dp" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

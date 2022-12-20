@@ -23,6 +23,7 @@ import com.example.monopoly.fragments.FieldRecLeft;
 import com.example.monopoly.fragments.FieldRecRight;
 import com.example.monopoly.fragments.FieldRecTop;
 import com.example.monopoly.fragments.FieldSquare;
+import com.example.monopoly.fragments.OfferFrag;
 import com.example.monopoly.fragments.PlayerFrag;
 import com.example.monopoly.fragments.buySoldHouses;
 import com.example.monopoly.fragments.soldBuyProperty;
@@ -795,15 +796,33 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+    public void offerClick(String playerName) {
+        if(playerName.equals(currentPlayer.name)){
+
+        }else{
+            Player player = game.players.stream().filter(x->x.name.equals(playerName)).findFirst().get();
+            int idPlayer = game.players.indexOf(player);
+            Bundle args = new Bundle();
+            args.putInt("idPlayer", idPlayer);
+            getSupportFragmentManager().popBackStack();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container_view, OfferFrag.class, args)
+                    .commit();
+        }
+
+
+    }
+
     public void showMessage(String mes){
+
         if(!mes.equals(SUCCESS)){
             Toast toast = Toast.makeText(getApplicationContext(),
                     mes, Toast.LENGTH_SHORT);
             toast.show();
         }
     }
-
-
 
 
     

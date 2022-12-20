@@ -1,8 +1,14 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static entities.StaticMessages.*;
+
+import android.widget.ArrayAdapter;
+
+import com.example.monopoly.MainActivity;
 
 import entities.Auction;
 import entities.Debt;
@@ -530,14 +536,16 @@ public class GameService {
                             int sum,
                             Property recipientProperty,
                             Player player) {
-        /*
-        Валидация
+        //Валидация
         if(offerType == OfferTypes.buy)
             if(recipientProperty==null)
-                return ERROR;
+                return "Recipient property can not be empty";
         if(offerType == OfferTypes.sold)
             if(senderProperty==null)
-                return ERROR;*/
+                return "Sender property can not be empty";
+        if(offerType == OfferTypes.change)
+            if(senderProperty==null && recipientProperty==null)
+                return "Sender and recipient property can not be empty";
 
         boolean flag1 = (offerType == OfferTypes.buy && getOwner(recipientProperty) == recipient);
         boolean flag2 = (offerType == OfferTypes.sold && getOwner(senderProperty) == player);
@@ -884,6 +892,19 @@ public class GameService {
                 MapService.getInstance()
                         .map.indexOf(street)
         ).houses;
+    }
+
+    public ArrayList<Property> getPlayersProperty(int idPlayer){
+        ArrayList<Integer> listPropertyIds = (ArrayList<Integer>) game.fieldsOwners
+                .stream().filter(x->x.owner==idPlayer)
+                .map(y->game.fieldsOwners.indexOf(y)).collect(Collectors.toList());
+
+        ArrayList<Property> listProperty = (ArrayList<Property>) listPropertyIds.stream()
+                .map(x-> MapService.getInstance()
+                        .getPropertyByPosition(x))
+                .collect(Collectors.toList());
+
+        return listProperty;
     }
 
     private boolean isHousesInGroup(Street street) {

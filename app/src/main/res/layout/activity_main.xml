@@ -120,26 +120,6 @@
                         android:src="@drawable/dice_6"></ImageView>
 
                 </LinearLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/moveBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="34dp"
-                        android:layout_gravity="center_horizontal"
-                        android:backgroundTint="#FF5722"
-                        android:onClick="moveClick"
-                        android:text="Сделать ход"
-                        android:textSize="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <FrameLayout
                     android:id="@+id/fragment_container_view"
                     android:layout_width="match_parent"
@@ -161,7 +141,7 @@
                 <fragment android:id="@+id/field37" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
                 <fragment android:id="@+id/field38" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
                 <fragment android:id="@+id/field39" android:name="com.example.monopoly.fragments.FieldRecRight" style="@style/FragRecHorizontalStyle" tools:layout="@layout/fragment_field_rec_right"></fragment>
-                
+
             </LinearLayout>
 
         </LinearLayout>
@@ -205,10 +185,9 @@
 
             <ImageButton
                 android:id="@+id/play_pause"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width=   "50dp"
+                android:layout_height=  "50dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
                 android:background="@drawable/play"
                 android:onClick="pausePLayClick" />
         </LinearLayout>
@@ -249,6 +228,18 @@
                 android:onClick="buySoldHouseClick"
                 android:text="Купить/продать дома"
                 android:textSize="10dp" />
+
+            <Button
+                android:id="@+id/moveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#FF5722"
+                android:onClick="moveClick"
+                android:text="Сделать ход"
+                android:textSize="10dp" />
+
+
 
         </GridLayout>
     </LinearLayout>
