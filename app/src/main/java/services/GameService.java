@@ -266,7 +266,7 @@ public class GameService {
                     //если владелец - другой игрок
                     else if (getOwner(property) != player) {
                         return payRent(property, dice1 + dice2);
-                    }else return SUCCESS;
+                    } else return SUCCESS;
             }
         } else {
             //логика выхода из тюрьмы через 3 хода после не выпадения дубля
