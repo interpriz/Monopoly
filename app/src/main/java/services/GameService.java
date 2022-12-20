@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 
 import static entities.StaticMessages.*;
 
-import android.widget.ArrayAdapter;
-
 import com.example.monopoly.MainActivity;
 
 import entities.Auction;
@@ -268,8 +266,7 @@ public class GameService {
                     //если владелец - другой игрок
                     else if (getOwner(property) != player) {
                         return payRent(property, dice1 + dice2);
-                    }
-                    break;
+                    }else return SUCCESS;
             }
         } else {
             //логика выхода из тюрьмы через 3 хода после не выпадения дубля
@@ -619,7 +616,7 @@ public class GameService {
         if (offer.state == OfferStates.rejectOffer || offer.state == OfferStates.acceptOffer) {
             return CANT_REJECT_OFFER;
         }
-        offer.state = OfferStates.rejectOffer;
+        playerRepo.setOfferState(player, offer,OfferStates.rejectOffer);
         return SUCCESS;
     }
 
@@ -729,7 +726,7 @@ public class GameService {
                 setOwner(offer.senderProperty(), player);
                 break;
         }
-        offer.state = OfferStates.acceptOffer;
+        playerRepo.setOfferState(player, offer, OfferStates.acceptOffer);
         return SUCCESS;
     }
 
@@ -905,6 +902,35 @@ public class GameService {
                 .collect(Collectors.toList());
 
         return listProperty;
+    }
+
+    public ArrayList<String> getPlayersOffersStrings(Player player){
+        ArrayList<String> offersStr = new ArrayList<>();
+        ArrayList<Offer> playerOffers = (ArrayList<Offer>) player.offers.stream()
+                .filter(x->x.state.equals(OfferStates.newOffer))
+                .collect(Collectors.toList());
+        for(Offer offer : playerOffers){
+            String senderPropName = offer.senderPropertyID!=-1 ? mapServ.getPropertyNameByPosition(offer.senderPropertyID):"";
+            String recipientPropName = offer.recipientPropertyID!=-1 ? mapServ.getPropertyNameByPosition(offer.recipientPropertyID):"";
+
+
+            String offerStr =
+            "Отправитель: "+ getPlayer(offer.senderID).name +
+                    " хочет ";
+            switch (offer.type) {
+                case buy:
+                    offerStr+= "купить собственность " + recipientPropName + " за " + offer.sum + "$";
+                    break;
+                case sold:
+                    offerStr+="продать собственность " + senderPropName + " за " + offer.sum + "$";
+                    break;
+                case change:
+                    offerStr+="обменять свою собственность " + senderPropName + " на " + recipientPropName + " c " +
+                            (offer.sum > 0 ? "вашей доплатой в "+offer.sum+ "$" : "доплатой отправителя "+offer.sum*-1)+ "$";
+                    break;
+            }offersStr.add(offerStr);
+        }
+        return  offersStr;
     }
 
     private boolean isHousesInGroup(Street street) {

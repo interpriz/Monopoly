@@ -25,6 +25,7 @@ import com.example.monopoly.fragments.FieldRecTop;
 import com.example.monopoly.fragments.FieldSquare;
 import com.example.monopoly.fragments.OfferFrag;
 import com.example.monopoly.fragments.PlayerFrag;
+import com.example.monopoly.fragments.ViewOffersFrag;
 import com.example.monopoly.fragments.buySoldHouses;
 import com.example.monopoly.fragments.soldBuyProperty;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -800,7 +801,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void offerClick(String playerName) {
         if(playerName.equals(currentPlayer.name)){
-
+            getSupportFragmentManager().popBackStack();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container_view, ViewOffersFrag.class, null)
+                    .commit();
         }else{
             Player player = game.players.stream().filter(x->x.name.equals(playerName)).findFirst().get();
             int idPlayer = game.players.indexOf(player);
@@ -817,11 +821,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void showMessage(String mes){
 
-        if(!mes.equals(SUCCESS)){
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    mes, Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        /*if(!mes.equals(SUCCESS)){
+
+        }*/
+        Toast toast = Toast.makeText(getApplicationContext(),
+                mes, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 

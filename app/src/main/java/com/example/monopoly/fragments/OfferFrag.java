@@ -56,7 +56,7 @@ public class  OfferFrag extends Fragment {
     ArrayList<String> listSenderPropertiesNames;
     ArrayList<String> listRecipientPropertiesNames;
 
-    OfferTypes offerType;
+    OfferTypes offerType = OfferTypes.sold;
 
     public OfferFrag() {
         super(R.layout.fragment_offer);
@@ -144,7 +144,8 @@ public class  OfferFrag extends Fragment {
                 Property senderProperty = senderPropertyId==-1 ? null:listSenderProperty.get((int) senderPropertyId);
                 Property recipientProperty = recipientPropertyId ==-1 ? null: listRecipientProperty.get((int) recipientPropertyId);
 
-                int sum = Integer.parseInt(sumEditText.getText().toString());
+                String sumTxt = sumEditText.getText().toString();
+                int sum = sumTxt.equals("")?0:Integer.parseInt(sumTxt);
 
 
                 String result = ((MainActivity) getActivity()).gameService.makeOffer(

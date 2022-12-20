@@ -32,7 +32,8 @@
             android:id="@+id/radioButtonSold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Продажа" />
+            android:text="Продажа"
+            android:checked="true"/>
 
         <RadioButton
             android:id="@+id/radioButtonChange"
@@ -117,7 +118,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:inputType="number"
+            android:inputType="numberSigned"
             android:layout_weight="1"
             android:textSize="10dp"/>
 

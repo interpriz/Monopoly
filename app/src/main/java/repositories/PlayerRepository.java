@@ -7,6 +7,7 @@ import entities.Debt;
 import entities.Game;
 import entities.Offer;
 import entities.Player;
+import enums.OfferStates;
 
 //TODO все сеттеры перевести в сервис и там прописывать запись в БД
 
@@ -127,7 +128,19 @@ public class PlayerRepository {
         }
     }
 
-    public void removeOffer(Player player, Offer offer) {
+    public void setOfferState(Player player, Offer offer, OfferStates newState) {
+        if(player!=game.bank){
+            myRef1.child("players")
+                    .child(Integer.toString(game.players.indexOf(player)))
+                    .child("offers")
+                    .child(Integer.toString(player.offers.indexOf(offer)))
+                    .child("state")
+                    .setValue(newState);
+            offer.state = newState;
+        }
+    }
+
+    /*public void removeOffer(Player player, Offer offer) {
         if(player.offers.indexOf(offer)!=-1){
             myRef1.child("players")
                     .child(Integer.toString(game.players.indexOf(player)))
@@ -136,7 +149,7 @@ public class PlayerRepository {
                     .removeValue();
             player.offers.remove(offer);
         }
-    }
+    }*/
 
 
 
