@@ -138,7 +138,7 @@ public class  OfferFrag extends Fragment {
             @Override
             public void onClick(View v) {
 
-                long senderPropertyId = senderList.getSelectedItemId();
+                long senderPropertyId = senderList.getChildCount()>0 ? senderList.getSelectedItemId() : -1;
                 long recipientPropertyId = recipientList.getChildCount()>0 ? recipientList.getSelectedItemId() : -1;
 
                 Property senderProperty = senderPropertyId==-1 ? null:listSenderProperty.get((int) senderPropertyId);

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#CEE6D0"
     android:orientation="vertical"
-    tools:context=".fragments.soldBuyProperty">
+    tools:context=".SoldBuyProperty">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

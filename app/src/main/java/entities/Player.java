@@ -26,7 +26,7 @@ public class Player {
         this.cash = cash;
         this.jailMove = 0;
         this.doubles = 0;
-        this.repayment = true;
+        this.repayment = false;
         this.bankrupt = false;
         this.canRollDice = false;
         this.name = name;

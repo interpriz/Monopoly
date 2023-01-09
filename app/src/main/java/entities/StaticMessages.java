@@ -23,14 +23,18 @@ public final class StaticMessages {
     public static final String CANT_DEPOSIT_STREET_WITH_HOUSES = "You can not deposit the street from group with houses!";
     public static final String SENDER_NOT_ENOUGH_MONEY = "Sender has not enough money to buy your property!";
     public static final String CANT_CHANGE_STREET_WITH_HOUSES = "You can not change streets from group with houses!";
-    public static final String NOT_THE_OFFER_OWNER ="You are not on the owner of this offer!";
+    public static final String NOT_THE_OFFER_OWNER = "You are not on the owner of this offer!";
     public static final String NOT_DEPOSIT = "Property is not in deposit!";
     public static final String ALREADY_DEPOSIT = "Property is already in deposit!";
     public static final String NOT_ORGANIZER = "You are not the organizer";
     public static final String GAME_IS_STARTED = "Game is already started!";
     public static final String ALREADY_ROLL = "You have already roll dices!";
     public static final String NO_AUCTION = "There is no auction in game now!";
-    public static final String NOT_CURRENT_PLAYER ="You are not a current player!";
+    public static final String NOT_CURRENT_PLAYER = "You are not a current player!";
+    public static final String BANKRUPT = "You are a bankrupt!";
+    public static final String SOLD_PROPERTY = "You have no money, but have property! Sold it!";
+    public static final String HAVE_DEBTS = "You have debts!";
+    public static final String INCORRECT_RECIPIENT = "Incorrect recipient!";
 
     private StaticMessages() {
     }

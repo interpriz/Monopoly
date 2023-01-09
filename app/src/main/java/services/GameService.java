@@ -153,21 +153,7 @@ public class GameService {
                         return SUCCESS;
 
                     case NOT_ENOUGH_MONEY:
-                        //проверка на наличие собственности
-                        int cnt = (int) mapServ.getProperties().stream().filter(x -> getOwner(x) == player).count();
-
-                        //если у игрока недостаточно денег и нет собственности, то он - банкрот
-                        if (cnt == 0) {
-                            playerRepo.setBankrupt(player, true);
-                            Player recipient = getPlayer(player.getLastOffer()
-                                    .recipientID);
-                            playerRepo.addCach(recipient, player.cash);
-                            playerRepo.setCash(player, 0);
-                            playerRepo.removeDebt(player, player.getLastDebt());
-
-                            return "You are a bankrupt!";
-                        } else
-                            return "You have no money, but have property! Sold it!";
+                        return bankruptCheck(player);
                     case AUCTION:
 //TODO продумать функционал аукциона (
 // можно в этот момент сделать предложение игроку от банка
@@ -272,13 +258,29 @@ public class GameService {
             //логика выхода из тюрьмы через 3 хода после не выпадения дубля
             // игрок платит 50 и идет на количество выпавших очков кубиков
             if (player.jailMove == 1) {
-                payment(player, game.bank, 50);
                 playerRepo.reduceJailMove(player);
-                move(dice1, dice2, player);
+
+                String result = payment(player, game.bank, 50);
+                switch (result){
+                    case NOT_ENOUGH_MONEY:
+                        String res = bankruptCheck(player);
+                        if(!res.equals(BANKRUPT)){
+                            res = move(dice1, dice2, player);
+                            return res;
+                            //break;
+                        }else
+                            return res;
+                    case SUCCESS:
+                        String res1 =  move(dice1, dice2, player);
+                        return res1;
+                        //break;
+                }
             }
             // если не последний ход в тюрьме
-            else playerRepo.reduceJailMove(player);
-            return SUCCESS;
+            else {
+                playerRepo.reduceJailMove(player);
+                return SUCCESS;
+            }
         }
         return ERROR;
     }
@@ -297,7 +299,7 @@ public class GameService {
                 giveDicesToNextPlayer();
             } else playerRepo.setCanRollDice(player, true);
         } else
-            return "You have debts!";
+            return HAVE_DEBTS;
 
         return SUCCESS;
     }
@@ -734,14 +736,35 @@ public class GameService {
     public String repayDebt(Player player, Debt debt) {
         if (debt.debtorID == game.players.indexOf(player))
             if (player.cash >= debt.sum){
-                playerRepo.removeDebt(player, debt);
-                return payment(game.players.get(debt.debtorID),
-                        game.players.get(debt.recipientID),
+                String result = payment(
+                        game.players.get(debt.debtorID),
+                        getPlayer(debt.recipientID),
                         debt.sum);
+                if (result.equals(SUCCESS))
+                    playerRepo.removeDebt(player, debt);
+
+                return result;
             }
             else
-                return NOT_ENOUGH_MONEY;
-        return "Incorrect recipient!";
+                return bankruptCheck(player);
+        return INCORRECT_RECIPIENT;
+    }
+
+    private String bankruptCheck(Player player){
+        //проверка на наличие собственности
+        int cnt = (int) mapServ.getProperties().stream().filter(x -> getOwner(x) == player).count();
+
+        //если у игрока недостаточно денег и нет собственности, то он - банкрот
+        if (cnt == 0) {
+            playerRepo.setBankrupt(player, true);
+            Player recipient = getPlayer(player.getLastDebt().recipientID);
+            playerRepo.addCach(recipient, player.cash);
+            playerRepo.setCash(player, 0);
+            playerRepo.removeDebt(player, player.getLastDebt());
+
+            return BANKRUPT;
+        } else
+            return SOLD_PROPERTY;
     }
 
     //начать аукцион
@@ -933,6 +956,21 @@ public class GameService {
         return  offersStr;
     }
 
+    public ArrayList<String> getPlayersDebtsStrings(Player player) {
+        ArrayList<String> debtsStr = new ArrayList<>();
+        ArrayList<Debt> playersDebts = player.debts;
+        for(Debt debt: playersDebts){
+            String str = "Вы должны "+ debt.sum +"$";
+            if(debt.recipientID==-1){
+                str+= " банку!";
+            }else{
+                str+= " игроку "+ getPlayer(debt.recipientID).name +"!";
+            }
+            debtsStr.add(str);
+        }
+        return debtsStr;
+    }
+
     private boolean isHousesInGroup(Street street) {
         if (street != null) {
             for (Street streetI : mapServ.getStreets()) {
@@ -1016,7 +1054,6 @@ public class GameService {
         }
         return -1;
     }
-
 
 
 

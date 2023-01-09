@@ -17,17 +17,15 @@ import com.example.monopoly.MainActivity;
 import com.example.monopoly.R;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
-import entities.Offer;
-import enums.OfferStates;
+import entities.Debt;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ViewOffersFrag#newInstance} factory method to
+ * Use the {@link DebtsFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewOffersFrag extends Fragment {
+public class DebtsFrag extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,10 +36,11 @@ public class ViewOffersFrag extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ListView offersList;
+    private ListView debtsList;
+    ArrayList<Debt> playerDebts;
 
-    public ViewOffersFrag() {
-        super(R.layout.fragment_view_offers);
+    public DebtsFrag() {
+        super(R.layout.fragment_debts);
         // Required empty public constructor
     }
 
@@ -51,11 +50,11 @@ public class ViewOffersFrag extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewOffersFrag.
+     * @return A new instance of fragment debtsFrag.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewOffersFrag newInstance(String param1, String param2) {
-        ViewOffersFrag fragment = new ViewOffersFrag();
+    public static DebtsFrag newInstance(String param1, String param2) {
+        DebtsFrag fragment = new DebtsFrag();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -76,52 +75,32 @@ public class ViewOffersFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_view_offers, container, false);
+        View view =  inflater.inflate(R.layout.fragment_debts, container, false);
 
-        offersList = (ListView) view.findViewById(R.id.offersList);
+        debtsList = (ListView) view.findViewById(R.id.debtsList);
 
-        ArrayList<Offer> playerOffers = (ArrayList<Offer>) ((MainActivity) getActivity())
-                .currentPlayer.offers.stream()
-                .filter(x->x.state.equals(OfferStates.newOffer))
-                .collect(Collectors.toList());
-        ArrayList<String> playerOffersStrings = ((MainActivity) getActivity()).gameService.getPlayersOffersStrings(((MainActivity) getActivity()).currentPlayer);
-
-
-        // создаем адаптер
-        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(),
-                android.R.layout.simple_list_item_1, playerOffersStrings);
-
-        // устанавливаем для списка адаптер
-        offersList.setAdapter(adapter);
+        updateList();
 
         // добавляем для списка слушатель
-        offersList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        debtsList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
-                Offer offer = playerOffers.get(position);
+                Debt debt = ((MainActivity) getActivity()).currentPlayer.debts.get(position);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle("Важное сообщение!")
-                        .setMessage("Что хотите сделать с предлождением?")
+                        .setMessage("Что хотите сделать с долгом?")
                         .setCancelable(false)
-                        .setPositiveButton("Принять",
+                        .setPositiveButton("Оплатить",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        String result = ((MainActivity) getActivity()).gameService.acceptOffer(offer, ((MainActivity) getActivity()).currentPlayer);
+                                        String result = ((MainActivity) getActivity()).gameService.repayDebt(((MainActivity) getActivity()).currentPlayer, debt);
                                         dialog.cancel();
                                         ((MainActivity) getActivity()).showMessage(result);
-                                        ((MainActivity) getActivity()).offerClick(((MainActivity) getActivity()).currentPlayer.name);
+                                        updateList();
+                                        //((MainActivity) getActivity()).debtClick();
 
-                                    }
-                                })
-                        .setNegativeButton("Отклонить",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        String result = ((MainActivity) getActivity()).gameService.rejectOffer(offer, ((MainActivity) getActivity()).currentPlayer);
-                                        dialog.cancel();
-                                        ((MainActivity) getActivity()).showMessage(result);
-                                        ((MainActivity) getActivity()).offerClick(((MainActivity) getActivity()).currentPlayer.name);
                                     }
                                 })
                         .setNeutralButton("Ничего",
@@ -137,5 +116,21 @@ public class ViewOffersFrag extends Fragment {
         });
 
         return view;
+
     }
+
+    public void updateList(){
+        playerDebts = ((MainActivity) getActivity()).currentPlayer.debts;
+        ArrayList<String> playerDebtsStrings = ((MainActivity) getActivity()).gameService.getPlayersDebtsStrings(((MainActivity) getActivity()).currentPlayer);
+
+
+        // создаем адаптер
+        ArrayAdapter<String> adapter = new ArrayAdapter(this.getContext(),
+                android.R.layout.simple_list_item_1, playerDebtsStrings);
+
+        // устанавливаем для списка адаптер
+        debtsList.setAdapter(adapter);
+
+    }
+
 }

@@ -33,12 +33,16 @@ public class PlayerRepository {
     }
 
     public void removeDebt(Player player, Debt debt){
-        myRef1.child("players")
+        /*myRef1.child("players")
                 .child(Integer.toString(game.players.indexOf(player)))
                 .child("debts")
                 .child(Integer.toString(player.debts.indexOf(debt)))
-                .removeValue();
+                .removeValue();*/
         player.debts.remove(debt);
+        myRef1.child("players")
+                .child(Integer.toString(game.players.indexOf(player)))
+                .child("debts")
+                .setValue(player.debts);
     }
 
     public void setPosition(Player player, int position) {

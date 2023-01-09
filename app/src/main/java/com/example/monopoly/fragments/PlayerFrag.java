@@ -70,6 +70,11 @@ public class PlayerFrag extends Fragment {
         // do something in fragment
     }
 
+    public void setBankrupt(){
+        LinearLayout frag = (LinearLayout) getView();
+        frag.setBackgroundResource(R.drawable.frame_bankrupt);
+    }
+
 
 
     public void setCash(int cash){
