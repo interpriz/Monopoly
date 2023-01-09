@@ -106,7 +106,7 @@ public class PlayerRepository {
     }
 
     public void setBankrupt(Player player, boolean bankrupt) {
-        player.bankrupt = bankrupt;
+        //player.bankrupt = bankrupt;
         myRef1.child("players")
                 .child(Integer.toString(game.players.indexOf(player)))
                 .child("bankrupt")

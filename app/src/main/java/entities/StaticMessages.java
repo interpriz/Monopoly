@@ -35,6 +35,19 @@ public final class StaticMessages {
     public static final String SOLD_PROPERTY = "You have no money, but have property! Sold it!";
     public static final String HAVE_DEBTS = "You have debts!";
     public static final String INCORRECT_RECIPIENT = "Incorrect recipient!";
+    public static final String ERROR_HOUSES_NUMBER = "ERROR unacceptable number of houses!";
+    public static final String ERROR_STATIONS_NUMBER = "ERROR unacceptable number of stations!";
+    public static final String ERROR_MUNICIPALS_NUMBER = "ERROR unacceptable number of municipal!";
+    public static final String RECIPIENT_EMPTY_PROPERTY = "Recipient property can not be empty";
+    public static final String SENDER_EMPTY_PROPERTY = "Sender property can not be empty";
+    public static final String SENDER_RECIPIENT_EMPTY_PROPERTY = "Sender and recipient property can not be empty";
+    public static final String SMALL_BET = "Last bet is bigger then yours!";
+    public static final String WINNER_CANT_GO_OUT = "You are the winner, you cant go out!";
+    public static final String NOT_IN_JAIL = "You are not in jail now!";
+    public static final String ALREADY_PAUSED = "Game is already paused!";
+    public static final String CANT_CONTINUE = "You can not continue game, as you didn't pause the game!";
+
+
 
     private StaticMessages() {
     }

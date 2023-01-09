@@ -332,7 +332,7 @@ public class GameService {
                             case 0:
                                 return payment(currentPlayer, getOwner(property), street.full_group_rent);
                             default:
-                                return "ERROR unacceptable number of houses";
+                                return ERROR_HOUSES_NUMBER;
                         }
                     } else {
                         return payment(currentPlayer, getOwner(property), street.rent);
@@ -354,7 +354,7 @@ public class GameService {
                     case 4:
                         return payment(currentPlayer, getOwner(property), 200);
                     default:
-                        return "ERROR unacceptable number of stations";
+                        return ERROR_STATIONS_NUMBER;
                 }
             case municipal:
                 // подсчет числа предприятий в собственности владельца текущего предприятия
@@ -367,7 +367,7 @@ public class GameService {
                     case 2:
                         return payment(currentPlayer, getOwner(property), 10 * dices);
                     default:
-                        return "ERROR unacceptable number of municipal";
+                        return ERROR_MUNICIPALS_NUMBER;
                 }
         }
         return ERROR;
@@ -456,7 +456,7 @@ public class GameService {
 
         //логика равномерного распределения домов
         if (col != 0) {
-            return "There are not an equal number of houses on the streets!";
+            return NOT_AN_EQUAL_NUMBER_OF_HOUSES;
         }
 
         payment(game.bank, seller, street.house_price / 2);
@@ -538,13 +538,13 @@ public class GameService {
         //Валидация
         if(offerType == OfferTypes.buy)
             if(recipientProperty==null)
-                return "Recipient property can not be empty";
+                return RECIPIENT_EMPTY_PROPERTY;
         if(offerType == OfferTypes.sold)
             if(senderProperty==null)
-                return "Sender property can not be empty";
+                return SENDER_EMPTY_PROPERTY;
         if(offerType == OfferTypes.change)
             if(senderProperty==null && recipientProperty==null)
-                return "Sender and recipient property can not be empty";
+                return SENDER_RECIPIENT_EMPTY_PROPERTY;
 
         boolean flag1 = (offerType == OfferTypes.buy && getOwner(recipientProperty) == recipient);
         boolean flag2 = (offerType == OfferTypes.sold && getOwner(senderProperty) == player);
@@ -792,7 +792,7 @@ public class GameService {
             return StaticMessages.SUCCESS;
         }
         else
-            return "Last bet is bigger then yours!";
+            return SMALL_BET;
     }
 
     // выйти из аукциона
@@ -807,7 +807,7 @@ public class GameService {
             gameRepo.setAuctionRemovePlayer(idPlayer);
             return StaticMessages.SUCCESS;
         }else{
-            return "You are the winner, you cant go out!";
+            return WINNER_CANT_GO_OUT;
         }
     }
 
@@ -828,7 +828,7 @@ public class GameService {
 
     public String goOutFromJail(Player player){
         if(player.jailMove==0)
-            return "You are not in jail now!";
+            return NOT_IN_JAIL;
 
         if(player.cash<50)
             return NOT_ENOUGH_MONEY;
@@ -872,7 +872,7 @@ public class GameService {
             gameRepo.setPausedPlayer(game.players.indexOf(player));
             return SUCCESS;
         }
-        return "Game is already paused!";
+        return ALREADY_PAUSED;
     }
 
     public String continueGame(Player player) {
@@ -881,7 +881,7 @@ public class GameService {
             gameRepo.setPausedPlayer(-1);
             return SUCCESS;
         }
-        return "You didn't pause the game!";
+        return CANT_CONTINUE;
     }
 
     public Player getOwner(Property property) {

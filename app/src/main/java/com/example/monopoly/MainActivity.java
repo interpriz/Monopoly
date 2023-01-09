@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.monopoly.fragments.EndOfGame;
 import com.example.monopoly.fragments.FieldRecBottom;
 import com.example.monopoly.fragments.FieldRecLeft;
 import com.example.monopoly.fragments.FieldRecRight;
@@ -40,6 +42,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import entities.Auction;
 import entities.FieldDB;
@@ -298,6 +302,8 @@ public class MainActivity extends AppCompatActivity {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
             game.winnerId = dataSnapshot.getValue(Integer.class);
+            if ( game.winnerId!=-1)
+                showWinOrLoose(game.winnerId, true);
             Log.d(TAG, "WinnerId value is: " + game.winnerId);
         }
 
@@ -421,19 +427,21 @@ public class MainActivity extends AppCompatActivity {
             PlayerFrag playerFrag = getPlayerFragByPlayersId(playerId);
             playerFrag.setCash(updatedPlayer.cash);
 
-            if(updatedPlayer.bankrupt){
+            if(updatedPlayer.bankrupt && !oldPlayer.bankrupt){
                 playerFrag.setBankrupt();
+                if (updatedPlayer.name.equals(yourPlayer.name))
+                    showWinOrLoose(playerId, false);
             }
 
             game.players.set(playerId, updatedPlayer);
 
             if(updatedPlayer.name.equals(yourPlayer.name)){
-                yourPlayer= game.players.get(playerId);
+                yourPlayer = game.players.get(playerId);
             }
 
             //TODO для теста
             if(updatedPlayer.name.equals(currentPlayer.name)){
-                currentPlayer= game.players.get(playerId);
+                currentPlayer = game.players.get(playerId);
             }
 
             Log.d(TAG, "Player changed:" + updatedPlayer.name);
@@ -792,6 +800,23 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(getApplicationContext(),
                 mes, Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    private void showWinOrLoose(int idPlayer, boolean win){
+        Bundle args = new Bundle();
+        args.putInt("idPlayer", idPlayer);
+        args.putBoolean("win", win);
+        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container_view, EndOfGame.class, args)
+                .commit();
+        /*try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        getSupportFragmentManager().popBackStack();*/
+
     }
 
 
