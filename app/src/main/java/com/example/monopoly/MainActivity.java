@@ -240,8 +240,10 @@ public class MainActivity extends AppCompatActivity {
             int oldCurPlayerId = game.currentPlayerId;
             Log.d(TAG, "CurrentPlayerId value is: " + newCurPlayerId);
 
-            PlayerFrag oldPlayerFragment = getPlayerFragByPlayersId(oldCurPlayerId);
-            oldPlayerFragment.setFrame(-1);
+            if(!gameService.getPlayer(oldCurPlayerId).bankrupt){
+                PlayerFrag oldPlayerFragment = getPlayerFragByPlayersId(oldCurPlayerId);
+                oldPlayerFragment.setFrame(-1);
+            }
 
             PlayerFrag curPlayerFragment = getPlayerFragByPlayersId(newCurPlayerId);
             curPlayerFragment.setFrame(newCurPlayerId);
