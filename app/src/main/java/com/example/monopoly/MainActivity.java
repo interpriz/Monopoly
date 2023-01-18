@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.monopoly.fragments.Authorisation;
 import com.example.monopoly.fragments.EndOfGame;
 import com.example.monopoly.fragments.FieldRecBottom;
 import com.example.monopoly.fragments.FieldRecLeft;
@@ -42,14 +43,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
+import java.util.Optional;
 
 import entities.Auction;
 import entities.FieldDB;
 import entities.Game;
 import entities.Offer;
 import entities.Player;
+import entities.User;
 import enums.GameStates;
 import repositories.GameRepository;
 import repositories.PlayerRepository;
@@ -65,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
     //объекты логики игры 
     public Game game;
-    public Player yourPlayer;
-    public Player currentPlayer; //TODO для теста
+    public ArrayList<User> users = new ArrayList<User>();
+    private String yourNickname;
+    public Player yourPlayer; //TODO для теста
     public GameService gameService;
     private GameRepository gr;
     private PlayerRepository pr;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     //объекты взаимодействия с БД
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
-    DatabaseReference testMessageRef = database.getReference("testMessage");
+    public DatabaseReference usersRef = database.getReference("users");
     DatabaseReference gameRef = database.getReference("testGame");
     DatabaseReference gameDice1Ref = gameRef.child("dice1");
     DatabaseReference gameDice2Ref = gameRef.child("dice2");
@@ -88,34 +90,27 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference gamePlayersRef = gameRef.child("players");
     //DatabaseReference gamePlayer0Ref = gameRef.child("players").child("0");
 
-    /*ValueEventListener gameFirstListen = new ValueEventListener() {
+
+    OnCompleteListener usersFirstListen = new OnCompleteListener<DataSnapshot>() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            game = dataSnapshot.getValue(Game.class);
-            int a =0;
-            if(game==null){
-                game = new Game(4,"God");
-                gameService = new GameService(game);
-                gr = new GameRepository(game);
-                pr = new PlayerRepository(game);
-                gameRef.setValue(game);
-                gameService.enterGame("God");
-                gameService.enterGame("Sasha");
-                gameService.enterGame("Sveta");
-                gameService.enterGame("Lola");
-                gr.setNewOwner(2, 0);
-            }else {
-                gameService = new GameService(game);
-                gr = new GameRepository(game);
-                pr = new PlayerRepository(game);
+        public void onComplete(@NonNull Task<DataSnapshot> task) {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                DataSnapshot ds = task.getResult();
+                for (DataSnapshot childSnapshot: ds.getChildren()) {
+                    User u = childSnapshot.getValue(User.class);
+                    users.add(u);
+                }
+
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container_view, authorisation)
+                        .commit();
             }
         }
+    };
 
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-            Log.e(TAG,"Error while reading data");
-        }
-    };*/
     //первичное считавание игры (если ее нет, то создается новая)
     OnCompleteListener gameFirstListen = new OnCompleteListener<DataSnapshot>() {
         @Override
@@ -128,20 +123,38 @@ public class MainActivity extends AppCompatActivity {
                 game = ds.getValue(Game.class);
                 int a = 0;
                 if (game == null) {
-                    game = new Game(4, "God");
+                    game = new Game(2, yourNickname);
                     gameRef.setValue(game);
                     gameService = new GameService(game);
-                    yourPlayer = gameService.enterGame("God");
-                    gameService.enterGame("Sasha");
-                    gameService.enterGame("Sveta");
-                    gameService.enterGame("Lola");
+                    yourPlayer = gameService.enterGame(yourNickname);
+                    //gameService.enterGame("Sasha");
+                    //gameService.enterGame("Sveta");
+                    //gameService.enterGame("Lola");
                 }else{
-                    yourPlayer = game.players.get(0);
-                }
+                    //yourPlayer = game.players.get(0);
 
-                gameService = new GameService(game);
+                    Optional<Player> player = game.players.stream().filter(x->x.name.equals(yourNickname)).findFirst();
+
+
+
+                    if(player.isPresent()){
+                        yourPlayer = player.get();
+                        gameService = new GameService(game);
+                    }else {
+                        if(game.state == GameStates.onStart){
+                            gameService = new GameService(game);
+                            yourPlayer = gameService.enterGame(yourNickname);
+                        }else{
+                            showMessage("Игра уже идет!");
+                            getSupportFragmentManager().beginTransaction()
+                                    .add(R.id.fragment_container_view, authorisation)
+                                    .commit();
+                            return;
+                        }
+                    }
+                }
                 //TODO для теста
-                currentPlayer = gameService.getCurrentPlayer();
+                //currentPlayer = gameService.getCurrentPlayer();
                 gameService.setTest(true);
                 gr = new GameRepository(game);
                 pr = new PlayerRepository(game);
@@ -250,15 +263,16 @@ public class MainActivity extends AppCompatActivity {
 
             game.currentPlayerId = newCurPlayerId;
 
-            currentPlayer= gameService.getCurrentPlayer(); //TODO для теста
+            Player currentPlayer= gameService.getCurrentPlayer(); //TODO для теста
 
-            if(newCurPlayerId==game.players.indexOf(currentPlayer) && game.state.equals(GameStates.onPlay)){
+            // для работы с одного стройства
+            /*if(newCurPlayerId==game.players.indexOf(yourPlayer) && game.state.equals(GameStates.onPlay)){
                 Button btn = (Button) findViewById(R.id.moveBtn);
-                if (currentPlayer.canRollDice)
+                if (yourPlayer.canRollDice)
                     btn.setText("Сделать ход");
                 else
                     btn.setText("Завершить ход");
-            }
+            }*/
 
         }
 
@@ -387,20 +401,25 @@ public class MainActivity extends AppCompatActivity {
             if(isNewPlayer){
                 game.players.add(newPlayer);
             }else{
-                int idPlayer = Integer.parseInt(dataSnapshot.getKey());
-                PlayerFrag playerI =  getPlayerFragByPlayersId(idPlayer);
-                playerI.setCash(newPlayer.cash);
-                playerI.setPlayerName(newPlayer.name);
-                playerI.setImage(playersImages.get(idPlayer));
-                movePlayerFigure(0, newPlayer.position, idPlayer);
-                if(newPlayer.bankrupt){
-                    playerI.setBankrupt();
-                }
+
             }
+
+            int idPlayer = Integer.parseInt(dataSnapshot.getKey());
+            PlayerFrag playerI =  getPlayerFragByPlayersId(idPlayer);
+            playerI.setCash(newPlayer.cash);
+            playerI.setPlayerName(newPlayer.name);
+            playerI.setImage(playersImages.get(idPlayer));
+            movePlayerFigure(0, newPlayer.position, idPlayer);
+            if(newPlayer.bankrupt){
+                playerI.setBankrupt();
+            }
+
+
             if(flag && game.players.size()==game.maxPLayers){
                 if(yourPlayer.name.equals(game.organizer)){
                     String result = gameService.startGame(yourPlayer);
                 }
+                gameCurPlayerRef.addValueEventListener(gameCurPlayerListener);
                 flag = false;
             }
 
@@ -437,13 +456,13 @@ public class MainActivity extends AppCompatActivity {
 
             game.players.set(playerId, updatedPlayer);
 
-            if(updatedPlayer.name.equals(yourPlayer.name)){
+            /*if(updatedPlayer.name.equals(yourPlayer.name)){
                 yourPlayer = game.players.get(playerId);
-            }
+            }*/
 
             //TODO для теста
-            if(updatedPlayer.name.equals(currentPlayer.name)){
-                currentPlayer = game.players.get(playerId);
+            if(updatedPlayer.name.equals(yourPlayer.name)){
+                yourPlayer = game.players.get(playerId);
             }
 
             Log.d(TAG, "Player changed:" + updatedPlayer.name);
@@ -642,7 +661,7 @@ public class MainActivity extends AppCompatActivity {
         gameDice2Ref.addValueEventListener(gameDice2Listener);
         gameAuctionRef.addValueEventListener(gameAuctionListener);
         gameStateRef.addValueEventListener(gameStateListener);
-        gameCurPlayerRef.addValueEventListener(gameCurPlayerListener);
+        //gameCurPlayerRef.addValueEventListener(gameCurPlayerListener);
         gameBankRef.addValueEventListener(gameBankListener);
         gamePausedPlayerRef.addValueEventListener(gamePausedPlayerListener);
         gameWinnerRef.addValueEventListener(gameWinnerListener);
@@ -651,13 +670,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public Fragment authorisation = new Authorisation();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //textView = (TextView) findViewById(R.id.text);
+        usersRef.get().addOnCompleteListener(usersFirstListen);
+    }
 
+    public void start(String name){
+        yourNickname = name;
+
+        getSupportFragmentManager().beginTransaction().remove(authorisation).commit();
         gameRef.get().addOnCompleteListener(gameFirstListen);
 
     }
@@ -694,7 +720,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (mode){
             case"Сделать ход":
-                String result = gameService.makeMove(currentPlayer);
+                String result = gameService.makeMove(yourPlayer);
                 switch (result){
                     case SUCCESS:
                         btn.setText("Завершить ход");
@@ -707,8 +733,8 @@ public class MainActivity extends AppCompatActivity {
                                 .setPositiveButton("Купить",
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
-                                                Offer bankOffer = currentPlayer.offers.get(currentPlayer.offers.size()-1);
-                                                String acceptRes = gameService.acceptOffer(bankOffer, currentPlayer);
+                                                Offer bankOffer = yourPlayer.offers.get(yourPlayer.offers.size()-1);
+                                                String acceptRes = gameService.acceptOffer(bankOffer, yourPlayer);
                                                 dialog.cancel();
                                                 showMessage(acceptRes);
                                             }
@@ -722,6 +748,7 @@ public class MainActivity extends AppCompatActivity {
                                         });
                         AlertDialog alert = builder.create();
                         alert.show();
+                        btn.setText("Завершить ход");
                         break;
                     default:
                         Toast toast = Toast.makeText(getApplicationContext(),
@@ -729,7 +756,6 @@ public class MainActivity extends AppCompatActivity {
                         toast.show();
                         break;
                 }
-                btn.setText("Завершить ход");
 
                 break;
             case "Завершить ход":
@@ -743,7 +769,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goOutFromJailClick(View view) {
-        String result = gameService.goOutFromJail(currentPlayer);
+        String result = gameService.goOutFromJail(yourPlayer);
         showMessage(result);
     }
 
@@ -767,7 +793,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void offerClick(String playerName) {
-        if(playerName.equals(currentPlayer.name)){
+        if(playerName.equals(yourPlayer.name)){
             getSupportFragmentManager().popBackStack();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container_view, ViewOffersFrag.class, null)

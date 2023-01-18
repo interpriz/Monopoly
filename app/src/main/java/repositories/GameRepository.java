@@ -148,5 +148,9 @@ public class GameRepository {
                 );
     }
 
+    public void deleteGame(){
+        myRef1.removeValue();
+    }
+
 
 }

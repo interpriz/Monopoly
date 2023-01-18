@@ -86,7 +86,7 @@ public class DebtsFrag extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
-                Debt debt = ((MainActivity) getActivity()).currentPlayer.debts.get(position);
+                Debt debt = ((MainActivity) getActivity()).yourPlayer.debts.get(position);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle("Важное сообщение!")
@@ -95,7 +95,7 @@ public class DebtsFrag extends Fragment {
                         .setPositiveButton("Оплатить",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        String result = ((MainActivity) getActivity()).gameService.repayDebt(((MainActivity) getActivity()).currentPlayer, debt);
+                                        String result = ((MainActivity) getActivity()).gameService.repayDebt(((MainActivity) getActivity()).yourPlayer, debt);
                                         dialog.cancel();
                                         ((MainActivity) getActivity()).showMessage(result);
                                         updateList();
@@ -120,8 +120,8 @@ public class DebtsFrag extends Fragment {
     }
 
     public void updateList(){
-        playerDebts = ((MainActivity) getActivity()).currentPlayer.debts;
-        ArrayList<String> playerDebtsStrings = ((MainActivity) getActivity()).gameService.getPlayersDebtsStrings(((MainActivity) getActivity()).currentPlayer);
+        playerDebts = ((MainActivity) getActivity()).yourPlayer.debts;
+        ArrayList<String> playerDebtsStrings = ((MainActivity) getActivity()).gameService.getPlayersDebtsStrings(((MainActivity) getActivity()).yourPlayer);
 
 
         // создаем адаптер

@@ -1055,6 +1055,13 @@ public class GameService {
         return -1;
     }
 
+    public String deleteGame(Player player){
+        if(player.name.equals(game.organizer)){
+            gameRepo.deleteGame();
+        }
+        return SUCCESS;
+    }
+
 
 
 }

@@ -81,10 +81,10 @@ public class ViewOffersFrag extends Fragment {
         offersList = (ListView) view.findViewById(R.id.offersList);
 
         ArrayList<Offer> playerOffers = (ArrayList<Offer>) ((MainActivity) getActivity())
-                .currentPlayer.offers.stream()
+                .yourPlayer.offers.stream()
                 .filter(x->x.state.equals(OfferStates.newOffer))
                 .collect(Collectors.toList());
-        ArrayList<String> playerOffersStrings = ((MainActivity) getActivity()).gameService.getPlayersOffersStrings(((MainActivity) getActivity()).currentPlayer);
+        ArrayList<String> playerOffersStrings = ((MainActivity) getActivity()).gameService.getPlayersOffersStrings(((MainActivity) getActivity()).yourPlayer);
 
 
         // создаем адаптер
@@ -108,20 +108,20 @@ public class ViewOffersFrag extends Fragment {
                         .setPositiveButton("Принять",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        String result = ((MainActivity) getActivity()).gameService.acceptOffer(offer, ((MainActivity) getActivity()).currentPlayer);
+                                        String result = ((MainActivity) getActivity()).gameService.acceptOffer(offer, ((MainActivity) getActivity()).yourPlayer);
                                         dialog.cancel();
                                         ((MainActivity) getActivity()).showMessage(result);
-                                        ((MainActivity) getActivity()).offerClick(((MainActivity) getActivity()).currentPlayer.name);
+                                        ((MainActivity) getActivity()).offerClick(((MainActivity) getActivity()).yourPlayer.name);
 
                                     }
                                 })
                         .setNegativeButton("Отклонить",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        String result = ((MainActivity) getActivity()).gameService.rejectOffer(offer, ((MainActivity) getActivity()).currentPlayer);
+                                        String result = ((MainActivity) getActivity()).gameService.rejectOffer(offer, ((MainActivity) getActivity()).yourPlayer);
                                         dialog.cancel();
                                         ((MainActivity) getActivity()).showMessage(result);
-                                        ((MainActivity) getActivity()).offerClick(((MainActivity) getActivity()).currentPlayer.name);
+                                        ((MainActivity) getActivity()).offerClick(((MainActivity) getActivity()).yourPlayer.name);
                                     }
                                 })
                         .setNeutralButton("Ничего",

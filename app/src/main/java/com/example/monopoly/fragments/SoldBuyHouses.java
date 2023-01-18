@@ -87,7 +87,7 @@ public class SoldBuyHouses extends Fragment {
         soldBtn = (Button) view.findViewById(R.id.soldBtn);
         dropDownList = (Spinner) view.findViewById(R.id.dropDownList);
 
-        int idPlayer = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).currentPlayer);
+        int idPlayer = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).yourPlayer);
 
         listPropertyIds = (ArrayList<Integer>) ((MainActivity) getActivity())
                 .game.fieldsOwners
@@ -121,7 +121,7 @@ public class SoldBuyHouses extends Fragment {
                 String streetName = dropDownList.getSelectedItem().toString();
                 int idStreetInList = listStreetsNames.indexOf(streetName);
                 Street street = listStreets.get(idStreetInList);
-                String result = ((MainActivity) getActivity()).gameService.buyHouse(street, ((MainActivity) getActivity()).currentPlayer);
+                String result = ((MainActivity) getActivity()).gameService.buyHouse(street, ((MainActivity) getActivity()).yourPlayer);
                 ((MainActivity) getActivity()).showMessage(result);
             }
         });
@@ -132,7 +132,7 @@ public class SoldBuyHouses extends Fragment {
                 String streetName = dropDownList.getSelectedItem().toString();
                 int idStreetInList = listStreetsNames.indexOf(streetName);
                 Street street = listStreets.get(idStreetInList);
-                String result = ((MainActivity) getActivity()).gameService.soldHouse(street, ((MainActivity) getActivity()).currentPlayer);
+                String result = ((MainActivity) getActivity()).gameService.soldHouse(street, ((MainActivity) getActivity()).yourPlayer);
                 ((MainActivity) getActivity()).showMessage(result);
             }
         });

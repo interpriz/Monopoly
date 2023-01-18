@@ -108,7 +108,7 @@ public class  OfferFrag extends Fragment {
 
 
         int idRecipient = getArguments().getInt("idPlayer");
-        int idSender = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).currentPlayer);
+        int idSender = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).yourPlayer);
 
         listSenderProperty = ((MainActivity) getActivity()).gameService.getPlayersProperty(idSender);
         listRecipientProperty = ((MainActivity) getActivity()).gameService.getPlayersProperty(idRecipient);

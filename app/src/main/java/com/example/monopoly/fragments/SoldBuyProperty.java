@@ -89,7 +89,7 @@ public class SoldBuyProperty extends Fragment {
         buyBackBtn   = (Button) view.findViewById(R.id.buyBackBtn);
         dropDownList = (Spinner) view.findViewById(R.id.dropDownList);
 
-        int idPlayer = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).currentPlayer);
+        int idPlayer = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).yourPlayer);
 
 
         listProperty = ((MainActivity) getActivity()).gameService.getPlayersProperty(idPlayer);
@@ -113,7 +113,7 @@ public class SoldBuyProperty extends Fragment {
                 String propertyName = dropDownList.getSelectedItem().toString();
                 int idPropertyInList = listPropertiesNames.indexOf(propertyName);
                 Property property = listProperty.get(idPropertyInList);
-                String result = ((MainActivity) getActivity()).gameService.createDeposit(property, ((MainActivity) getActivity()).currentPlayer);
+                String result = ((MainActivity) getActivity()).gameService.createDeposit(property, ((MainActivity) getActivity()).yourPlayer);
                 ((MainActivity) getActivity()).showMessage(result);
             }
         });
@@ -124,7 +124,7 @@ public class SoldBuyProperty extends Fragment {
                 String propertyName = dropDownList.getSelectedItem().toString();
                 int idPropertyInList = listPropertiesNames.indexOf(propertyName);
                 Property property = listProperty.get(idPropertyInList);
-                String result = ((MainActivity) getActivity()).gameService.destroyDeposit(property, ((MainActivity) getActivity()).currentPlayer);
+                String result = ((MainActivity) getActivity()).gameService.destroyDeposit(property, ((MainActivity) getActivity()).yourPlayer);
                 ((MainActivity) getActivity()).showMessage(result);
             }
         });
