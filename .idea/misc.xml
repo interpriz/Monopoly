@@ -5,9 +5,18 @@
       <map>
         <entry key="..\:/Monopoly/Monopoly-master/app/src/main/res/layout/activity_main.xml" value="0.4466666666666667" />
         <entry key="..\:/Monopoly/Monopoly-master/app/src/main/res/layout/fragment_field_rec_left.xml" value="1.0" />
-        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_buy_sold_houses.xml" value="0.5" />
         <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_debts.xml" value="0.30052083333333335" />
-        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_player.xml" value="0.1859375" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_end_of_game.xml" value="0.29030797101449274" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_field_rec_bottom.xml" value="3.3333333333333335" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_field_rec_left.xml" value="3.3333333333333335" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_field_rec_right.xml" value="3.3333333333333335" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_field_rec_top.xml" value="2.6666666666666665" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_field_square.xml" value="2.6666666666666665" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_offer.xml" value="0.5" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_player.xml" value="0.6666666666666666" />
+        <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_sold_buy_property.xml" value="0.6666666666666666" />
         <entry key="..\:/Monopoly/Monopoly/app/src/main/res/layout/fragment_view_offers.xml" value="0.30052083333333335" />
       </map>
     </option>

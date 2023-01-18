@@ -12,8 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Выберите собственность игрока"
-        android:textAlignment="center">
+        android:text="Выберите собственность"
+        android:textAlignment="center"
+        android:fontFamily="@font/segoepr"
+        android:textColor="@color/dark_blue">
 
     </TextView>
 
@@ -22,20 +24,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        />
 
     <Button
         android:id="@+id/depositBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Заложить"/>
+        android:text="Заложить"
+        android:backgroundTint="@color/dark_blue"/>
 
     <Button
         android:id="@+id/buyBackBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Выкупить" />
+        android:text="Выкупить"
+        android:backgroundTint="@color/dark_blue"/>
 
 </LinearLayout>

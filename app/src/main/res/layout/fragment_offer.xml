@@ -13,7 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Выберите тип сделки"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:fontFamily="@font/segoepr"
+        android:textColor="@color/dark_blue"
+        android:textSize="11dp"/>
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -26,20 +29,29 @@
             android:id="@+id/radioButtonBuy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Покупка" />
+            android:text="Покупка"
+            android:fontFamily="@font/segoeprb"
+            android:textColor="@color/dark_blue"
+            android:textSize="12dp"/>
 
         <RadioButton
             android:id="@+id/radioButtonSold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Продажа"
-            android:checked="true"/>
+            android:checked="true"
+            android:fontFamily="@font/segoeprb"
+            android:textColor="@color/dark_blue"
+            android:textSize="12dp"/>
 
         <RadioButton
             android:id="@+id/radioButtonChange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Обмен" />
+            android:text="Обмен"
+            android:fontFamily="@font/segoeprb"
+            android:textColor="@color/dark_blue"
+            android:textSize="12dp"/>
     </RadioGroup>
 
     <LinearLayout
@@ -60,7 +72,10 @@
                 android:layout_gravity="center_horizontal"
                 android:lines="3"
                 android:text="Выберите свою собственность"
-                android:textAlignment="center">
+                android:textAlignment="center"
+                android:fontFamily="@font/segoepr"
+                android:textColor="@color/dark_blue"
+                android:textSize="10dp">
 
             </TextView>
 
@@ -83,7 +98,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="Выберите собственность игрока"
-                android:textAlignment="center">
+                android:textAlignment="center"
+                android:fontFamily="@font/segoepr"
+                android:textColor="@color/dark_blue"
+                android:textSize="10dp">
 
             </TextView>
 
@@ -100,8 +118,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Сумма сделки \nПри обмене: '+' - доплата получателя; '-' - доплата отправителя"
-        android:textAlignment="center">
+        android:text="Сумма сделки \nПри обмене: '+' - доплата получателя;\n'-' - доплата отправителя"
+        android:textAlignment="center"
+        android:fontFamily="@font/segoepr"
+        android:textColor="@color/dark_blue"
+        android:textSize="10dp">
 
     </TextView>
 
@@ -120,7 +141,8 @@
             android:layout_marginRight="20dp"
             android:inputType="numberSigned"
             android:layout_weight="1"
-            android:textSize="10dp"/>
+            android:textSize="10dp"
+            android:textColor="@color/dark_blue"/>
 
         <Button
             android:id="@+id/makeOfferBtn"
@@ -129,7 +151,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:text="Создать"
-            android:textSize="10dp" />
+            android:textSize="10dp"
+            android:backgroundTint="@color/dark_blue"/>
 
     </LinearLayout>
 

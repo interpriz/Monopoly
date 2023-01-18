@@ -12,8 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Выберите улицу игрока"
-        android:textAlignment="center">
+        android:text="Выберите улицу "
+        android:textAlignment="center"
+        android:fontFamily="@font/segoepr"
+        android:textColor="@color/dark_blue">
 
     </TextView>
 
@@ -29,13 +31,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Купить дом"/>
+        android:text="Купить дом"
+        android:backgroundTint="@color/dark_blue"/>
 
     <Button
         android:id="@+id/soldBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Продать дом" />
+        android:text="Продать дом"
+        android:backgroundTint="@color/dark_blue"/>
 
 </LinearLayout>
