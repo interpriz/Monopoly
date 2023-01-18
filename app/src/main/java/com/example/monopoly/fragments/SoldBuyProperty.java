@@ -110,22 +110,29 @@ public class SoldBuyProperty extends Fragment {
         depositBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String propertyName = dropDownList.getSelectedItem().toString();
-                int idPropertyInList = listPropertiesNames.indexOf(propertyName);
-                Property property = listProperty.get(idPropertyInList);
-                String result = ((MainActivity) getActivity()).gameService.createDeposit(property, ((MainActivity) getActivity()).yourPlayer);
-                ((MainActivity) getActivity()).showMessage(result);
+                if(dropDownList.getCount()!=0){
+                    String propertyName = dropDownList.getSelectedItem().toString();
+                    int idPropertyInList = listPropertiesNames.indexOf(propertyName);
+                    Property property = listProperty.get(idPropertyInList);
+                    String result = ((MainActivity) getActivity()).gameService.createDeposit(property, ((MainActivity) getActivity()).yourPlayer);
+                    ((MainActivity) getActivity()).showMessage(result);
+                }else
+                    ((MainActivity) getActivity()).showMessage("У вас нет собственности!");
+
             }
         });
 
         buyBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String propertyName = dropDownList.getSelectedItem().toString();
-                int idPropertyInList = listPropertiesNames.indexOf(propertyName);
-                Property property = listProperty.get(idPropertyInList);
-                String result = ((MainActivity) getActivity()).gameService.destroyDeposit(property, ((MainActivity) getActivity()).yourPlayer);
-                ((MainActivity) getActivity()).showMessage(result);
+                if(dropDownList.getCount()!=0) {
+                    String propertyName = dropDownList.getSelectedItem().toString();
+                    int idPropertyInList = listPropertiesNames.indexOf(propertyName);
+                    Property property = listProperty.get(idPropertyInList);
+                    String result = ((MainActivity) getActivity()).gameService.destroyDeposit(property, ((MainActivity) getActivity()).yourPlayer);
+                    ((MainActivity) getActivity()).showMessage(result);
+                }else
+                    ((MainActivity) getActivity()).showMessage("У вас нет собственности!");
             }
         });
 

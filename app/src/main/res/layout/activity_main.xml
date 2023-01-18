@@ -7,41 +7,44 @@
     android:orientation="horizontal"
     android:background="@drawable/table3"
     tools:context=".MainActivity">
-<LinearLayout
-    android:layout_width="186dp"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:weightSum="3">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/opponents"
+        android:layout_width="186dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="left"
-
         android:weightSum="3">
 
-        <fragment
-            android:id="@+id/player_1"
-            style="@style/FragPlayer"
-            tools:layout="@layout/fragment_player"
-            android:layout_weight="1"/>
-        <fragment
-            android:id="@+id/player_2"
-            style="@style/FragPlayer"
-            tools:layout="@layout/fragment_player"
-            android:layout_weight="1"/>
-        <fragment
-            android:id="@+id/player_3"
-            style="@style/FragPlayer"
-            tools:layout="@layout/fragment_player"
-            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:orientation="vertical"
+
+            android:weightSum="3">
+
+            <fragment
+                android:id="@+id/player_1"
+                style="@style/FragPlayer"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_player" />
+
+            <fragment
+                android:id="@+id/player_2"
+                style="@style/FragPlayer"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_player" />
+
+            <fragment
+                android:id="@+id/player_3"
+                style="@style/FragPlayer"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_player" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
-
-
-
-</LinearLayout>
 
 
     <LinearLayout
@@ -173,6 +176,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/you"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -185,14 +189,15 @@
 
             <ImageButton
                 android:id="@+id/play_pause"
-                android:layout_width=   "50dp"
-                android:layout_height=  "50dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:background="@drawable/play"
                 android:onClick="pausePLayClick" />
         </LinearLayout>
 
         <GridLayout
+            android:id="@+id/buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:columnCount="1">
@@ -248,7 +253,6 @@
                 android:onClick="moveClick"
                 android:text="Сделать ход"
                 android:textSize="10dp" />
-
 
 
         </GridLayout>

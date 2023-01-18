@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -423,6 +425,12 @@ public class MainActivity extends AppCompatActivity {
                 flag = false;
             }
 
+            if(yourPlayer.name.equals(newPlayer.name)) {
+                Button btn = (Button) findViewById(R.id.moveBtn);
+                if (!yourPlayer.canRollDice && gameService.getCurrentPlayer().name.equals(yourPlayer.name))
+                    btn.setText("Завершить ход");
+            }
+
             Log.d(TAG, "Player added:" + newPlayer.name);
 
             // ...
@@ -463,6 +471,12 @@ public class MainActivity extends AppCompatActivity {
             //TODO для теста
             if(updatedPlayer.name.equals(yourPlayer.name)){
                 yourPlayer = game.players.get(playerId);
+
+                Button btn = (Button) findViewById(R.id.moveBtn);
+                if (!yourPlayer.canRollDice && gameService.getCurrentPlayer().name.equals(yourPlayer.name))
+                    btn.setText("Завершить ход");
+                else
+                    btn.setText("Сделать ход");
             }
 
             Log.d(TAG, "Player changed:" + updatedPlayer.name);
@@ -528,6 +542,10 @@ public class MainActivity extends AppCompatActivity {
                     R.id.player_1, R.id.player_2, R.id.player_3
             )
     );
+
+    LinearLayout opponents;
+    LinearLayout you;
+    GridLayout buttons;
 
 
 
@@ -667,6 +685,10 @@ public class MainActivity extends AppCompatActivity {
         gameWinnerRef.addValueEventListener(gameWinnerListener);
         gameFieldsOwnersRef.addChildEventListener(gameFieldsOwnersListener);
         gamePlayersRef.addChildEventListener(gamePlayersListener);
+
+        opponents.setVisibility(View.VISIBLE);
+        you.setVisibility(View.VISIBLE);
+        buttons.setVisibility(View.VISIBLE);
     }
 
 
@@ -676,6 +698,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        opponents = findViewById(R.id.opponents);
+        you = findViewById(R.id.you);
+        buttons = findViewById(R.id.buttons);
+
+        opponents.setVisibility(View.INVISIBLE);
+        you.setVisibility(View.INVISIBLE);
+        buttons.setVisibility(View.INVISIBLE);
 
         usersRef.get().addOnCompleteListener(usersFirstListen);
     }

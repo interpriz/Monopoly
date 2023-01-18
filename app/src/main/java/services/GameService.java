@@ -827,11 +827,17 @@ public class GameService {
     }
 
     public String goOutFromJail(Player player){
+        if(game.currentPlayerId!= getPlayerId(player)){
+            return NOT_CURRENT_PLAYER;
+        }
+
         if(player.jailMove==0)
             return NOT_IN_JAIL;
 
         if(player.cash<50)
             return NOT_ENOUGH_MONEY;
+
+
 
         payment(player, game.bank, 50);
         playerRepo.setJailMove(player,0);

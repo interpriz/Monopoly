@@ -118,22 +118,30 @@ public class SoldBuyHouses extends Fragment {
         buyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String streetName = dropDownList.getSelectedItem().toString();
-                int idStreetInList = listStreetsNames.indexOf(streetName);
-                Street street = listStreets.get(idStreetInList);
-                String result = ((MainActivity) getActivity()).gameService.buyHouse(street, ((MainActivity) getActivity()).yourPlayer);
-                ((MainActivity) getActivity()).showMessage(result);
+                if(dropDownList.getCount()!=0){
+                    String streetName = dropDownList.getSelectedItem().toString();
+                    int idStreetInList = listStreetsNames.indexOf(streetName);
+                    Street street = listStreets.get(idStreetInList);
+                    String result = ((MainActivity) getActivity()).gameService.buyHouse(street, ((MainActivity) getActivity()).yourPlayer);
+                    ((MainActivity) getActivity()).showMessage(result);
+                }else
+                    ((MainActivity) getActivity()).showMessage("У вас нет улиц!");
+
             }
         });
 
         soldBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String streetName = dropDownList.getSelectedItem().toString();
-                int idStreetInList = listStreetsNames.indexOf(streetName);
-                Street street = listStreets.get(idStreetInList);
-                String result = ((MainActivity) getActivity()).gameService.soldHouse(street, ((MainActivity) getActivity()).yourPlayer);
-                ((MainActivity) getActivity()).showMessage(result);
+                if(dropDownList.getCount()!=0){
+                    String streetName = dropDownList.getSelectedItem().toString();
+                    int idStreetInList = listStreetsNames.indexOf(streetName);
+                    Street street = listStreets.get(idStreetInList);
+                    String result = ((MainActivity) getActivity()).gameService.soldHouse(street, ((MainActivity) getActivity()).yourPlayer);
+                    ((MainActivity) getActivity()).showMessage(result);
+                }else
+                    ((MainActivity) getActivity()).showMessage("У вас нет улиц!");
+
             }
         });
 
