@@ -184,7 +184,6 @@
             <fragment
                 android:id="@+id/yourPlayer"
                 style="@style/FragPlayer"
-                android:layout_weight="1"
                 tools:layout="@layout/fragment_player" />
 
             <ImageButton
@@ -252,7 +251,7 @@
                 android:backgroundTint="#FF5722"
                 android:onClick="moveClick"
                 android:text="Сделать ход"
-                android:textSize="10dp" />
+                android:textSize="10dp"/>
 
 
         </GridLayout>

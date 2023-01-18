@@ -75,6 +75,16 @@ public class PlayerFrag extends Fragment {
         frag.setBackgroundResource(R.drawable.frame_bankrupt);
     }
 
+    public void setJail(int jailMove){
+        TextView jailCount = (TextView) getView().findViewById(R.id.jailNumber);
+        jailCount.setText(jailMove+"");
+    }
+
+    public void setOffers(int offersCount){
+        TextView text = (TextView) getView().findViewById(R.id.offerNumber);
+        text.setText(offersCount+"");
+    }
+
 
 
     public void setCash(int cash){

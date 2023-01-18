@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +57,7 @@ import entities.Offer;
 import entities.Player;
 import entities.User;
 import enums.GameStates;
+import enums.OfferStates;
 import repositories.GameRepository;
 import repositories.PlayerRepository;
 import services.GameService;
@@ -246,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     ValueEventListener gameCurPlayerListener = new ValueEventListener() {
+        @SuppressLint("ResourceAsColor")
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
@@ -266,6 +271,13 @@ public class MainActivity extends AppCompatActivity {
             game.currentPlayerId = newCurPlayerId;
 
             Player currentPlayer= gameService.getCurrentPlayer(); //TODO для теста
+
+            Button btn = (Button) findViewById(R.id.moveBtn);
+            if(newCurPlayerId==game.players.indexOf(yourPlayer)) {
+                btn.setVisibility(View.VISIBLE);
+            }else{
+                btn.setVisibility(View.INVISIBLE);
+            }
 
             // для работы с одного стройства
             /*if(newCurPlayerId==game.players.indexOf(yourPlayer) && game.state.equals(GameStates.onPlay)){
@@ -416,6 +428,9 @@ public class MainActivity extends AppCompatActivity {
                 playerI.setBankrupt();
             }
 
+            playerI.setJail(newPlayer.jailMove);
+            playerI.setOffers((int) newPlayer.offers.stream().filter(x->x.state== OfferStates.newOffer).count());
+
 
             if(flag && game.players.size()==game.maxPLayers){
                 if(yourPlayer.name.equals(game.organizer)){
@@ -461,6 +476,11 @@ public class MainActivity extends AppCompatActivity {
                 if (updatedPlayer.name.equals(yourPlayer.name))
                     showWinOrLoose(playerId, false);
             }
+
+            playerFrag.setJail(updatedPlayer.jailMove);
+
+            playerFrag.setJail(updatedPlayer.jailMove);
+            playerFrag.setOffers((int) updatedPlayer.offers.stream().filter(x->x.state== OfferStates.newOffer).count());
 
             game.players.set(playerId, updatedPlayer);
 
@@ -756,9 +776,12 @@ public class MainActivity extends AppCompatActivity {
                         btn.setText("Завершить ход");
                         break;
                     case BUY_OR_AUCTION:
+                        int sum = yourPlayer.getLastOffer().sum;
+                        String propertyName = mapService.getPropertyNameByPosition(yourPlayer.getLastOffer().senderPropertyID);
+
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle("Важное сообщение!")
-                                .setMessage("Хотите купить собственность или начать аукцион?")
+                                .setMessage("Хотите купить собственность \""+propertyName+"\" за "+sum+"$ или начать аукцион?")
                                 .setCancelable(false)
                                 .setPositiveButton("Купить",
                                         new DialogInterface.OnClickListener() {
@@ -773,6 +796,7 @@ public class MainActivity extends AppCompatActivity {
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 //gameService.startAuction(currentPlayer.offers.get(0).senderProperty());
+                                                gameService.rejectOffer(yourPlayer.getLastOffer(), yourPlayer);
                                                 dialog.cancel();
                                             }
                                         });

@@ -337,38 +337,45 @@ public class GameService {
                     } else {
                         return payment(currentPlayer, getOwner(property), street.rent);
                     }
-                }
-                break;
+                } else
+                    return SUCCESS;
             case station:
                 // подсчет числа станций в собственности владельца текущей станции
-                int cnt1 = (int) mapServ.getRailwayStations().stream()
-                        .filter(x -> getOwner(x) == getOwner(property))
-                        .count();
-                switch (cnt1) {
-                    case 1:
-                        return payment(currentPlayer, getOwner(property), 25);
-                    case 2:
-                        return payment(currentPlayer, getOwner(property), 50);
-                    case 3:
-                        return payment(currentPlayer, getOwner(property), 100);
-                    case 4:
-                        return payment(currentPlayer, getOwner(property), 200);
-                    default:
-                        return ERROR_STATIONS_NUMBER;
-                }
+                if(!getDeposit(property)){
+                    int cnt1 = (int) mapServ.getRailwayStations().stream()
+                            .filter(x -> getOwner(x) == getOwner(property))
+                            .count();
+                    switch (cnt1) {
+                        case 1:
+                            return payment(currentPlayer, getOwner(property), 25);
+                        case 2:
+                            return payment(currentPlayer, getOwner(property), 50);
+                        case 3:
+                            return payment(currentPlayer, getOwner(property), 100);
+                        case 4:
+                            return payment(currentPlayer, getOwner(property), 200);
+                        default:
+                            return ERROR_STATIONS_NUMBER;
+                    }
+                }else
+                    return  SUCCESS;
             case municipal:
-                // подсчет числа предприятий в собственности владельца текущего предприятия
-                int cnt2 = (int) mapServ.getMunicipalEnterprises().stream()
-                        .filter(x -> getOwner(x) == getOwner(property))
-                        .count();
-                switch (cnt2) {
-                    case 1:
-                        return payment(currentPlayer, getOwner(property), 4 * dices);
-                    case 2:
-                        return payment(currentPlayer, getOwner(property), 10 * dices);
-                    default:
-                        return ERROR_MUNICIPALS_NUMBER;
-                }
+                if(!getDeposit(property)) {
+                    // подсчет числа предприятий в собственности владельца текущего предприятия
+                    int cnt2 = (int) mapServ.getMunicipalEnterprises().stream()
+                            .filter(x -> getOwner(x) == getOwner(property))
+                            .count();
+                    switch (cnt2) {
+                        case 1:
+                            return payment(currentPlayer, getOwner(property), 4 * dices);
+                        case 2:
+                            return payment(currentPlayer, getOwner(property), 10 * dices);
+                        default:
+                            return ERROR_MUNICIPALS_NUMBER;
+                    }
+                }else
+                    return  SUCCESS;
+
         }
         return ERROR;
     }
@@ -1006,8 +1013,6 @@ public class GameService {
             return -1;
         return game.players.indexOf(player);
     }
-
-    
 
     public int getFullOfferSum(Offer offer, Participants player) {
         Player sender = getPlayer(offer.senderID);
