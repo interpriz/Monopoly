@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 //TODO для теста
                 //currentPlayer = gameService.getCurrentPlayer();
-                gameService.setTest(true);
+                //gameService.setTest(true);
                 gr = new GameRepository(game);
                 pr = new PlayerRepository(game);
 
@@ -741,7 +741,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void moveClick(View view){
         //TODO для теста
-        gameService.setD1D2(game.dice1, game.dice2);
+        //gameService.setD1D2(game.dice1, game.dice2);
         //Player curPlayer = yourPlayer; //gameService.getCurrentPlayer();
 
         Button btn = (Button) view;
