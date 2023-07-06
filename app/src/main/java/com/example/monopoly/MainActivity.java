@@ -64,7 +64,7 @@ import services.GameService;
 import services.MapService;
 import static entities.StaticMessages.*;
 
-// token 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
+// token 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
 public class MainActivity extends AppCompatActivity {
 
     String text;
