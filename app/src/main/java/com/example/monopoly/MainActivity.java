@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
@@ -678,17 +679,22 @@ public class MainActivity extends AppCompatActivity {
     public void start(String name){
         yourNickname = name;
 
-        getSupportFragmentManager().beginTransaction().remove(authorisation).commit();
         //gameRef.get().addOnCompleteListener(gameFirstListen);
 
         yourPlayer = gameService.gameInitialise(yourNickname);
         if (yourPlayer==null){
             showMessage("Игра уже идет!");
+
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container_view, authorisation)
+                    .add(R.id.fragment_container_view, Authorisation.class, null)
                     .commit();
+        }else{
+            getSupportFragmentManager().beginTransaction()
+                    .remove(authorisation)
+                    .commit();
+            bindGameParameters();
         }
-        bindGameParameters();
+
 
     }
 

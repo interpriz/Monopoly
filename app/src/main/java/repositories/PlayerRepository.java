@@ -33,6 +33,8 @@ public class PlayerRepository {
         //this.game = game;
     }
 
+
+
     public void addDebt(Player player, Debt newDebt){
 
         gameRef.child("players")

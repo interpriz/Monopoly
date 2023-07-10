@@ -1,14 +1,20 @@
 package repositories;
 
+import static android.content.ContentValues.TAG;
+
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.example.monopoly.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
 
@@ -19,7 +25,7 @@ import entities.Street;
 import enums.GameStates;
 import services.MapService;
 
-public class GameRepository implements OnCompleteListener<DataSnapshot> {
+public class GameRepository implements OnCompleteListener<DataSnapshot>, ValueEventListener {
 
     private /*final*/ Game game;
 
@@ -47,10 +53,14 @@ public class GameRepository implements OnCompleteListener<DataSnapshot> {
         DBGameReference = FireBaseRepository.getInstance()
                 .getDatabase().getReference(gameName); //"testGame"
         addGameFirsListen();
+        //addValueEventListener();
     }
 
     public void addGameFirsListen() {
         DBGameReference.get().addOnCompleteListener(this);
+    }
+    public void addValueEventListener(){
+        DBGameReference.addValueEventListener(this);
     }
 
     //TODO добавить исключение и сделать проброс для выполнения bindGameParameters
@@ -64,6 +74,17 @@ public class GameRepository implements OnCompleteListener<DataSnapshot> {
             DataSnapshot ds = task.getResult();
             game = ds.getValue(Game.class);
         }
+    }
+
+    @Override
+    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        game = snapshot.getValue(Game.class);
+        Log.d(TAG, "Game updated");
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError error) {
+        Log.w(TAG, "Failed to read Game value.", error.toException());
     }
 
     public Game getGame() {
@@ -203,8 +224,6 @@ public class GameRepository implements OnCompleteListener<DataSnapshot> {
     public void deleteGame() {
         DBGameReference.removeValue();
     }
-
-
 
 
 
