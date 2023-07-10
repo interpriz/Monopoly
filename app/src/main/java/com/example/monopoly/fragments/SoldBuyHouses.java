@@ -87,12 +87,12 @@ public class SoldBuyHouses extends Fragment {
         soldBtn = (Button) view.findViewById(R.id.soldBtn);
         dropDownList = (Spinner) view.findViewById(R.id.dropDownList);
 
-        int idPlayer = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).yourPlayer);
+        int idPlayer = ((MainActivity) getActivity()).gameService.getGame().players.indexOf(((MainActivity) getActivity()).yourPlayer);
 
         listPropertyIds = (ArrayList<Integer>) ((MainActivity) getActivity())
-                .game.fieldsOwners
+                .gameService.getGame().fieldsOwners
                 .stream().filter(x->x.owner==idPlayer)
-                .map(y->((MainActivity) getActivity()).game.fieldsOwners.indexOf(y)).collect(Collectors.toList());
+                .map(y->((MainActivity) getActivity()).gameService.getGame().fieldsOwners.indexOf(y)).collect(Collectors.toList());
 
         listStreets = (ArrayList<Street>) listPropertyIds.stream()
                 .map(x-> MapService.getInstance()

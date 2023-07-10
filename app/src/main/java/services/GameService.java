@@ -50,14 +50,14 @@ public class GameService {
 
     public GameService(String gameName) {
         //this.game = game;
-        this.gameRepo = new GameRepository(gameName);
+        this.gameRepo = GameRepository.getInstance(gameName);
         this.mapServ = MapService.getInstance();
         this.playerRepo = new PlayerRepository(gameName);
         this.test = false;
     }
     
     public Game getGame(){
-        return getGame();
+        return gameRepo.getGame();
     }
 
     public Player gameInitialise(String yourNickname){

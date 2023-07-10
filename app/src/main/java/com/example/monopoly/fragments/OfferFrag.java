@@ -108,7 +108,7 @@ public class  OfferFrag extends Fragment {
 
 
         int idRecipient = getArguments().getInt("idPlayer");
-        int idSender = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).yourPlayer);
+        int idSender = ((MainActivity) getActivity()).gameService.getGame().players.indexOf(((MainActivity) getActivity()).yourPlayer);
 
         listSenderProperty = ((MainActivity) getActivity()).gameService.getPlayersProperty(idSender);
         listRecipientProperty = ((MainActivity) getActivity()).gameService.getPlayersProperty(idRecipient);
@@ -149,12 +149,12 @@ public class  OfferFrag extends Fragment {
 
 
                 String result = ((MainActivity) getActivity()).gameService.makeOffer(
-                        ((MainActivity) getActivity()).game.players.get(idRecipient),
+                        ((MainActivity) getActivity()).gameService.getGame().players.get(idRecipient),
                         senderProperty,
                         offerType,
                         sum,
                         recipientProperty,
-                        ((MainActivity) getActivity()).game.players.get(idSender)
+                        ((MainActivity) getActivity()).gameService.getGame().players.get(idSender)
                 );
                 ((MainActivity) getActivity()).showMessage(result);
             }

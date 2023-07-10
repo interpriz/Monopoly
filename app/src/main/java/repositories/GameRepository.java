@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Collections;
 
@@ -29,7 +30,20 @@ public class GameRepository implements OnCompleteListener<DataSnapshot> {
         this.game = game;
     }*/
 
-    public GameRepository(String gameName) {
+    private volatile static GameRepository sGameRepository;
+
+    public static synchronized GameRepository getInstance(String gameName) {
+        if(sGameRepository == null) {
+            synchronized (FireBaseRepository.class) {
+                sGameRepository = new GameRepository(gameName);
+            }
+        }
+        return sGameRepository;
+    }
+
+
+
+    private GameRepository(String gameName) {
         DBGameReference = FireBaseRepository.getInstance()
                 .getDatabase().getReference(gameName); //"testGame"
         addGameFirsListen();

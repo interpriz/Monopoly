@@ -89,7 +89,7 @@ public class SoldBuyProperty extends Fragment {
         buyBackBtn   = (Button) view.findViewById(R.id.buyBackBtn);
         dropDownList = (Spinner) view.findViewById(R.id.dropDownList);
 
-        int idPlayer = ((MainActivity) getActivity()).game.players.indexOf(((MainActivity) getActivity()).yourPlayer);
+        int idPlayer = ((MainActivity) getActivity()).gameService.getGame().players.indexOf(((MainActivity) getActivity()).yourPlayer);
 
 
         listProperty = ((MainActivity) getActivity()).gameService.getPlayersProperty(idPlayer);

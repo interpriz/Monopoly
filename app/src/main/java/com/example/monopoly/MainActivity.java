@@ -71,12 +71,17 @@ public class MainActivity extends AppCompatActivity {
     String text;
     private TextView textView;
 
-    //объекты логики игры 
-    public Game game;
+    public GameService gameService = new GameService("testGame");
+
+    //объекты логики игры
+    //public Game game = gameService.getGame();
     public ArrayList<User> users = new ArrayList<User>();
     private String yourNickname;
     public Player yourPlayer; //TODO для теста
-    public GameService gameService;
+
+
+
+
     //private GameRepository gr;
     //private PlayerRepository pr;
     private MapService mapService = MapService.getInstance();
@@ -84,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
     //объекты взаимодействия с БД
     FirebaseDatabase database = FireBaseRepository.getInstance().getDatabase(); //FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
     public DatabaseReference usersRef = database.getReference("users");
-    DatabaseReference gameRef = gameService.getGameRef();
-    DatabaseReference gameDice1Ref = gameRef.child("dice1");
+    DatabaseReference gameRef = gameService.getGameRef();;
+    /*DatabaseReference gameDice1Ref = gameRef.child("dice1");
     DatabaseReference gameDice2Ref = gameRef.child("dice2");
     DatabaseReference gameAuctionRef = gameRef.child("auction");
     DatabaseReference gameStateRef = gameRef.child("state");
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference gamePausedPlayerRef = gameRef.child("pausedPlayer");
     DatabaseReference gameWinnerRef = gameRef.child("winnerId");
     DatabaseReference gameFieldsOwnersRef = gameRef.child("fieldsOwners");
-    DatabaseReference gamePlayersRef = gameRef.child("players");
+    DatabaseReference gamePlayersRef = gameRef.child("players");*/
     //DatabaseReference gamePlayer0Ref = gameRef.child("players").child("0");
 
 
@@ -125,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            game.dice1 = dataSnapshot.getValue(Integer.class);
-            Log.d(TAG, "Dice1 value is: " + game.dice1);
+            gameService.getGame().dice1 = dataSnapshot.getValue(Integer.class);
+            Log.d(TAG, "Dice1 value is: " + gameService.getGame().dice1);
             ImageView dice1Img = findViewById(R.id.dice1);
-            dice1Img.setImageResource(dicesImages.get(game.dice1-1));
+            dice1Img.setImageResource(dicesImages.get(gameService.getGame().dice1-1));
         }
 
         @Override
@@ -142,10 +147,10 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            game.dice2 = dataSnapshot.getValue(Integer.class);
-            Log.d(TAG, "Dice2 value is: " + game.dice2);
+            gameService.getGame().dice2 = dataSnapshot.getValue(Integer.class);
+            Log.d(TAG, "Dice2 value is: " + gameService.getGame().dice2);
             ImageView dice2Img = findViewById(R.id.dice2);
-            dice2Img.setImageResource(dicesImages.get(game.dice2-1));
+            dice2Img.setImageResource(dicesImages.get(gameService.getGame().dice2-1));
         }
 
         @Override
@@ -159,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            game.auction = dataSnapshot.getValue(Auction.class);
-            Log.d(TAG, "Auction value is: " + game.auction);
+            gameService.getGame().auction = dataSnapshot.getValue(Auction.class);
+            Log.d(TAG, "Auction value is: " + gameService.getGame().auction);
         }
 
         @Override
@@ -175,10 +180,10 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            game.state = dataSnapshot.getValue(GameStates.class);
-            Log.d(TAG, "Game state value is: " + game.state);
+            gameService.getGame().state = dataSnapshot.getValue(GameStates.class);
+            Log.d(TAG, "Game state value is: " + gameService.getGame().state);
             ImageButton buttonPlayPause = findViewById(R.id.play_pause);
-            switch (game.state){
+            switch (gameService.getGame().state){
                 case onStart:case onEnd:
                     buttonPlayPause.setBackgroundResource(0);
                     break;
@@ -206,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             // whenever data at this location is updated.
 
             int newCurPlayerId = dataSnapshot.getValue(Integer.class);
-            int oldCurPlayerId = game.currentPlayerId;
+            int oldCurPlayerId = gameService.getGame().currentPlayerId;
             Log.d(TAG, "CurrentPlayerId value is: " + newCurPlayerId);
 
             if(!gameService.getPlayer(oldCurPlayerId).bankrupt){
@@ -217,19 +222,19 @@ public class MainActivity extends AppCompatActivity {
             PlayerFrag curPlayerFragment = getPlayerFragByPlayersId(newCurPlayerId);
             curPlayerFragment.setFrame(newCurPlayerId);
 
-            game.currentPlayerId = newCurPlayerId;
+            gameService.getGame().currentPlayerId = newCurPlayerId;
 
             Player currentPlayer= gameService.getCurrentPlayer(); //TODO для теста
 
             Button btn = (Button) findViewById(R.id.moveBtn);
-            if(newCurPlayerId==game.players.indexOf(yourPlayer)) {
+            if(newCurPlayerId==gameService.getGame().players.indexOf(yourPlayer)) {
                 btn.setVisibility(View.VISIBLE);
             }else{
                 btn.setVisibility(View.INVISIBLE);
             }
 
             // для работы с одного стройства
-            /*if(newCurPlayerId==game.players.indexOf(yourPlayer) && game.state.equals(GameStates.onPlay)){
+            /*if(newCurPlayerId==gameService.getGame().players.indexOf(yourPlayer) && gameService.getGame().state.equals(GameStates.onPlay)){
                 Button btn = (Button) findViewById(R.id.moveBtn);
                 if (yourPlayer.canRollDice)
                     btn.setText("Сделать ход");
@@ -250,8 +255,8 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            game.bank = dataSnapshot.getValue(Player.class);
-            Log.d(TAG, "Bank value is: " + game.bank);
+            gameService.getGame().bank = dataSnapshot.getValue(Player.class);
+            Log.d(TAG, "Bank value is: " + gameService.getGame().bank);
         }
 
         @Override
@@ -265,8 +270,8 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            game.pausedPlayer = dataSnapshot.getValue(Integer.class);
-            Log.d(TAG, "PausedPLayerId value is: " + game.pausedPlayer);
+            gameService.getGame().pausedPlayer = dataSnapshot.getValue(Integer.class);
+            Log.d(TAG, "PausedPLayerId value is: " + gameService.getGame().pausedPlayer);
         }
 
         @Override
@@ -280,10 +285,10 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             // This method is called once with the initial value and again
             // whenever data at this location is updated.
-            game.winnerId = dataSnapshot.getValue(Integer.class);
-            if ( game.winnerId!=-1)
-                showWinOrLoose(game.winnerId, true);
-            Log.d(TAG, "WinnerId value is: " + game.winnerId);
+            gameService.getGame().winnerId = dataSnapshot.getValue(Integer.class);
+            if ( gameService.getGame().winnerId!=-1)
+                showWinOrLoose(gameService.getGame().winnerId, true);
+            Log.d(TAG, "WinnerId value is: " + gameService.getGame().winnerId);
         }
 
         @Override
@@ -303,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
             int fieldId = Integer.parseInt(dataSnapshot.getKey());
             setHousesOnField(fieldId,field.houses);
             setPlayerFrame(fieldId, field.owner, field.deposit);
-            //game.fieldsOwners.add(field);
+            //gameService.getGame().fieldsOwners.add(field);
 
             // ...
         }
@@ -316,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
             // comment and if so displayed the changed comment.
             FieldDB updatedField = dataSnapshot.getValue(FieldDB.class);
             int fieldId = Integer.parseInt(dataSnapshot.getKey());
-            game.fieldsOwners.set(fieldId, updatedField);
+            gameService.getGame().fieldsOwners.set(fieldId, updatedField);
             setHousesOnField(fieldId,updatedField.houses);
             setPlayerFrame(fieldId, updatedField.owner, updatedField.deposit);
 
@@ -359,10 +364,10 @@ public class MainActivity extends AppCompatActivity {
         public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
 
             Player newPlayer = dataSnapshot.getValue(Player.class);
-            boolean isNewPlayer = game.players.stream().noneMatch(x -> x.name.equals(newPlayer.name));
+            boolean isNewPlayer = gameService.getGame().players.stream().noneMatch(x -> x.name.equals(newPlayer.name));
             // A new comment has been added, add it to the displayed list
             if(isNewPlayer){
-                game.players.add(newPlayer);
+                gameService.getGame().players.add(newPlayer);
             }else{
 
             }
@@ -381,11 +386,11 @@ public class MainActivity extends AppCompatActivity {
             playerI.setOffers((int) newPlayer.offers.stream().filter(x->x.state== OfferStates.newOffer).count());
 
 
-            if(flag && game.players.size()==game.maxPLayers){
-                if(yourPlayer.name.equals(game.organizer)){
+            if(flag && gameService.getGame().players.size()==gameService.getGame().maxPLayers){
+                if(yourPlayer.name.equals(gameService.getGame().organizer)){
                     String result = gameService.startGame(yourPlayer);
                 }
-                gameCurPlayerRef.addValueEventListener(gameCurPlayerListener);
+                gameRef.child("currentPlayerId").addValueEventListener(gameCurPlayerListener);
                 flag = false;
             }
 
@@ -408,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
             // comment and if so displayed the changed comment.
             Player updatedPlayer = dataSnapshot.getValue(Player.class);
             int playerId = Integer.parseInt(dataSnapshot.getKey());
-            Player oldPlayer = game.players.get(playerId);
+            Player oldPlayer = gameService.getGame().players.get(playerId);
 
 
             int oldPosition = oldPlayer.position;
@@ -431,15 +436,15 @@ public class MainActivity extends AppCompatActivity {
             playerFrag.setJail(updatedPlayer.jailMove);
             playerFrag.setOffers((int) updatedPlayer.offers.stream().filter(x->x.state== OfferStates.newOffer).count());
 
-            game.players.set(playerId, updatedPlayer);
+            gameService.getGame().players.set(playerId, updatedPlayer);
 
             /*if(updatedPlayer.name.equals(yourPlayer.name)){
-                yourPlayer = game.players.get(playerId);
+                yourPlayer = gameService.getGame().players.get(playerId);
             }*/
 
             //TODO для теста
             if(updatedPlayer.name.equals(yourPlayer.name)){
-                yourPlayer = game.players.get(playerId);
+                yourPlayer = gameService.getGame().players.get(playerId);
 
                 Button btn = (Button) findViewById(R.id.moveBtn);
                 if (!yourPlayer.canRollDice && gameService.getCurrentPlayer().name.equals(yourPlayer.name))
@@ -629,7 +634,7 @@ public class MainActivity extends AppCompatActivity {
 
     private PlayerFrag getPlayerFragByPlayersId(int idPlayer){
         int playerRID;
-        int yourPlayerId = game.players.indexOf(yourPlayer);
+        int yourPlayerId = gameService.getGame().players.indexOf(yourPlayer);
         if(idPlayer==yourPlayerId){
             playerRID = R.id.yourPlayer;
         }
@@ -644,16 +649,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void bindGameParameters() {
         //gameRef            .addListenerForSingleValueEvent(gameFirstListen);
-        gameDice1Ref.addValueEventListener(gameDice1Listener);
-        gameDice2Ref.addValueEventListener(gameDice2Listener);
-        gameAuctionRef.addValueEventListener(gameAuctionListener);
-        gameStateRef.addValueEventListener(gameStateListener);
+        gameRef.child("dice1").addValueEventListener(gameDice1Listener);
+        gameRef.child("dice2").addValueEventListener(gameDice2Listener);
+        gameRef.child("auction").addValueEventListener(gameAuctionListener);
+        gameRef.child("state").addValueEventListener(gameStateListener);
         //gameCurPlayerRef.addValueEventListener(gameCurPlayerListener);
-        gameBankRef.addValueEventListener(gameBankListener);
-        gamePausedPlayerRef.addValueEventListener(gamePausedPlayerListener);
-        gameWinnerRef.addValueEventListener(gameWinnerListener);
-        gameFieldsOwnersRef.addChildEventListener(gameFieldsOwnersListener);
-        gamePlayersRef.addChildEventListener(gamePlayersListener);
+        gameRef.child("bank").addValueEventListener(gameBankListener);
+        gameRef.child("pausedPlayer").addValueEventListener(gamePausedPlayerListener);
+        gameRef.child("winnerId").addValueEventListener(gameWinnerListener);
+        gameRef.child("fieldsOwners").addChildEventListener(gameFieldsOwnersListener);
+        gameRef.child("players").addChildEventListener(gamePlayersListener);
 
         opponents.setVisibility(View.VISIBLE);
         you.setVisibility(View.VISIBLE);
@@ -678,8 +683,7 @@ public class MainActivity extends AppCompatActivity {
 
         usersRef.get().addOnCompleteListener(usersFirstListen);
 
-        gameService = new GameService("testGame");
-        game = gameService.getGame();
+
     }
 
     public void start(String name){
@@ -710,7 +714,7 @@ public class MainActivity extends AppCompatActivity {
     public void pausePLayClick(View view){
 
         String result = SUCCESS;
-        switch (game.state){
+        switch (gameService.getGame().state){
             case onPlay:
                 result = gameService.pauseGame(yourPlayer);
                 break;
@@ -731,7 +735,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void moveClick(View view){
         //TODO для теста
-        //gameService.setD1D2(game.dice1, game.dice2);
+        //gameService.setD1D2(gameService.getGame().dice1, gameService.getGame().dice2);
         //Player curPlayer = yourPlayer; //gameService.getCurrentPlayer();
 
         Button btn = (Button) view;
@@ -823,8 +827,8 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.fragment_container_view, ViewOffersFrag.class, null)
                     .commit();
         }else{
-            Player player = game.players.stream().filter(x->x.name.equals(playerName)).findFirst().get();
-            int idPlayer = game.players.indexOf(player);
+            Player player = gameService.getGame().players.stream().filter(x->x.name.equals(playerName)).findFirst().get();
+            int idPlayer = gameService.getGame().players.indexOf(player);
             Bundle args = new Bundle();
             args.putInt("idPlayer", idPlayer);
             getSupportFragmentManager().popBackStack();

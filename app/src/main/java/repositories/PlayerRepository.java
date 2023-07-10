@@ -20,7 +20,7 @@ public class PlayerRepository {
     private GameRepository gameRepo;
 
     public PlayerRepository(String gameName) {
-        gameRepo = new GameRepository(gameName);
+        gameRepo = GameRepository.getInstance(gameName);
         //this.game = game;
     }
 
@@ -116,11 +116,12 @@ public class PlayerRepository {
     }
 
     public void setCanRollDice(Player player, boolean canRollDice) {
-        player.canRollDice = canRollDice;
+        //TODO битая ссылка на пользователя
         myRef1.child("players")
                 .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                 .child("canRollDice")
                 .setValue(canRollDice);
+        player.canRollDice = canRollDice;
     }
 
     public void addOffer(Player player, Offer offer) {

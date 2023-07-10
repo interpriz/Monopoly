@@ -80,7 +80,7 @@ public class EndOfGame extends Fragment {
         TextView  nickName = (TextView) view.findViewById(R.id.playerName);
         TextView  info = (TextView) view.findViewById(R.id.text);
 
-        String playerName = ((MainActivity) getActivity()).game.players.get(idPlayer).name;
+        String playerName = ((MainActivity) getActivity()).gameService.getGame().players.get(idPlayer).name;
 
         nickName.setText(playerName);
         if (win) {
