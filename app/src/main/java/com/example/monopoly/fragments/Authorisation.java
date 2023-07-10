@@ -89,7 +89,7 @@ public class Authorisation extends Fragment {
                 Optional<User> user = ((MainActivity) getActivity()).users.stream().filter(x-> x.name.equals(nickName)).findFirst();
 
                 if(user.isPresent()){
-                    boolean checkPassword = ((MainActivity) getActivity()).users.contains(user.get());
+                    boolean checkPassword = user.get().password.equals(password);
                     if(!checkPassword){
                         ((MainActivity) getActivity()).showMessage("Неправильное имя или пароль!");
                         return;
