@@ -1,9 +1,14 @@
 package repositories;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import android.util.Log;
 
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.Collections;
 
 import entities.Auction;
@@ -13,61 +18,94 @@ import entities.Street;
 import enums.GameStates;
 import services.MapService;
 
-public class GameRepository {
+public class GameRepository implements OnCompleteListener<DataSnapshot> {
 
-    private final Game game;
+    private /*final*/ Game game;
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
-    DatabaseReference myRef1 = database.getReference("testGame");
+    //FirebaseDatabase database = FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
+    public DatabaseReference DBGameReference;
 
-    public GameRepository(Game game) {
+    /*public GameRepository(Game game) {
         this.game = game;
+    }*/
+
+    public GameRepository(String gameName) {
+        DBGameReference = FireBaseRepository.getInstance()
+                .getDatabase().getReference(gameName); //"testGame"
+        addGameFirsListen();
     }
 
-    public void setDice1(int i){
-        game.dice1 = i;
-        myRef1.child("dice1").setValue(i);
+    public void addGameFirsListen() {
+        DBGameReference.get().addOnCompleteListener(this);
     }
-    public void setDice2(int i){
+
+    //TODO добавить исключение и сделать проброс для выполнения bindGameParameters
+    //первичное считавание игры (если ее нет, то создается новая)
+    @Override
+    public void onComplete(@NonNull Task<DataSnapshot> task) {
+        if (!task.isSuccessful()) {
+            Log.e("firebase", "Error getting data", task.getException());
+        } else {
+            Log.d("firebase", String.valueOf(task.getResult().getValue()));
+            DataSnapshot ds = task.getResult();
+            game = ds.getValue(Game.class);
+        }
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        game = game;
+        DBGameReference.setValue(game);
+    }
+
+    public void setDice1(int i) {
+        game.dice1 = i;
+        DBGameReference.child("dice1").setValue(i);
+    }
+
+    public void setDice2(int i) {
         game.dice2 = i;
-        myRef1.child("dice2").setValue(i);
+        DBGameReference.child("dice2").setValue(i);
     }
 
     public void setWinner(int winnerId) {
         game.winnerId = winnerId;
-        myRef1.child("winnerId").setValue(winnerId);
+        DBGameReference.child("winnerId").setValue(winnerId);
     }
 
     public void setState(GameStates newState) {
         game.state = newState;
-        myRef1.child("state").setValue(newState);
+        DBGameReference.child("state").setValue(newState);
     }
 
     public void setAuction(Auction newAuction) {
         game.auction = newAuction;
-        myRef1.child("auction").setValue(newAuction);
+        DBGameReference.child("auction").setValue(newAuction);
     }
 
     public void setAuctionBet(int newBet) {
-        game.auction.bet=newBet;
-        myRef1.child("auction").child("bet").setValue(newBet);
+        game.auction.bet = newBet;
+        DBGameReference.child("auction").child("bet").setValue(newBet);
     }
 
     public void setAuctionWinner(int idWinner) {
         game.auction.winner = idWinner;
-        myRef1.child("auction").child("winner").setValue(idWinner);
+        DBGameReference.child("auction").child("winner").setValue(idWinner);
     }
 
     public void setAuctionNewParticipant(int idPlayer) {
 
-        myRef1.child("auction")
+        DBGameReference.child("auction")
                 .child("participants")
                 .child(Integer.toString(game.auction.participants.size())).setValue(idPlayer);
         game.auction.participants.add(idPlayer);
     }
 
     public void setAuctionRemovePlayer(int idPlayer) {
-        myRef1.child("auction")
+        DBGameReference.child("auction")
                 .child("participants")
                 .child(Integer.toString(game.auction.participants.indexOf(idPlayer)))
                 .removeValue();
@@ -76,7 +114,8 @@ public class GameRepository {
     }
 
     public void addNewPlayer(Player newPlayer) {
-        myRef1.child("players").child(Integer.toString(game.players.size())).setValue(newPlayer);
+        DBGameReference.child("players")
+                .child(Integer.toString(game.players.size())).setValue(newPlayer);
         game.players.add(newPlayer);
     }
 
@@ -86,7 +125,7 @@ public class GameRepository {
             buffer.add(player);
         }*/
         Collections.shuffle(game.players);
-        myRef1.child("players").setValue(game.players);
+        DBGameReference.child("players").setValue(game.players);
         /*for(int i=0; i< game.players.size(); i++){
             myRef1.child("players").child(i+"").setValue(game.players.get(i));
         }*/
@@ -96,24 +135,23 @@ public class GameRepository {
 
     public void setCurrentPlayerID(int i) {
         //game.currentPlayerId = i;
-        myRef1.child("currentPlayerId").setValue(i);
+        DBGameReference.child("currentPlayerId").setValue(i);
     }
 
     public void setPausedPlayer(int playerId) {
         game.pausedPlayer = playerId;
-        myRef1.child("pausedPlayer").setValue(playerId);
+        DBGameReference.child("pausedPlayer").setValue(playerId);
     }
 
     public void setNewOwner(int idProperty, int newOwnerId) {
         game.fieldsOwners.get(idProperty).owner = newOwnerId;
-        myRef1.child("fieldsOwners").child(String.valueOf(idProperty)).child("owner").setValue(newOwnerId);
+        DBGameReference.child("fieldsOwners").child(String.valueOf(idProperty)).child("owner").setValue(newOwnerId);
     }
 
     public void setNewDeposit(int idProperty, boolean newDeposit) {
         game.fieldsOwners.get(idProperty).deposit = newDeposit;
-        myRef1.child("fieldsOwners").child(String.valueOf(idProperty)).child("deposit").setValue(newDeposit);
+        DBGameReference.child("fieldsOwners").child(String.valueOf(idProperty)).child("deposit").setValue(newDeposit);
     }
-
 
 
     public void addHouse(Street street) {
@@ -124,7 +162,7 @@ public class GameRepository {
                 idProperty
         ).houses++;
 
-        myRef1.child("fieldsOwners")
+        DBGameReference.child("fieldsOwners")
                 .child(String.valueOf(idProperty))
                 .child("houses").setValue(
                         game.fieldsOwners
@@ -140,7 +178,7 @@ public class GameRepository {
                 idProperty
         ).houses--;
 
-        myRef1.child("fieldsOwners")
+        DBGameReference.child("fieldsOwners")
                 .child(String.valueOf(idProperty))
                 .child("houses").setValue(
                         game.fieldsOwners
@@ -148,9 +186,12 @@ public class GameRepository {
                 );
     }
 
-    public void deleteGame(){
-        myRef1.removeValue();
+    public void deleteGame() {
+        DBGameReference.removeValue();
     }
+
+
+
 
 
 }

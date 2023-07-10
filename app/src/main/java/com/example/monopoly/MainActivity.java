@@ -58,6 +58,7 @@ import entities.Player;
 import entities.User;
 import enums.GameStates;
 import enums.OfferStates;
+import repositories.FireBaseRepository;
 import repositories.GameRepository;
 import repositories.PlayerRepository;
 import services.GameService;
@@ -76,14 +77,14 @@ public class MainActivity extends AppCompatActivity {
     private String yourNickname;
     public Player yourPlayer; //TODO для теста
     public GameService gameService;
-    private GameRepository gr;
-    private PlayerRepository pr;
+    //private GameRepository gr;
+    //private PlayerRepository pr;
     private MapService mapService = MapService.getInstance();
 
     //объекты взаимодействия с БД
-    FirebaseDatabase database = FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
+    FirebaseDatabase database = FireBaseRepository.getInstance().getDatabase(); //FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
     public DatabaseReference usersRef = database.getReference("users");
-    DatabaseReference gameRef = database.getReference("testGame");
+    DatabaseReference gameRef = gameService.getGameRef();
     DatabaseReference gameDice1Ref = gameRef.child("dice1");
     DatabaseReference gameDice2Ref = gameRef.child("dice2");
     DatabaseReference gameAuctionRef = gameRef.child("auction");
@@ -109,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                     User u = childSnapshot.getValue(User.class);
                     users.add(u);
                 }
-
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container_view, authorisation)
                         .commit();
@@ -117,58 +117,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    //первичное считавание игры (если ее нет, то создается новая)
-    OnCompleteListener gameFirstListen = new OnCompleteListener<DataSnapshot>() {
-        @Override
-        public void onComplete(@NonNull Task<DataSnapshot> task) {
-            if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
-            } else {
-                Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                DataSnapshot ds = task.getResult();
-                game = ds.getValue(Game.class);
-                int a = 0;
-                if (game == null) {
-                    game = new Game(2, yourNickname);
-                    gameRef.setValue(game);
-                    gameService = new GameService(game);
-                    yourPlayer = gameService.enterGame(yourNickname);
-                    //gameService.enterGame("Sasha");
-                    //gameService.enterGame("Sveta");
-                    //gameService.enterGame("Lola");
-                }else{
-                    //yourPlayer = game.players.get(0);
 
-                    Optional<Player> player = game.players.stream().filter(x->x.name.equals(yourNickname)).findFirst();
-
-
-
-                    if(player.isPresent()){
-                        yourPlayer = player.get();
-                        gameService = new GameService(game);
-                    }else {
-                        if(game.state == GameStates.onStart){
-                            gameService = new GameService(game);
-                            yourPlayer = gameService.enterGame(yourNickname);
-                        }else{
-                            showMessage("Игра уже идет!");
-                            getSupportFragmentManager().beginTransaction()
-                                    .add(R.id.fragment_container_view, authorisation)
-                                    .commit();
-                            return;
-                        }
-                    }
-                }
-                //TODO для теста
-                //currentPlayer = gameService.getCurrentPlayer();
-                //gameService.setTest(true);
-                gr = new GameRepository(game);
-                pr = new PlayerRepository(game);
-
-                bindGameParameters();
-            }
-        }
-    };
 
 
     ValueEventListener gameDice1Listener = new ValueEventListener() {
@@ -728,15 +677,33 @@ public class MainActivity extends AppCompatActivity {
         buttons.setVisibility(View.INVISIBLE);
 
         usersRef.get().addOnCompleteListener(usersFirstListen);
+
+        gameService = new GameService("testGame");
+        game = gameService.getGame();
     }
 
     public void start(String name){
         yourNickname = name;
 
         getSupportFragmentManager().beginTransaction().remove(authorisation).commit();
-        gameRef.get().addOnCompleteListener(gameFirstListen);
+        //gameRef.get().addOnCompleteListener(gameFirstListen);
+
+        yourPlayer = gameService.gameInitialise(yourNickname);
+        if (yourPlayer==null){
+            showMessage("Игра уже идет!");
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container_view, authorisation)
+                    .commit();
+        }
+        bindGameParameters();
 
     }
+
+
+
+
+
+
 
 
 
@@ -758,6 +725,9 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         }
     }
+
+
+
 
     public void moveClick(View view){
         //TODO для теста

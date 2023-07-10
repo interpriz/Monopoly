@@ -1,12 +1,13 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import static entities.StaticMessages.*;
 
-import com.example.monopoly.MainActivity;
+import com.google.firebase.database.DatabaseReference;
 
 import entities.Auction;
 import entities.Debt;
@@ -26,7 +27,7 @@ import repositories.PlayerRepository;
 
 public class GameService {
 
-    private final Game game;
+    //private final Game game;
 
     private final MapService mapServ;
 
@@ -47,19 +48,62 @@ public class GameService {
     }
 
 
-    public GameService(Game game) {
-        this.game = game;
-        this.gameRepo = new GameRepository(game);
+    public GameService(String gameName) {
+        //this.game = game;
+        this.gameRepo = new GameRepository(gameName);
         this.mapServ = MapService.getInstance();
-        this.playerRepo = new PlayerRepository(game);
+        this.playerRepo = new PlayerRepository(gameName);
         this.test = false;
     }
+    
+    public Game getGame(){
+        return getGame();
+    }
+
+    public Player gameInitialise(String yourNickname){
+        //gameRepo.addGameFirsListen();
+        int a = 0;
+        if (getGame() == null) {
+            gameRepo.setGame(new Game(2, yourNickname));
+            //gameRef.setValue(game);
+            //gameService = new GameService(game);
+            return enterGame(yourNickname);
+            //gameService.enterGame("Sasha");
+            //gameService.enterGame("Sveta");
+            //gameService.enterGame("Lola");
+        } else {
+            //yourPlayer = game().players.get(0);
+
+            Optional<Player> player = getGame().players.stream().filter(x -> x.name.equals(yourNickname)).findFirst();
+
+
+            if (player.isPresent()) {
+                return  player.get();
+                //gameService = new GameService(game);
+            } else {
+                if (getGame().state == GameStates.onStart) {
+                    //gameService = new GameService(game);
+                    return enterGame(yourNickname);
+                } else {
+                    return null;
+                }
+            }
+        }
+        //TODO для теста
+        //currentPlayer = gameService.getCurrentPlayer();
+        //gameService.setTest(true);
+    }
+
+    public DatabaseReference getGameRef(){
+        return gameRepo.DBGameReference;
+    }
+
     //войти в игру
     public Player enterGame(String name) {
-        boolean unicName = game.players.stream().noneMatch(x -> x.name.equals(name));
+        boolean unicName = getGame().players.stream().noneMatch(x -> x.name.equals(name));
         if (unicName && name!="BANK") {
             Player newPlayer = new Player(1500, name);
-            if (game.players.size() < game.maxPLayers) {
+            if (getGame().players.size() < getGame().maxPLayers) {
                 gameRepo.addNewPlayer(newPlayer);
                 return newPlayer;
             }
@@ -70,15 +114,15 @@ public class GameService {
     //начать игру
     public String startGame(Player player) {
 
-        if (!player.name.equals(game.organizer))
+        if (!player.name.equals(getGame().organizer))
             return NOT_ORGANIZER;
 
-        if (game.state == GameStates.onStart) {
+        if (getGame().state == GameStates.onStart) {
             gameRepo.setState(GameStates.onPlay);
             //случайное перемешивание игроков
             //TODO подумать о синхронизации данного действия
             //gameRepo.mixPLayers();
-            playerRepo.setCanRollDice(game.players.get(0), true);
+            playerRepo.setCanRollDice(getGame().players.get(0), true);
         } else
             return GAME_IS_STARTED;
 
@@ -87,7 +131,7 @@ public class GameService {
 
     //бросок кубиков
     private String diceRoll(/*Player player*/) {
-        /*if (!game.isCurrentPLayer(player)) {
+        /*if (!game().isCurrentPLayer(player)) {
             String message = "You are not a current player!";
             return;
         }*/
@@ -110,7 +154,7 @@ public class GameService {
 
     //осуществление хода
     public String makeMove(Player player) {
-        if (game.state != GameStates.onPlay)
+        if (getGame().state != GameStates.onPlay)
             return GAME_NOT_ON_PLAY;
 
         if (getCurrentPlayer() != player) {
@@ -128,7 +172,7 @@ public class GameService {
         Player winner = null;//возможный победитель
 
         // подсчет числа банкротов
-        for (Player playerI : game.players) {
+        for (Player playerI : getGame().players) {
             //если игрок банкрот
             if (playerI.bankrupt) {
                 bankrupts++;
@@ -136,7 +180,7 @@ public class GameService {
         }
 
         //если не все кроме одного банкроты
-        if (bankrupts != game.players.size() - 1) {
+        if (bankrupts != getGame().players.size() - 1) {
             //если текущий игрок банкрот, то передать кубики
             if (player.bankrupt) {
                 giveDicesToNextPlayer();
@@ -145,7 +189,7 @@ public class GameService {
                 //то ему записывается долг, который надо погасить, после чего закончить ход endMotion.
                 //если игрок устроил аукцион, то он должен завершить ход после окончания аукциона
                 //TODO проверить возвращаемое значение на наличие ошибки оплаты
-                result = move(game.dice1, game.dice2, player);
+                result = move(getGame().dice1, getGame().dice2, player);
                 assert result != null;
                 switch (result) {
                     case SUCCESS:
@@ -167,7 +211,7 @@ public class GameService {
         } else
         //иначе единственный не банкрот - победитель
         {
-            gameRepo.setWinner(game.players.indexOf(winner));
+            gameRepo.setWinner(getGame().players.indexOf(winner));
             gameRepo.setState(GameStates.onEnd);
             //pay_winner(winner);
         }
@@ -200,7 +244,7 @@ public class GameService {
         if (player.jailMove == 0) {
 
             //если игрок прошел через поле вперед, то выплатить ему 200
-            if (dice1 + dice2 + player.position > 40) payment(game.bank, player, 200);
+            if (dice1 + dice2 + player.position > 40) payment(getGame().bank, player, 200);
 
             //подсчет текущей позиции игрока как старая позиция + число на кубиках % 40
             int newPosition = (dice1 + dice2 + player.position) % 40;
@@ -208,23 +252,23 @@ public class GameService {
             switch (mapServ.getFieldByPosition(newPosition).getType()) {
                 case forward:
                     //поле вперед
-                    return payment(game.bank, player, 200);
+                    return payment(getGame().bank, player, 200);
                 case publicTreasury:
                     //общественная казна
                     return (new Random().nextInt(2) == 0) ?
-                            payment(game.bank, player, new Random().nextInt(200) + 1) :
-                            payment(player, game.bank, new Random().nextInt(200) + 1);
+                            payment(getGame().bank, player, new Random().nextInt(200) + 1) :
+                            payment(player, getGame().bank, new Random().nextInt(200) + 1);
                 case chance:
                     //шанс
                     return (new Random().nextInt(2) == 0) ?
-                            payment(game.bank, player, new Random().nextInt(200) + 1) :
-                            payment(player, game.bank, new Random().nextInt(200) + 1);
+                            payment(getGame().bank, player, new Random().nextInt(200) + 1) :
+                            payment(player, getGame().bank, new Random().nextInt(200) + 1);
                 case incomeTax:
                     //подоходный налог
-                    return payment(player, game.bank, 200);
+                    return payment(player, getGame().bank, 200);
                 case superTax:
                     //сверхналог
-                    return payment(player, game.bank, 100);
+                    return payment(player, getGame().bank, 100);
                 case inPrison:
                 case parking:
                     //посещение тюрьмы и стоянка
@@ -241,11 +285,11 @@ public class GameService {
                     //улица
                     //если владелец - банк
                     Property property = mapServ.getPropertyByPosition(newPosition);
-                    if (getOwner(property) == game.bank) {
+                    if (getOwner(property) == getGame().bank) {
                         //TODO продумать функционал аукциона
-                        makeOffer(player, property, OfferTypes.sold, property.price, null, game.bank);
-                        //game.auction = new Auction(property, player);
-                        /*payment(player, game.bank, property.price);
+                        makeOffer(player, property, OfferTypes.sold, property.price, null, getGame().bank);
+                        //game().auction = new Auction(property, player);
+                        /*payment(player, game().bank, property.price);
                         property.owner = player;*/
                         return AUCTION;
                     }
@@ -260,7 +304,7 @@ public class GameService {
             if (player.jailMove == 1) {
                 playerRepo.reduceJailMove(player);
 
-                String result = payment(player, game.bank, 50);
+                String result = payment(player, getGame().bank, 50);
                 switch (result){
                     case NOT_ENOUGH_MONEY:
                         String res = bankruptCheck(player);
@@ -291,7 +335,7 @@ public class GameService {
             return "You are not a current player!";
         }*/
         Player player = getCurrentPlayer();
-        if (game.state != GameStates.onPlay)
+        if (getGame().state != GameStates.onPlay)
             return GAME_NOT_ON_PLAY;
 
         if (!player.hasDebts()) {
@@ -389,8 +433,8 @@ public class GameService {
         if (sender.cash < sum) {
             playerRepo.addDebt(sender,
                     new Debt(
-                            game.players.indexOf(sender),
-                            game.players.indexOf(recipient),
+                            getGame().players.indexOf(sender),
+                            getGame().players.indexOf(recipient),
                             sum));
             //sender.addDebt(new Debt(sender, recipient, sum));
             return NOT_ENOUGH_MONEY;
@@ -437,7 +481,7 @@ public class GameService {
         ) {
             return NOT_A_FULL_GROUP;
         }
-        payment(buyer, game.bank, street.house_price);
+        payment(buyer, getGame().bank, street.house_price);
         gameRepo.addHouse(street);
         return SUCCESS;
     }
@@ -466,7 +510,7 @@ public class GameService {
             return NOT_AN_EQUAL_NUMBER_OF_HOUSES;
         }
 
-        payment(game.bank, seller, street.house_price / 2);
+        payment(getGame().bank, seller, street.house_price / 2);
         gameRepo.reduceHouses(street);
         return SUCCESS;
     }
@@ -479,12 +523,12 @@ public class GameService {
                 /*if (player.cash < property.tenPercent) {
                     return "You has not enough money to pay 10% of properties deposit price!";
                 }*/
-                return payment(player, game.bank, property.tenPercent);
+                return payment(player, getGame().bank, property.tenPercent);
             } else {//выкупить заложенную собственность
                 /*if (player.cash < property.redemptionPrice) {
                     return "You has not enough money to pay properties redemptionPrice!";
                 }*/
-                String result = payment(player, game.bank, property.redemptionPrice);
+                String result = payment(player, getGame().bank, property.redemptionPrice);
                 if (result.equals(SUCCESS)) {
                     setDeposit(property, false);
                 }
@@ -510,7 +554,7 @@ public class GameService {
         if (isHousesInGroup(street))
             return CANT_DEPOSIT_STREET_WITH_HOUSES;
 
-        String result = payment(game.bank, player, property.depositPrice);
+        String result = payment(getGame().bank, player, property.depositPrice);
         if (result.equals(SUCCESS))
             setDeposit(property,true);
         return result;
@@ -529,7 +573,7 @@ public class GameService {
             return NOT_ENOUGH_MONEY;
         }
 
-        String result = payment(player, game.bank, property.redemptionPrice);
+        String result = payment(player, getGame().bank, property.redemptionPrice);
         if (result.equals(SUCCESS))
             setDeposit(property,false);
         return result;
@@ -741,10 +785,10 @@ public class GameService {
 
     //выплатить долг
     public String repayDebt(Player player, Debt debt) {
-        if (debt.debtorID == game.players.indexOf(player))
+        if (debt.debtorID == getGame().players.indexOf(player))
             if (player.cash >= debt.sum){
                 String result = payment(
-                        game.players.get(debt.debtorID),
+                        getGame().players.get(debt.debtorID),
                         getPlayer(debt.recipientID),
                         debt.sum);
                 if (result.equals(SUCCESS))
@@ -785,11 +829,11 @@ public class GameService {
         if(player.cash<newBet){
             return NOT_ENOUGH_MONEY;
         }
-        Auction auction= game.auction;
+        Auction auction= getGame().auction;
         if(auction==null)
             return NO_AUCTION;
 
-        int idPlayer = game.players.indexOf(player);
+        int idPlayer = getGame().players.indexOf(player);
 
         if(newBet>auction.bet){
             gameRepo.setAuctionBet(newBet);
@@ -804,11 +848,11 @@ public class GameService {
 
     // выйти из аукциона
     public String goOutFromAuction(Player player){
-        Auction auction= game.auction;
+        Auction auction= getGame().auction;
         if(auction==null)
             return NO_AUCTION;
 
-        int idPlayer = game.players.indexOf(player);
+        int idPlayer = getGame().players.indexOf(player);
 
         if(auction.winner != idPlayer && auction.participants.contains(idPlayer)){
             gameRepo.setAuctionRemovePlayer(idPlayer);
@@ -820,21 +864,21 @@ public class GameService {
 
     //закончить аукцион
     public Player endAuction() {
-        Auction auction = game.auction;
+        Auction auction = getGame().auction;
         if (auction.participants.size() == 1 &&
                 auction.participants.get(0) == auction.winner) {
-            payment(game.players.get(auction.winner), game.bank, auction.bet);
-            setOwner(auction.property, game.players.get(auction.winner));
+            payment(getGame().players.get(auction.winner), getGame().bank, auction.bet);
+            setOwner(auction.property, getGame().players.get(auction.winner));
             gameRepo.setState(GameStates.onPlay);
             gameRepo.setAuction(null);
-            return game.players.get(auction.winner);
+            return getGame().players.get(auction.winner);
         } else {
             return null;
         }
     }
 
     public String goOutFromJail(Player player){
-        if(game.currentPlayerId!= getPlayerId(player)){
+        if(getGame().currentPlayerId!= getPlayerId(player)){
             return NOT_CURRENT_PLAYER;
         }
 
@@ -846,7 +890,7 @@ public class GameService {
 
 
 
-        payment(player, game.bank, 50);
+        payment(player, getGame().bank, 50);
         playerRepo.setJailMove(player,0);
 
         return SUCCESS;
@@ -857,18 +901,18 @@ public class GameService {
 
 
     public Player getCurrentPlayer() {
-        return game.players.get(game.currentPlayerId);
+        return getGame().players.get(getGame().currentPlayerId);
     }
 
     public boolean isCurrentPLayer(Player player) {
-        return game.currentPlayerId == game.players.indexOf(player);
+        return getGame().currentPlayerId == getGame().players.indexOf(player);
     }
 
     private void giveDicesToNextPlayer() {
         playerRepo.setCanRollDice(getCurrentPlayer(), false);
-        int i = game.currentPlayerId;
+        int i = getGame().currentPlayerId;
         do {
-            if (i == game.players.size() - 1) {
+            if (i == getGame().players.size() - 1) {
                 i=0;
                 //gameRepo.setCurrentPlayerID(0);
             } else
@@ -880,16 +924,16 @@ public class GameService {
     }
 
     public String pauseGame(Player player) {
-        if (game.state == GameStates.onPlay) {
+        if (getGame().state == GameStates.onPlay) {
             gameRepo.setState(GameStates.onPause);
-            gameRepo.setPausedPlayer(game.players.indexOf(player));
+            gameRepo.setPausedPlayer(getGame().players.indexOf(player));
             return SUCCESS;
         }
         return ALREADY_PAUSED;
     }
 
     public String continueGame(Player player) {
-        if (game.pausedPlayer == game.players.indexOf(player)) {
+        if (getGame().pausedPlayer == getGame().players.indexOf(player)) {
             gameRepo.setState(GameStates.onPlay);
             gameRepo.setPausedPlayer(-1);
             return SUCCESS;
@@ -898,21 +942,21 @@ public class GameService {
     }
 
     public Player getOwner(Property property) {
-        int idOwner = game.fieldsOwners
+        int idOwner = getGame().fieldsOwners
                 .get(MapService.getInstance().map.indexOf(property))
                 .owner;
-        return idOwner == -1 ? game.bank : game.players.get(idOwner);
+        return idOwner == -1 ? getGame().bank : getGame().players.get(idOwner);
     }
 
     public void setOwner(Property property, Player newOwner) {
         int idProperty = MapService.getInstance().map.indexOf(property);
-        int newOwnerId = game.players.indexOf(newOwner);
+        int newOwnerId = getGame().players.indexOf(newOwner);
         gameRepo.setNewOwner(idProperty, newOwnerId);
     }
 
     public boolean getDeposit(Property property){
         int idProp =  mapServ.map.indexOf(property);
-        return game.fieldsOwners.get(idProp).deposit;
+        return getGame().fieldsOwners.get(idProp).deposit;
     }
 
     public void setDeposit(Property property, boolean newDeposit){
@@ -921,16 +965,16 @@ public class GameService {
     }
 
     public int getHouses(Street street) {
-        return game.fieldsOwners.get(
+        return getGame().fieldsOwners.get(
                 MapService.getInstance()
                         .map.indexOf(street)
         ).houses;
     }
 
     public ArrayList<Property> getPlayersProperty(int idPlayer){
-        ArrayList<Integer> listPropertyIds = (ArrayList<Integer>) game.fieldsOwners
+        ArrayList<Integer> listPropertyIds = (ArrayList<Integer>) getGame().fieldsOwners
                 .stream().filter(x->x.owner==idPlayer)
-                .map(y->game.fieldsOwners.indexOf(y)).collect(Collectors.toList());
+                .map(y-> getGame().fieldsOwners.indexOf(y)).collect(Collectors.toList());
 
         ArrayList<Property> listProperty = (ArrayList<Property>) listPropertyIds.stream()
                 .map(x-> MapService.getInstance()
@@ -1004,14 +1048,14 @@ public class GameService {
 
     public Player getPlayer(int id){
         if(id==-1)
-            return game.bank;
-        return game.players.get(id);
+            return getGame().bank;
+        return getGame().players.get(id);
     }
 
     public int getPlayerId(Player player){
-        if(game.bank.equals(player))
+        if(getGame().bank.equals(player))
             return -1;
-        return game.players.indexOf(player);
+        return getGame().players.indexOf(player);
     }
 
     public int getFullOfferSum(Offer offer, Participants player) {
@@ -1067,7 +1111,7 @@ public class GameService {
     }
 
     public String deleteGame(Player player){
-        if(player.name.equals(game.organizer)){
+        if(player.name.equals(getGame().organizer)){
             gameRepo.deleteGame();
         }
         return SUCCESS;
