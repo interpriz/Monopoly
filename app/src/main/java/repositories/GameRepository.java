@@ -34,7 +34,7 @@ public class GameRepository implements OnCompleteListener<DataSnapshot> {
 
     public static synchronized GameRepository getInstance(String gameName) {
         if(sGameRepository == null) {
-            synchronized (FireBaseRepository.class) {
+            synchronized (GameRepository.class) {
                 sGameRepository = new GameRepository(gameName);
             }
         }

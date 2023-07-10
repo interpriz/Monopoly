@@ -1,10 +1,8 @@
 package repositories;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import entities.Debt;
-import entities.Game;
 import entities.Offer;
 import entities.Player;
 import enums.OfferStates;
@@ -14,19 +12,30 @@ import enums.OfferStates;
 public class PlayerRepository {
 
     //FirebaseDatabase database = FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
-    DatabaseReference myRef1 = FireBaseRepository.getInstance().getDatabase().getReference("testGame");
+    DatabaseReference gameRef;
 
     //private final Game game;
     private GameRepository gameRepo;
+    private volatile static PlayerRepository sPlayerRepository;
 
-    public PlayerRepository(String gameName) {
+    public static synchronized PlayerRepository getInstance(String gameName) {
+        if(sPlayerRepository == null) {
+            synchronized (PlayerRepository.class) {
+                sPlayerRepository = new PlayerRepository(gameName);
+            }
+        }
+        return sPlayerRepository;
+    }
+
+    private PlayerRepository(String gameName) {
         gameRepo = GameRepository.getInstance(gameName);
+        gameRef = gameRepo.DBGameReference;
         //this.game = game;
     }
 
     public void addDebt(Player player, Debt newDebt){
 
-        myRef1.child("players")
+        gameRef.child("players")
                 .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                 .child("debts")
                 .child(Integer.toString(player.debts.size()))
@@ -41,7 +50,7 @@ public class PlayerRepository {
                 .child(Integer.toString(player.debts.indexOf(debt)))
                 .removeValue();*/
         player.debts.remove(debt);
-        myRef1.child("players")
+        gameRef.child("players")
                 .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                 .child("debts")
                 .setValue(player.debts);
@@ -49,7 +58,7 @@ public class PlayerRepository {
 
     public void setPosition(Player player, int position) {
         //player.position = position;
-        myRef1.child("players")
+        gameRef.child("players")
                 .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                 .child("position")
                 .setValue(position);
@@ -58,12 +67,12 @@ public class PlayerRepository {
     public void setCash(Player player, int cash) {
         player.cash = cash;
         if(player!=gameRepo.getGame().bank){
-            myRef1.child("players")
+            gameRef.child("players")
                     .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                     .child("cash")
                     .setValue(cash);
         }else{
-            myRef1.child("bank")
+            gameRef.child("bank")
                     .child("cash")
                     .setValue(cash);
         }
@@ -82,7 +91,7 @@ public class PlayerRepository {
 
     public void setJailMove(Player player, int jailMove) {
         player.jailMove = jailMove;
-        myRef1.child("players")
+        gameRef.child("players")
                 .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                 .child("jailMove")
                 .setValue(jailMove);
@@ -96,7 +105,7 @@ public class PlayerRepository {
 
     public void setDoubles(Player player, int doubles) {
         player.doubles = doubles;
-        myRef1.child("players")
+        gameRef.child("players")
                 .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                 .child("doubles")
                 .setValue(player.doubles);
@@ -109,7 +118,7 @@ public class PlayerRepository {
 
     public void setBankrupt(Player player, boolean bankrupt) {
         //player.bankrupt = bankrupt;
-        myRef1.child("players")
+        gameRef.child("players")
                 .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                 .child("bankrupt")
                 .setValue(bankrupt);
@@ -117,7 +126,7 @@ public class PlayerRepository {
 
     public void setCanRollDice(Player player, boolean canRollDice) {
         //TODO битая ссылка на пользователя
-        myRef1.child("players")
+        gameRef.child("players")
                 .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                 .child("canRollDice")
                 .setValue(canRollDice);
@@ -126,7 +135,7 @@ public class PlayerRepository {
 
     public void addOffer(Player player, Offer offer) {
         if(player!=gameRepo.getGame().bank){
-            myRef1.child("players")
+            gameRef.child("players")
                     .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                     .child("offers")
                     .child(Integer.toString(player.offers.size()))
@@ -137,7 +146,7 @@ public class PlayerRepository {
 
     public void setOfferState(Player player, Offer offer, OfferStates newState) {
         if(player!=gameRepo.getGame().bank){
-            myRef1.child("players")
+            gameRef.child("players")
                     .child(Integer.toString(gameRepo.getGame().players.indexOf(player)))
                     .child("offers")
                     .child(Integer.toString(player.offers.indexOf(offer)))

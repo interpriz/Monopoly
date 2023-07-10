@@ -52,7 +52,7 @@ public class GameService {
         //this.game = game;
         this.gameRepo = GameRepository.getInstance(gameName);
         this.mapServ = MapService.getInstance();
-        this.playerRepo = new PlayerRepository(gameName);
+        this.playerRepo = PlayerRepository.getInstance(gameName);
         this.test = false;
     }
     

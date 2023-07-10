@@ -89,18 +89,7 @@ public class MainActivity extends AppCompatActivity {
     //объекты взаимодействия с БД
     FirebaseDatabase database = FireBaseRepository.getInstance().getDatabase(); //FirebaseDatabase.getInstance("https://monopoly-b9e36-default-rtdb.europe-west1.firebasedatabase.app/");
     public DatabaseReference usersRef = database.getReference("users");
-    DatabaseReference gameRef = gameService.getGameRef();;
-    /*DatabaseReference gameDice1Ref = gameRef.child("dice1");
-    DatabaseReference gameDice2Ref = gameRef.child("dice2");
-    DatabaseReference gameAuctionRef = gameRef.child("auction");
-    DatabaseReference gameStateRef = gameRef.child("state");
-    DatabaseReference gameCurPlayerRef = gameRef.child("currentPlayerId");
-    DatabaseReference gameBankRef = gameRef.child("bank");
-    DatabaseReference gamePausedPlayerRef = gameRef.child("pausedPlayer");
-    DatabaseReference gameWinnerRef = gameRef.child("winnerId");
-    DatabaseReference gameFieldsOwnersRef = gameRef.child("fieldsOwners");
-    DatabaseReference gamePlayersRef = gameRef.child("players");*/
-    //DatabaseReference gamePlayer0Ref = gameRef.child("players").child("0");
+    DatabaseReference gameRef = gameService.getGameRef();
 
 
     OnCompleteListener usersFirstListen = new OnCompleteListener<DataSnapshot>() {
