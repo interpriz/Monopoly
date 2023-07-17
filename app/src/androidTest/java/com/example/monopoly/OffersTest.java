@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static entities.StaticMessages.*;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,13 +22,13 @@ import static enums.OfferTypes.*;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import enums.Participants;
+import rules.GameInitialiseRule;
 import services.GameService;
 import services.MapService;
 
 @RunWith(AndroidJUnit4.class)
 public class OffersTest {
-    private Game game;
-    private final MapService mapService;
+    private final MapService mapService = MapService.getInstance();;
     private GameService gameService;
 
     private Player sender;
@@ -36,35 +37,33 @@ public class OffersTest {
     private int senderID;
     private int recipientID;
 
-    private Property senderProperty;
-    private Property recipientProperty;
+    private Property senderProperty = mapService.getPropertyByPosition(1);;
+    private Property recipientProperty = mapService.getPropertyByPosition(6);;
 
     public OffersTest() {
-        mapService = MapService.getInstance();
     }
+
+    @Rule
+    public final GameInitialiseRule gameInitialiseRule =
+            new GameInitialiseRule("testGame1");
 
     @Before
     public void setUp() throws Exception {
-        game = new Game(4, "God");
+        
         gameService = new GameService("testGame1");
-        gameService.enterGame("God");
-        for (int i = 1; i < game.maxPLayers; i++) {
-            gameService.enterGame("player_" + i);
-        }
-        sender = game.players.get(0);
-        recipient = game.players.get(1);
+        
+        sender = gameService.getGame().players.get(0);
+        recipient = gameService.getGame().players.get(1);
 
         senderID = 0;
         recipientID = 1;
 
-        senderProperty = mapService.getPropertyByPosition(1);
-        game.fieldsOwners.get(1).owner = 0;
-        game.fieldsOwners.get(3).owner = 0;
+        gameService.getGame().fieldsOwners.get(1).owner = 0;
+        gameService.getGame().fieldsOwners.get(3).owner = 0;
 
-        recipientProperty = mapService.getPropertyByPosition(6);
-        game.fieldsOwners.get(6).owner = 1;
-        game.fieldsOwners.get(8).owner = 1;
-        game.fieldsOwners.get(9).owner = 1;
+        gameService.getGame().fieldsOwners.get(6).owner = 1;
+        gameService.getGame().fieldsOwners.get(8).owner = 1;
+        gameService.getGame().fieldsOwners.get(9).owner = 1;
     }
 
     //-----------------makeOffer-----------------------
@@ -92,7 +91,7 @@ public class OffersTest {
 
     @Test
     public void makeOffer_buy_NotAnOwner() {
-        game.fieldsOwners.get(6).owner = -1;
+        gameService.getGame().fieldsOwners.get(6).owner = -1;
 
         String result = gameService.makeOffer(
                 recipient,
@@ -147,7 +146,7 @@ public class OffersTest {
 
     @Test
     public void makeOffer_sold_NotAnOwner() {
-        game.fieldsOwners.get(1).owner = -1;
+        gameService.getGame().fieldsOwners.get(1).owner = -1;
 
         String result = gameService.makeOffer(
                 recipient,
@@ -164,8 +163,8 @@ public class OffersTest {
 
     @Test
     public void makeOffer_sold_StreetWithHouses() {
-        game.fieldsOwners.get(1).houses = 0;
-        game.fieldsOwners.get(3).houses = 1;
+        gameService.getGame().fieldsOwners.get(1).houses = 0;
+        gameService.getGame().fieldsOwners.get(3).houses = 1;
 
 
         String result = gameService.makeOffer(
@@ -183,7 +182,7 @@ public class OffersTest {
 
     @Test
     public void makeOffer_change_NotAnOwner() {
-        game.fieldsOwners.get(1).owner = -1;
+        gameService.getGame().fieldsOwners.get(1).owner = -1;
 
         String result = gameService.makeOffer(
                 recipient,
@@ -325,7 +324,7 @@ public class OffersTest {
     //-----------------acceptBuyOffer-----------------------
     @Test
     public void acceptOffer_buy_NotAnOwner() {
-        game.fieldsOwners.get(6).owner = -1;
+        gameService.getGame().fieldsOwners.get(6).owner = -1;
         Offer offer = new Offer(
                 senderID,
                 recipientID,
@@ -339,14 +338,14 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SOMEBODY_NOT_THE_OWNER, result);
-        assertEquals(-1, game.fieldsOwners.get(6).owner);
+        assertEquals(-1, gameService.getGame().fieldsOwners.get(6).owner);
     }
 
     @Test
     public void acceptOffer_buy_StreetWithHouses() {
-        game.fieldsOwners.get(6).houses = 0;
-        game.fieldsOwners.get(8).houses = 1;
-        game.fieldsOwners.get(9).houses = 1;
+        gameService.getGame().fieldsOwners.get(6).houses = 0;
+        gameService.getGame().fieldsOwners.get(8).houses = 1;
+        gameService.getGame().fieldsOwners.get(9).houses = 1;
         Offer offer = new Offer(
                 senderID,
                 recipientID,
@@ -360,7 +359,7 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(CANT_SOLD_STREET_WITH_HOUSES, result);
-        assertEquals(1, game.fieldsOwners.get(6).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(6).owner);
     }
 
     @Test
@@ -378,7 +377,7 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SENDER_NOT_ENOUGH_MONEY, result);
-        assertEquals(1, game.fieldsOwners.get(6).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(6).owner);
     }
 
     @Test
@@ -396,7 +395,7 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SUCCESS, result);
-        assertEquals(0, game.fieldsOwners.get(6).owner);
+        assertEquals(0, gameService.getGame().fieldsOwners.get(6).owner);
         assertEquals(1600, recipient.cash);
         assertEquals(1400, sender.cash);
     }
@@ -404,7 +403,7 @@ public class OffersTest {
     //-----------------acceptSoldOffer-----------------------
     @Test
     public void acceptOffer_sold_NotAnOwner() {
-        game.fieldsOwners.get(1).owner = -1;
+        gameService.getGame().fieldsOwners.get(1).owner = -1;
         Offer offer = new Offer(
                 senderID,
                 recipientID,
@@ -418,13 +417,13 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SOMEBODY_NOT_THE_OWNER, result);
-        assertEquals(-1, game.fieldsOwners.get(1).owner);
+        assertEquals(-1, gameService.getGame().fieldsOwners.get(1).owner);
     }
 
     @Test
     public void acceptOffer_sold_StreetWithHouses() {
-        game.fieldsOwners.get(1).houses = 0;
-        game.fieldsOwners.get(3).houses = 1;
+        gameService.getGame().fieldsOwners.get(1).houses = 0;
+        gameService.getGame().fieldsOwners.get(3).houses = 1;
         Offer offer = new Offer(
                 senderID,
                 recipientID,
@@ -438,7 +437,7 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(CANT_BUY_STREET_WITH_HOUSES, result);
-        assertEquals(0, game.fieldsOwners.get(1).owner);
+        assertEquals(0, gameService.getGame().fieldsOwners.get(1).owner);
     }
 
     @Test
@@ -456,7 +455,7 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(NOT_ENOUGH_MONEY, result);
-        assertEquals(0, game.fieldsOwners.get(1).owner);
+        assertEquals(0, gameService.getGame().fieldsOwners.get(1).owner);
     }
 
     @Test
@@ -473,7 +472,7 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SUCCESS, result);
-        assertEquals(1, game.fieldsOwners.get(1).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(1).owner);
         assertEquals(1400, recipient.cash);
         assertEquals(1600, sender.cash);
     }
@@ -482,8 +481,8 @@ public class OffersTest {
 
     @Test
     public void acceptOffer_change_NotAnOwner() {
-        game.fieldsOwners.get(1).owner = -1;
-        //game.fieldsOwners.get(6).owner = -1;
+        gameService.getGame().fieldsOwners.get(1).owner = -1;
+        //gameService.getGame().fieldsOwners.get(6).owner = -1;
         Offer offer = new Offer(
                 senderID,
                 recipientID,
@@ -497,18 +496,18 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SOMEBODY_NOT_THE_OWNER, result);
-        assertEquals(-1, game.fieldsOwners.get(1).owner);
-        assertEquals(1, game.fieldsOwners.get(6).owner);
+        assertEquals(-1, gameService.getGame().fieldsOwners.get(1).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(6).owner);
     }
 
     @Test
     public void acceptOffer_change_StreetWithHouses() {
-        //game.fieldsOwners.get(1).houses = 0;
-        //game.fieldsOwners.get(3).houses = 1;
+        //gameService.getGame().fieldsOwners.get(1).houses = 0;
+        //gameService.getGame().fieldsOwners.get(3).houses = 1;
 
-        game.fieldsOwners.get(6).houses = 0;
-        game.fieldsOwners.get(8).houses = 1;
-        game.fieldsOwners.get(9).houses = 1;
+        gameService.getGame().fieldsOwners.get(6).houses = 0;
+        gameService.getGame().fieldsOwners.get(8).houses = 1;
+        gameService.getGame().fieldsOwners.get(9).houses = 1;
         Offer offer = new Offer(
                 senderID,
                 recipientID,
@@ -522,8 +521,8 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(CANT_CHANGE_STREET_WITH_HOUSES, result);
-        assertEquals(0, game.fieldsOwners.get(1).owner);
-        assertEquals(1, game.fieldsOwners.get(6).owner);
+        assertEquals(0, gameService.getGame().fieldsOwners.get(1).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(6).owner);
     }
 
     @Test
@@ -541,15 +540,15 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(NOT_ENOUGH_MONEY, result);
-        assertEquals(0, game.fieldsOwners.get(1).owner);
-        assertEquals(1, game.fieldsOwners.get(6).owner);
+        assertEquals(0, gameService.getGame().fieldsOwners.get(1).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(6).owner);
 
         offer.sum = -1600;
         result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SENDER_NOT_ENOUGH_MONEY, result);
-        assertEquals(0, game.fieldsOwners.get(1).owner);
-        assertEquals(1, game.fieldsOwners.get(6).owner);
+        assertEquals(0, gameService.getGame().fieldsOwners.get(1).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(6).owner);
 
     }
 
@@ -567,8 +566,8 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SUCCESS, result);
-        assertEquals(1, game.fieldsOwners.get(1).owner);
-        assertEquals(0, game.fieldsOwners.get(6).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(1).owner);
+        assertEquals(0, gameService.getGame().fieldsOwners.get(6).owner);
         assertEquals(1400, recipient.cash);
         assertEquals(1600, sender.cash);
     }
@@ -587,8 +586,8 @@ public class OffersTest {
         String result = gameService.acceptOffer(offer, recipient);
 
         assertEquals(SUCCESS, result);
-        assertEquals(1, game.fieldsOwners.get(1).owner);
-        assertEquals(0, game.fieldsOwners.get(6).owner);
+        assertEquals(1, gameService.getGame().fieldsOwners.get(1).owner);
+        assertEquals(0, gameService.getGame().fieldsOwners.get(6).owner);
         assertEquals(1600, recipient.cash);
         assertEquals(1400, sender.cash);
     }

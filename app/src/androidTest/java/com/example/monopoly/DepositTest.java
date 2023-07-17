@@ -12,40 +12,39 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import entities.Game;
 import entities.Player;
 import entities.Property;
+import rules.GameInitialiseRule;
 import services.GameService;
 import services.MapService;
 
 @RunWith(AndroidJUnit4.class)
 public class DepositTest {
     private Game game;
-    private final MapService mapService;
+    private final MapService mapService = MapService.getInstance();
     private GameService gameService;
 
     private Player player;
-    private Property property;
+    private Property property = mapService.getPropertyByPosition(1);
 
     public DepositTest() {
-        mapService = MapService.getInstance();
     }
+
+    @Rule
+    public final GameInitialiseRule gameInitialiseRule =
+            new GameInitialiseRule("testGame1");
 
     @Before
     public void setUp() throws Exception {
-        game = new Game(4, "God");
         gameService = new GameService("testGame1");
-        gameService.enterGame("God");
-        for (int i = 1; i < game.maxPLayers; i++) {
-            gameService.enterGame("player_" + i);
-        }
-        player = game.players.get(0);
-        property = mapService.getPropertyByPosition(1);
-        game.fieldsOwners.get(1).owner = 0;
-        game.fieldsOwners.get(3).owner = 0;
+        player = gameService.getGame().players.get(0);
+        gameService.getGame().fieldsOwners.get(1).owner = 0;
+        gameService.getGame().fieldsOwners.get(3).owner = 0;
     }
 
     @After
@@ -55,10 +54,7 @@ public class DepositTest {
 
     @Test
     public void test() {
-
-
         boolean result = gameService.getDeposit(property);
-
         assertEquals(false, result);
     }
 
@@ -66,7 +62,7 @@ public class DepositTest {
     @Test
     public void createDeposit_notAnOwner() {
 
-        String result = gameService.createDeposit(property, game.players.get(1));
+        String result = gameService.createDeposit(property, gameService.getGame().players.get(1));
 
         assertEquals(NOT_AN_OWNER, result);
         assertFalse(gameService.getDeposit(property));
@@ -84,8 +80,8 @@ public class DepositTest {
 
     @Test
     public void createDeposit_StreetWithHouses() {
-        game.fieldsOwners.get(1).houses = 0;
-        game.fieldsOwners.get(1).houses = 1;
+        gameService.getGame().fieldsOwners.get(1).houses = 0;
+        gameService.getGame().fieldsOwners.get(1).houses = 1;
 
         String result = gameService.createDeposit(property, player);
 
@@ -108,7 +104,7 @@ public class DepositTest {
     public void destroyDeposit_notAnOwner() {
 
         gameService.setDeposit(property,true);
-        String result = gameService.destroyDeposit(property, game.players.get(1));
+        String result = gameService.destroyDeposit(property, gameService.getGame().players.get(1));
 
         assertEquals(NOT_AN_OWNER, result);
         assertTrue(gameService.getDeposit(property));

@@ -681,7 +681,7 @@ public class MainActivity extends AppCompatActivity {
 
         //gameRef.get().addOnCompleteListener(gameFirstListen);
 
-        yourPlayer = gameService.gameInitialise(yourNickname);
+        yourPlayer = gameService.gameInitialise(yourNickname,2);
         if (yourPlayer==null){
             showMessage("Игра уже идет!");
 

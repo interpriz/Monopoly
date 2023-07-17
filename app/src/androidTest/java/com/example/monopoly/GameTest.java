@@ -9,12 +9,14 @@ import static org.junit.Assert.assertTrue;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import entities.Game;
 import entities.Player;
 import enums.GameStates;
+import rules.GameInitialiseRule;
 import services.GameService;
 import services.MapService;
 
@@ -22,7 +24,7 @@ import services.MapService;
 public class GameTest {
 
     private Game game;
-    private final MapService mapService;
+    private final MapService mapService = MapService.getInstance();;
     private GameService gameService;
 
     private Player organizer;
@@ -32,21 +34,20 @@ public class GameTest {
 
 
     public GameTest() {
-        mapService = MapService.getInstance();
     }
+
+    @Rule
+    public final GameInitialiseRule gameInitialiseRule =
+            new GameInitialiseRule("testGame1");
 
     @Before
     public void setUp() throws Exception {
-        game = new Game(4, "God");
         gameService = new GameService("testGame1");
         gameService.setTest(true);
-        organizer = gameService.enterGame("God");
-        for (int i = 1; i < game.maxPLayers; i++){
-            gameService.enterGame("player_" + i);
-        }
-        player_1 = game.players.get(1);
-        player_2 = game.players.get(2);
-        player_3 = game.players.get(3);
+        organizer = gameService.getPlayer(0);
+        player_1 = gameService.getGame().players.get(1);
+        player_2 = gameService.getGame().players.get(2);
+        player_3 = gameService.getGame().players.get(3);
 
     }
 
@@ -63,11 +64,11 @@ public class GameTest {
 
         result = gameService.startGame(organizer);
         assertEquals(SUCCESS,result);
-        assertEquals(GameStates.onPlay,game.state);
-        boolean flag1 = game.players.indexOf(organizer)==0;
-        boolean flag2 = game.players.indexOf(player_1)==1;
-        boolean flag3 = game.players.indexOf(player_2)==2;
-        boolean flag4 = game.players.indexOf(player_3)==3;
+        assertEquals(GameStates.onPlay,gameService.getGame().state);
+        boolean flag1 = gameService.getGame().players.indexOf(organizer)==0;
+        boolean flag2 = gameService.getGame().players.indexOf(player_1)==1;
+        boolean flag3 = gameService.getGame().players.indexOf(player_2)==2;
+        boolean flag4 = gameService.getGame().players.indexOf(player_3)==3;
         assertFalse(flag1 && flag2 && flag3 && flag4);
 
 
@@ -86,12 +87,12 @@ public class GameTest {
 
         //проверка текущего игрока
         Player currentPlayer = gameService.getCurrentPlayer();
-        assertEquals(game.players.get(0),currentPlayer);
+        assertEquals(gameService.getGame().players.get(0),currentPlayer);
 
         //купил житную
         gameService.acceptOffer(currentPlayer.getLastOffer(), currentPlayer);
-        assertEquals(game.fieldsOwners.get(1).owner = 0,
-                game.players.indexOf(currentPlayer));
+        assertEquals(gameService.getGame().fieldsOwners.get(1).owner = 0,
+                gameService.getGame().players.indexOf(currentPlayer));
 
         // не может ходить повторно, т.к. не дубль
         result = gameService.makeMove(player_1);
@@ -100,7 +101,7 @@ public class GameTest {
         //передает кубики следующему
         result = gameService.endMotion();
         assertEquals(SUCCESS,result);
-        assertEquals(1,game.currentPlayerId);
+        assertEquals(1,gameService.getGame().currentPlayerId);
         assertFalse(currentPlayer.canRollDice);
     }
 
@@ -178,17 +179,17 @@ public class GameTest {
 
         //проверка текущего игрока
         Player currentPlayer = gameService.getCurrentPlayer();
-        assertEquals(game.players.get(1),currentPlayer);
+        assertEquals(gameService.getGame().players.get(1),currentPlayer);
 
         // купил варшавку
         gameService.acceptOffer(currentPlayer.getLastOffer(), currentPlayer);
-        assertEquals(game.fieldsOwners.get(6).owner = 1,
-                game.players.indexOf(currentPlayer));
+        assertEquals(gameService.getGame().fieldsOwners.get(6).owner = 1,
+                gameService.getGame().players.indexOf(currentPlayer));
 
         //передает кубики следующему (себе)
         result = gameService.endMotion();
         assertEquals(SUCCESS,result);
-        assertEquals(1,game.currentPlayerId);
+        assertEquals(1,gameService.getGame().currentPlayerId);
         assertTrue(currentPlayer.canRollDice);
 
         //----------тест 3его хода(дубль)------------
@@ -198,17 +199,17 @@ public class GameTest {
         assertEquals(BUY_OR_AUCTION,result);
 
         //проверка текущего игрока
-        assertEquals(game.players.get(1),currentPlayer);
+        assertEquals(gameService.getGame().players.get(1),currentPlayer);
 
         // купил огарева
         gameService.acceptOffer(currentPlayer.getLastOffer(), currentPlayer);
-        assertEquals(game.fieldsOwners.get(8).owner = 1,
-                game.players.indexOf(currentPlayer));
+        assertEquals(gameService.getGame().fieldsOwners.get(8).owner = 1,
+                gameService.getGame().players.indexOf(currentPlayer));
 
         //передает кубики следующему (себе)
         result = gameService.endMotion();
         assertEquals(SUCCESS,result);
-        assertEquals(1,game.currentPlayerId);
+        assertEquals(1,gameService.getGame().currentPlayerId);
         assertTrue(currentPlayer.canRollDice);
 
         //----------тест 4ого хода(дубль)------------
@@ -218,17 +219,17 @@ public class GameTest {
         assertEquals(BUY_OR_AUCTION,result);
 
         //проверка текущего игрока
-        assertEquals(game.players.get(1),currentPlayer);
+        assertEquals(gameService.getGame().players.get(1),currentPlayer);
 
         // купил первую парковую
         gameService.acceptOffer(currentPlayer.getLastOffer(), currentPlayer);
-        assertEquals(game.fieldsOwners.get(9).owner = 1,
-                game.players.indexOf(currentPlayer));
+        assertEquals(gameService.getGame().fieldsOwners.get(9).owner = 1,
+                gameService.getGame().players.indexOf(currentPlayer));
 
         //передает кубики следующему
         result = gameService.endMotion();
         assertEquals(SUCCESS,result);
-        assertEquals(2,game.currentPlayerId);
+        assertEquals(2,gameService.getGame().currentPlayerId);
         assertFalse(currentPlayer.canRollDice);
     }
 
@@ -246,29 +247,29 @@ public class GameTest {
         Roll4();
         //----------- тест 5ого хода --------------
         //проверка текущего игрока
-        assertEquals(game.players.get(2),gameService.getCurrentPlayer());
+        assertEquals(gameService.getGame().players.get(2),gameService.getCurrentPlayer());
 
         //сходил на общественную казну (дубль)
         gameService.setD1D2(1,1);
         String result = gameService.makeMove(player_3);
         assertEquals(SUCCESS,result);
-        assertTrue(game.players.get(2).cash!=1500);
+        assertTrue(gameService.getGame().players.get(2).cash!=1500);
 
-        int playerNewCash = game.players.get(2).cash;
+        int playerNewCash = gameService.getGame().players.get(2).cash;
 
         //передает кубики следующему (себе)
         gameService.endMotion();
 
         //----------- тест 6ого хода --------------
         //проверка текущего игрока
-        assertEquals(game.players.get(2),gameService.getCurrentPlayer());
+        assertEquals(gameService.getGame().players.get(2),gameService.getCurrentPlayer());
 
         //сходил на подоходный налог (дубль)
         gameService.setD1D2(1,1);
         result = gameService.makeMove(player_3);
         assertEquals(SUCCESS,result);
-        assertEquals(playerNewCash-200, game.players.get(2).cash);
-        playerNewCash = game.players.get(2).cash;
+        assertEquals(playerNewCash-200, gameService.getGame().players.get(2).cash);
+        playerNewCash = gameService.getGame().players.get(2).cash;
 
 
         //передает кубики следующему (себе)
@@ -276,7 +277,7 @@ public class GameTest {
 
         //----------- тест 7ого хода --------------
         //проверка текущего игрока
-        assertEquals(game.players.get(2),gameService.getCurrentPlayer());
+        assertEquals(gameService.getGame().players.get(2),gameService.getCurrentPlayer());
         //сходил на варшавку (3ий дубль - тюрьма)
         gameService.setD1D2(1,1);
         result = gameService.makeMove(player_3);
@@ -287,7 +288,7 @@ public class GameTest {
         gameService.endMotion();
 
         //проверка текущего игрока
-        assertEquals(game.players.get(3),gameService.getCurrentPlayer());
+        assertEquals(gameService.getGame().players.get(3),gameService.getCurrentPlayer());
     }
 
 }

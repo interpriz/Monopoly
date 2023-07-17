@@ -56,7 +56,7 @@ public class DebtTest {
 
 
         gameService = new GameService("testGame1");
-        gameService.gameInitialise("God");
+        gameService.gameInitialise("God",4);
         for(int i=1; i<gameService.getGame().maxPLayers;i++){
             gameService.enterGame("player_"+i);
         }

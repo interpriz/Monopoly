@@ -27,7 +27,7 @@ public class GameInitialiseRule implements TestRule {
             public void evaluate() throws Throwable {
 
                 try {
-                    gameService.gameInitialise("God");
+                    gameService.gameInitialise("God", 4);
                     for(int i=1; i<gameService.getGame().maxPLayers;i++){
                         gameService.enterGame("player_"+i);
                     }

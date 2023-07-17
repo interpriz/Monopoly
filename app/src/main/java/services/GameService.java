@@ -60,11 +60,11 @@ public class GameService {
         return gameRepo.getGame();
     }
 
-    public Player gameInitialise(String yourNickname){
+    public Player gameInitialise(String yourNickname, int maxPlayers){
         //gameRepo.addGameFirsListen();
         int a = 0;
         if (getGame() == null) {
-            gameRepo.setGame(new Game(2, yourNickname));
+            gameRepo.setGame(new Game(maxPlayers, yourNickname));
             //gameRef.setValue(game);
             //gameService = new GameService(game);
             return enterGame(yourNickname);
