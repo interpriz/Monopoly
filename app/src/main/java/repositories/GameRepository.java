@@ -92,7 +92,7 @@ public class GameRepository implements OnCompleteListener<DataSnapshot>, ValueEv
     }
 
     public void setGame(Game game) {
-        game = game;
+        this.game = game;
         DBGameReference.setValue(game);
     }
 
@@ -222,6 +222,7 @@ public class GameRepository implements OnCompleteListener<DataSnapshot>, ValueEv
     }
 
     public void deleteGame() {
+        this.game = null;
         DBGameReference.removeValue();
     }
 

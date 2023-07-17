@@ -1,6 +1,8 @@
 package com.example.monopoly;
 
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -12,8 +14,10 @@ import static entities.StaticMessages.*;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import rules.GameInitialiseRule;
 import services.GameService;
 import services.MapService;
+
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -26,23 +30,18 @@ public class PaymentTest {
     private Player sender;
     private Player recipient;
 
-    private Game game;
-    private final MapService mapService;
+    private final MapService mapService= MapService.getInstance();;
     private GameService gameService;
 
-    public PaymentTest() {
-        mapService = MapService.getInstance();
-    }
+    @Rule
+    public final GameInitialiseRule gameInitialiseRule =
+            new GameInitialiseRule("testGame1");
+
     @Before
     public void setUp() throws Exception {
-        game = new Game(4,"God");
-        gameService = new GameService(game);
-        gameService.enterGame("God");
-        for(int i=1; i<game.maxPLayers;i++){
-            gameService.enterGame("player_"+i);
-        }
-        sender = game.players.get(0);
-        recipient = game.players.get(1);
+        gameService = new GameService("testGame1");
+        sender = gameService.getGame().players.get(0);
+        recipient = gameService.getGame().players.get(1);
     }
 
     /*@Before

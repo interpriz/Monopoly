@@ -32,7 +32,7 @@ public class HousesTest {
     @Before
     public void setUp() throws Exception {
         game = new Game(4,"God");
-        gameService = new GameService(game);
+        gameService = new GameService("testGame1");
         gameService.enterGame("God");
         for(int i=1; i<game.maxPLayers;i++){
             gameService.enterGame("player_"+i);
